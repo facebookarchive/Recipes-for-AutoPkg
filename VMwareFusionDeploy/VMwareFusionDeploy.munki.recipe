@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Imports the VMwareFusion mass deployment package into Munki. Requires justinrummel-recipes to download.</string>
+	<key>Identifier</key>
+	<string>com.facebook.autopkg.munki.deploy.VMwareFusion</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>VMwareFusion</string>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/VMware</string>
+		<key>LICENSE_KEY</key>
+		<string># key = XXXXX-XXXXX-XXXXX-XXXXX-XXXXX</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>display_name</key>
+			<string>VMWare Fusion Pro</string>
+			<key>category</key>
+			<string>Productivity</string>
+			<key>developer</key>
+			<string>VMware</string>
+			<key>description</key>
+			<string></string>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>0.2.5</string>
+	<key>ParentRecipe</key>
+	<string>com.justinrummel.download.VMwareFusion</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Processor</key>
+			<string>Unarchiver</string>
+			<key>Arguments</key>
+			<dict>
+				<key>archive_path</key>
+				<string>%pathname%</string>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/tar</string>
+				<key>purge_destination</key>
+				<true/>
+				<key>archive_format</key>
+				<string>tar</string>
+			</dict>
+		</dict>
+ 		<dict>
+			<key>Processor</key>
+			<string>Unarchiver</string>
+			<key>Arguments</key>
+			<dict>
+				<key>archive_path</key>
+				<string>%RECIPE_CACHE_DIR%/tar/com.vmware.fusion.zip</string>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/source</string>
+				<key>purge_destination</key>
+				<true/>
+				<key>archive_format</key>
+				<string>zip</string>
+			</dict>
+		</dict>
+ 		<dict>
+			<key>Comment</key>
+			<string>Extract a version string from Info.plist to use for the package.</string>
+			<key>Processor</key>
+			<string>Versioner</string>
+			<key>Arguments</key>
+			<dict>
+				<key>input_plist_path</key>
+				<string>%RECIPE_CACHE_DIR%/source/payload/VMware Fusion.app/Contents/Info.plist</string>
+				<key>plist_version_key</key>
+				<string>CFBundleShortVersionString</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>PkgRootCreator</string>
+			<key>Arguments</key>
+			<dict>
+				<key>pkgroot</key>
+				<string>%RECIPE_CACHE_DIR%/Deploy VMware Fusion</string>
+				<key>pkgdirs</key>
+				<dict/>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>FileMover</string>
+			<key>Arguments</key>
+			<dict>
+				<key>source</key>
+				<string>%RECIPE_CACHE_DIR%/source/payload/VMware Fusion.app/Contents/Library/Deploy VMware Fusion.mpkg</string>
+				<key>target</key>
+				<string>%pkgroot%/Deploy VMware Fusion.mpkg</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>FileMover</string>
+			<key>Arguments</key>
+			<dict>
+				<key>source</key>
+				<string>%RECIPE_CACHE_DIR%/source/payload/VMware Fusion.app</string>
+				<key>target</key>
+				<string>%pkgroot%/Deploy VMware Fusion.mpkg/Contents/00Fusion_Deployment_Items/VMWare Fusion.app</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>PathDeleter</string>
+			<key>Arguments</key>
+			<dict>
+				<key>path_list</key>
+				<array>
+					<string>%pkgroot%/Deploy VMware Fusion.mpkg/Contents/00Fusion_Deployment_Items/Deploy.ini</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>FileCreator</string>
+			<key>Arguments</key>
+			<dict>
+				<key>file_content</key>
+				<string>[Volume License]
+%LICENSE_KEY%
+
+[UI Defaults]
+
+[Locations]
+
+[Applications]
+
+[Virtual Machines]
+</string>
+				<key>file_path</key>
+				<string>%pkgroot%/Deploy VMware Fusion.mpkg/Contents/00Fusion_Deployment_Items/Deploy.ini</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>DmgCreator</string>
+			<key>Arguments</key>
+			<dict>
+				<key>dmg_root</key>
+				<string>%pkgroot%</string>
+				<key>dmg_path</key>
+				<string>%RECIPE_CACHE_DIR%/DeployVMwareFusion.dmg</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>version</key>
+					<string>%version%</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%RECIPE_CACHE_DIR%/DeployVMwareFusion.dmg</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

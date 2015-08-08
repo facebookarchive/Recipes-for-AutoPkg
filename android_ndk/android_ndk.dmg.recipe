@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Description</key>
+    <string>Creates a disk image containing the Android NDK.</string>
+    <key>Identifier</key>
+    <string>com.facebook.autopkg.dmg.android_ndk</string>
+    <key>Input</key>
+    <dict>
+        <key>NAME</key>
+        <string>android_ndk</string>
+    </dict>
+    <key>MinimumVersion</key>
+    <string>0.2.0</string>
+    <key>ParentRecipe</key>
+    <string>com.facebook.autopkg.download.android_ndk</string>
+    <key>Process</key>
+    <array>
+        <dict>
+            <key>Processor</key>
+            <string>StopProcessingIf</string>
+            <key>Arguments</key>
+            <dict>
+                <key>predicate</key>
+                <string>download_changed == FALSE</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>PkgRootCreator</string>
+            <key>Arguments</key>
+            <dict>
+                <key>pkgroot</key>
+                <string>%RECIPE_CACHE_DIR%/%NAME%</string>
+                <key>pkgdirs</key>
+                <dict>
+                    <key>opt</key>
+                    <string>0755</string>
+                    <key>opt/android_ndk</key>
+                    <string>0755</string>
+                </dict>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>LinuxBinExtractor</string>
+            <key>Arguments</key>
+            <dict>
+                <key>output_dir</key>
+                <string>%pkgroot%/opt/%NAME%</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>DmgCreator</string>
+            <key>Arguments</key>
+            <dict>
+                <key>dmg_root</key>
+                <string>%pkgroot%</string>
+                <key>dmg_path</key>
+                <string>%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg</string>
+                <key>dmg_zlib_level</key>
+                <string>9</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>PathDeleter</string>
+            <key>Arguments</key>
+            <dict>
+                <key>path_list</key>
+                <array>
+                    <string>%RECIPE_CACHE_DIR%/%NAME%</string>
+                </array>
+            </dict>
+        </dict>
+    </array>
+</dict>
+</plist>
