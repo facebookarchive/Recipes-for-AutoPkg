@@ -22,6 +22,10 @@ The Android NDK downloads as a Linux self-extracting binary (see [here](http://s
 
 Versioning is determined naively by parsing the download URL itself.  If a local file was provided instead of a download, the self-extracting binary itself is queried for its table of contents, and the topmost directory is parsed for a version string.
 
+Because of the way the self-extracting binary process executes, the DMG creation that takes place will generate a **new** DMG each time, which Munki would try to reimport each time because there's nothing on the disk image that Munki can use to determine a matching version. 
+
+The only way to avoid Munki reimporting the same DMG each time is to abort the recipe  if the download hasn't changed.  Thus, by definition, this recipe is technically **not idempotent**. 
+
 ### BlueJeans
 
 [BlueJeans](http://bluejeans.com/) is a video conferencing tool. Previously, BlueJeans was only available as browser plugins, but they now offer desktop applications for Windows and OS X.
