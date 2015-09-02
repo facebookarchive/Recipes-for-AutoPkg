@@ -16,6 +16,10 @@
 		<string># key = XXXXX-XXXXX-XXXXX-XXXXX-XXXXX</string>
 		<key>pkginfo</key>
 		<dict>
+			<key>blocking_applications</key>
+			<array>
+				<string>VMware Fusion.app</string>
+			</array>
 			<key>name</key>
 			<string>%NAME%</string>
 			<key>display_name</key>
