@@ -77,6 +77,6 @@ The "FBGitHubReleasesInfoProvider" is nearly identical to the [AutoPkg GitHubRel
 The parent recipe for this is in [Justin Rummel's VMware Fusion](https://github.com/autopkg/justinrummel-recipes/tree/master/VMware%20Fusion) recipe set. **You must add Justin Rummel's recipes to your search directories before you can use this recipe:**  
 `autopkg repo-add justinrummel-recipes`
 
-The serial number is specified as an input variable, so you should create an override to use your own number. The `deploy.ini` file specified in the instructions above is created on-demand by the recipe itself.
+To use this recipe, you must, at a bare minimum, create an override and replace the license key with your own.  The `deploy.ini` file contents are an input variable, so you can place in your own settings as you see fit.
 
-At this time, customizations to the `deploy.ini` file would necessitate changes to the recipe, so if you want to provide more configurations than just the serial number, you will have to make some changes to the FileCreator processor inside.
+Though this recipe does include both .pkg and .munki variants, the .pkg recipe only creates a bundle package, not a flat package, and therefore will need to be put into a DMG / archive of some sort to be used with other deployment mechanisms (JSS, Absolute, etc.).
