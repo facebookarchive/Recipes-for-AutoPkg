@@ -79,16 +79,6 @@ key = XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 				<dict>
 					<key>minimum_os_version</key>
 					<string>%ls_minimum_system_version%</string>
-				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>MunkiPkginfoMerger</string>
-			<key>Arguments</key>
-			<dict>
-				<key>additional_pkginfo</key>
-				<dict>
 					<key>version</key>
 					<string>%version%</string>
 				</dict>
