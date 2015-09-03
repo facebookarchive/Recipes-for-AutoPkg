@@ -3,38 +3,25 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Imports the VMwareFusion mass deployment package into Munki. Requires justinrummel-recipes to download.</string>
+	<string>Creates a VMwareFusion mass deployment package DMG. Requires justinrummel-recipes to download. You can substitute your own deploy.ini file in an override by placing the content in the DEPLOY_INI_FILE input variable. At a minimum, you'll need to put your license key in, or the postflight will fail.</string>
 	<key>Identifier</key>
-	<string>com.facebook.autopkg.munki.deploy.VMwareFusion</string>
+	<string>com.facebook.autopkg.munki.deploy.VMwareFusion.pkg</string>
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
 		<string>VMwareFusion</string>
-		<key>MUNKI_REPO_SUBDIR</key>
-		<string>apps/VMware</string>
-		<key>LICENSE_KEY</key>
-		<string># key = XXXXX-XXXXX-XXXXX-XXXXX-XXXXX</string>
-		<key>pkginfo</key>
-		<dict>
-			<key>blocking_applications</key>
-			<array>
-				<string>VMware Fusion.app</string>
-			</array>
-			<key>name</key>
-			<string>%NAME%</string>
-			<key>display_name</key>
-			<string>VMWare Fusion Pro</string>
-			<key>category</key>
-			<string>Productivity</string>
-			<key>developer</key>
-			<string>VMware</string>
-			<key>description</key>
-			<string></string>
-			<key>catalogs</key>
-			<array>
-				<string>testing</string>
-			</array>
-		</dict>
+		<key>DEPLOY_INI_FILE</key>
+		<string>[Volume License]
+key = XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+
+[UI Defaults]
+
+[Locations]
+
+[Applications]
+
+[Virtual Machines]
+</string>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>0.2.5</string>
@@ -91,18 +78,6 @@
 			</dict>
 		</dict>
 		<dict>
-			<key>Processor</key>
-			<string>MunkiPkginfoMerger</string>
-			<key>Arguments</key>
-			<dict>
-				<key>additional_pkginfo</key>
-				<dict>
-					<key>minimum_os_version</key>
-					<string>%ls_minimum_system_version%</string>
-				</dict>
-			</dict>
-		</dict>
-		<dict>
 			<key>Arguments</key>
 			<dict>
 				<key>pkgroot</key>
@@ -130,23 +105,6 @@
 			</dict>
 		</dict>
 		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>installs_item_paths</key>
-				<array>
-					<string>/Applications/VMware Fusion.app</string>
-				</array>
-				<key>faux_root</key>
-				<string>%RECIPE_CACHE_DIR%/fauxroot</string>
-			</dict>
-			<key>Processor</key>
-			<string>MunkiInstallsItemsCreator</string>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>MunkiPkginfoMerger</string>
-		</dict>
-		<dict>
 			<key>Processor</key>
 			<string>PkgRootCreator</string>
 			<key>Arguments</key>
@@ -167,6 +125,23 @@
 				<key>target</key>
 				<string>%pkgroot%/Deploy VMware Fusion.mpkg</string>
 			</dict>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>installs_item_paths</key>
+				<array>
+					<string>/Applications/VMware Fusion.app</string>
+				</array>
+				<key>faux_root</key>
+				<string>%RECIPE_CACHE_DIR%/fauxroot</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiInstallsItemsCreator</string>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
 		</dict>
 		<dict>
 			<key>Processor</key>
@@ -196,53 +171,9 @@
 			<key>Arguments</key>
 			<dict>
 				<key>file_content</key>
-				<string>[Volume License]
-%LICENSE_KEY%
-
-[UI Defaults]
-
-[Locations]
-
-[Applications]
-
-[Virtual Machines]
-</string>
+				<string>%DEPLOY_INI_FILE%</string>
 				<key>file_path</key>
 				<string>%pkgroot%/Deploy VMware Fusion.mpkg/Contents/00Fusion_Deployment_Items/Deploy.ini</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>DmgCreator</string>
-			<key>Arguments</key>
-			<dict>
-				<key>dmg_root</key>
-				<string>%pkgroot%</string>
-				<key>dmg_path</key>
-				<string>%RECIPE_CACHE_DIR%/DeployVMwareFusion.dmg</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>MunkiPkginfoMerger</string>
-			<key>Arguments</key>
-			<dict>
-				<key>additional_pkginfo</key>
-				<dict>
-					<key>version</key>
-					<string>%version%</string>
-				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>MunkiImporter</string>
-			<key>Arguments</key>
-			<dict>
-				<key>pkg_path</key>
-				<string>%RECIPE_CACHE_DIR%/DeployVMwareFusion.dmg</string>
-				<key>repo_subdirectory</key>
-				<string>%MUNKI_REPO_SUBDIR%</string>
 			</dict>
 		</dict>
 	</array>
