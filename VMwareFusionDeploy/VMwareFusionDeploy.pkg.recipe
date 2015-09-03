@@ -8,8 +8,6 @@
 	<string>com.facebook.autopkg.munki.deploy.VMwareFusion.pkg</string>
 	<key>Input</key>
 	<dict>
-		<key>NAME</key>
-		<string>VMwareFusion</string>
 		<key>DEPLOY_INI_FILE</key>
 		<string>[Volume License]
 key = XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
