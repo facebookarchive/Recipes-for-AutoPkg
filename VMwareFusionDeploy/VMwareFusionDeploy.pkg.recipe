@@ -5,9 +5,11 @@
 	<key>Description</key>
 	<string>Creates a VMwareFusion mass deployment package DMG. Requires justinrummel-recipes to download. You can substitute your own deploy.ini file in an override by placing the content in the DEPLOY_INI_FILE input variable. At a minimum, you'll need to put your license key in, or the postflight will fail.</string>
 	<key>Identifier</key>
-	<string>com.facebook.autopkg.munki.deploy.VMwareFusion.pkg</string>
+	<string>com.facebook.autopkg.pkg.deploy.VMwareFusion</string>
 	<key>Input</key>
 	<dict>
+		<key>NAME</key>
+		<string>VMwareFusionDeploy</string>
 		<key>DEPLOY_INI_FILE</key>
 		<string>[Volume License]
 key = XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
@@ -172,6 +174,17 @@ key = XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 				<string>%DEPLOY_INI_FILE%</string>
 				<key>file_path</key>
 				<string>%pkgroot%/Deploy VMware Fusion.mpkg/Contents/00Fusion_Deployment_Items/Deploy.ini</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>FileMover</string>
+			<key>Arguments</key>
+			<dict>
+				<key>source</key>
+				<string>%pkgroot%/Deploy VMware Fusion.mpkg</string>
+				<key>target</key>
+				<string>%pkgroot%/%NAME%-%version%.mpkg</string>
 			</dict>
 		</dict>
 	</array>

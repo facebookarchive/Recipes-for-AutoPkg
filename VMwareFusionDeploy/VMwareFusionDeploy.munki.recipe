@@ -56,7 +56,7 @@ key = XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 	<key>MinimumVersion</key>
 	<string>0.2.5</string>
 	<key>ParentRecipe</key>
-	<string>com.facebook.autopkg.munki.deploy.VMwareFusion.pkg</string>
+	<string>com.facebook.autopkg.pkg.deploy.VMwareFusion</string>
 	<key>Process</key>
 	<array>
 		<dict>
