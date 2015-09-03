@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Imports the VMwareFusion mass deployment package into Munki. Requires justinrummel-recipes to download.</string>
+	<string>Imports the VMwareFusion mass deployment package into Munki. Requires justinrummel-recipes to download. You can substitute your own deploy.ini file in an override by placing the content in the DEPLOY_INI_FILE input variable. At a minimum, you'll need to put your license key in (replace the XXXXXs), or the postflight will fail.</string>
 	<key>Identifier</key>
 	<string>com.facebook.autopkg.munki.deploy.VMwareFusion</string>
 	<key>Input</key>
@@ -12,8 +12,18 @@
 		<string>VMwareFusion</string>
 		<key>MUNKI_REPO_SUBDIR</key>
 		<string>apps/VMware</string>
-		<key>LICENSE_KEY</key>
-		<string># key = XXXXX-XXXXX-XXXXX-XXXXX-XXXXX</string>
+		<key>DEPLOY_INI_FILE</key>
+		<string>[Volume License]
+key = XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+
+[UI Defaults]
+
+[Locations]
+
+[Applications]
+
+[Virtual Machines]
+</string>
 		<key>pkginfo</key>
 		<dict>
 			<key>blocking_applications</key>
@@ -34,183 +44,21 @@
 			<array>
 				<string>testing</string>
 			</array>
+			<key>uninstall_method</key>
+			<string>uninstall_script</string>
+			<key>uninstall_script</key>
+			<string>#!/bin/sh
+/bin/rm -rf /Applications/VMware\ Fusion.app
+/bin/rm -f /Library/Preferences/VMware Fusion/config
+</string>
 		</dict>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>0.2.5</string>
 	<key>ParentRecipe</key>
-	<string>com.justinrummel.download.VMwareFusion</string>
+	<string>com.facebook.autopkg.munki.deploy.VMwareFusion.pkg</string>
 	<key>Process</key>
 	<array>
-		<dict>
-			<key>Processor</key>
-			<string>Unarchiver</string>
-			<key>Arguments</key>
-			<dict>
-				<key>archive_path</key>
-				<string>%pathname%</string>
-				<key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/tar</string>
-				<key>purge_destination</key>
-				<true/>
-				<key>archive_format</key>
-				<string>tar</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>Unarchiver</string>
-			<key>Arguments</key>
-			<dict>
-				<key>archive_path</key>
-				<string>%RECIPE_CACHE_DIR%/tar/com.vmware.fusion.zip</string>
-				<key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/source</string>
-				<key>purge_destination</key>
-				<true/>
-				<key>archive_format</key>
-				<string>zip</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Comment</key>
-			<string>Extract version strings from Info.plist to use for the pkginfo.</string>
-			<key>Processor</key>
-			<string>PlistReader</string>
-			<key>Arguments</key>
-			<dict>
-				<key>info_path</key>
-				<string>%RECIPE_CACHE_DIR%/source/payload/VMware Fusion.app/Contents/Info.plist</string>
-				<key>plist_keys</key>
-				<dict>
-					<key>LSMinimumSystemVersion</key>
-					<string>ls_minimum_system_version</string>
-					<key>CFBundleShortVersionString</key>
-					<string>version</string>
-				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>MunkiPkginfoMerger</string>
-			<key>Arguments</key>
-			<dict>
-				<key>additional_pkginfo</key>
-				<dict>
-					<key>minimum_os_version</key>
-					<string>%ls_minimum_system_version%</string>
-				</dict>
-			</dict>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>pkgroot</key>
-				<string>%RECIPE_CACHE_DIR%/fauxroot</string>
-				<key>pkgdirs</key>
-				<dict>
-					<key>Applications</key>
-					<string>01775</string>
-				</dict>
-				<key>purge_destination</key>
-				<true/>
-			</dict>
-			<key>Processor</key>
-			<string>PkgRootCreator</string>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>FileMover</string>
-			<key>Arguments</key>
-			<dict>
-				<key>source</key>
-				<string>%RECIPE_CACHE_DIR%/source/payload/VMware Fusion.app</string>
-				<key>target</key>
-				<string>%RECIPE_CACHE_DIR%/fauxroot/Applications/VMware Fusion.app</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>installs_item_paths</key>
-				<array>
-					<string>/Applications/VMware Fusion.app</string>
-				</array>
-				<key>faux_root</key>
-				<string>%RECIPE_CACHE_DIR%/fauxroot</string>
-			</dict>
-			<key>Processor</key>
-			<string>MunkiInstallsItemsCreator</string>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>MunkiPkginfoMerger</string>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>PkgRootCreator</string>
-			<key>Arguments</key>
-			<dict>
-				<key>pkgroot</key>
-				<string>%RECIPE_CACHE_DIR%/Deploy VMware Fusion</string>
-				<key>pkgdirs</key>
-				<dict/>
-			</dict>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>FileMover</string>
-			<key>Arguments</key>
-			<dict>
-				<key>source</key>
-				<string>%RECIPE_CACHE_DIR%/fauxroot/Applications/VMware Fusion.app/Contents/Library/Deploy VMware Fusion.mpkg</string>
-				<key>target</key>
-				<string>%pkgroot%/Deploy VMware Fusion.mpkg</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>FileMover</string>
-			<key>Arguments</key>
-			<dict>
-				<key>source</key>
-				<string>%RECIPE_CACHE_DIR%/fauxroot/Applications/VMware Fusion.app</string>
-				<key>target</key>
-				<string>%pkgroot%/Deploy VMware Fusion.mpkg/Contents/00Fusion_Deployment_Items/VMware Fusion.app</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>PathDeleter</string>
-			<key>Arguments</key>
-			<dict>
-				<key>path_list</key>
-				<array>
-					<string>%pkgroot%/Deploy VMware Fusion.mpkg/Contents/00Fusion_Deployment_Items/Deploy.ini</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>FileCreator</string>
-			<key>Arguments</key>
-			<dict>
-				<key>file_content</key>
-				<string>[Volume License]
-%LICENSE_KEY%
-
-[UI Defaults]
-
-[Locations]
-
-[Applications]
-
-[Virtual Machines]
-</string>
-				<key>file_path</key>
-				<string>%pkgroot%/Deploy VMware Fusion.mpkg/Contents/00Fusion_Deployment_Items/Deploy.ini</string>
-			</dict>
-		</dict>
 		<dict>
 			<key>Processor</key>
 			<string>DmgCreator</string>
@@ -229,6 +77,8 @@
 			<dict>
 				<key>additional_pkginfo</key>
 				<dict>
+					<key>minimum_os_version</key>
+					<string>%ls_minimum_system_version%</string>
 					<key>version</key>
 					<string>%version%</string>
 				</dict>
