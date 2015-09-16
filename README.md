@@ -80,3 +80,27 @@ The parent recipe for this is in [Justin Rummel's VMware Fusion](https://github.
 To use this recipe, you must, at a bare minimum, create an override and replace the license key with your own.  The `deploy.ini` file contents are an input variable, so you can place in your own settings as you see fit.
 
 Though this recipe does include both .pkg and .munki variants, the .pkg recipe only creates a bundle package, not a flat package, and therefore will need to be put into a DMG / archive of some sort to be used with other deployment mechanisms (JSS, Absolute, etc.).
+
+## Shared Processors
+
+Facebook also provides a number of [Shared Processors](https://github.com/autopkg/autopkg/wiki/Processor-Locations#shared-recipe-processors) that can be used in multiple processors.
+
+Facebook's common convention for custom processors is to bundle together recipe-specific tools with the recipe itself - such as unique Versioners, URL providers, etc.  Some processors serve useful purposes for many recipes (such as rsync), and therefore make more sense to be shared in a common location.
+
+These shared processors can be referred to by using the stub recipe identifier `com.facebook.autopkg.shared`:
+
+```
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/SubDirectoryList</string>
+      <key>Comment</key>
+      <string>Get list of folder contents</string>
+      <key>Arguments</key>
+      <dict>
+        <key>root_path</key>
+        <string>%RECIPE_CACHE_DIR%/unpack</string>
+      </dict>
+    </dict>
+```
+
+See the README inside the Shared_Processors directory for more details about the provided processors.
