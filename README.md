@@ -52,10 +52,6 @@ This recipe will download the BlueJeans installer package and create a straightf
 
 Since this is a standard configure / make / make install Linux installer, the custom processors provided here will create a tiny sandbox to do the custom install into the AutoPkg cache, so it won't affect your current system.
 
-### ExpandDrive
-
-[ExpanDrive](http://www.expandrive.com/) can mount remote network storage (SFTP, WebDav, Amazon Cloud Drive, S3, etc.) as local file system storage.
-
 ### Intellij IDEA
 
 [IntelliJ IDEA](http://www.jetbrains.com/js2) is a lightweight developer IDE for Java, Groovy, and Scala.
