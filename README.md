@@ -26,11 +26,35 @@ Because of the way the self-extracting binary process executes, the DMG creation
 
 The only way to avoid Munki reimporting the same DMG each time is to abort the recipe  if the download hasn't changed.  Thus, by definition, this recipe is technically **not idempotent**. 
 
+### Android SDK
+
+The [Android Software Development Kit](https://developer.android.com/sdk/index.html) recipe uses a number of custom processors to determine versioning and URLs.  
+
+This recipe parses two XML files that Google uses to inform the URLs, versions, and names of all packages related to the SDK. The Android SDK installer, which is a Java app, can download all of these manually (and uses those two XML URLs to figure out what to download).
+
+This is a *minimal* set of packages necessary to start developing with the Android SDK. It is not the *complete* SDK. 
+
+The Android SDK requires Java 7 in order to function.
+
 ### BlueJeans
 
 [BlueJeans](http://bluejeans.com/) is a video conferencing tool. Previously, BlueJeans was only available as browser plugins, but they now offer desktop applications for Windows and OS X.
 
 This recipe will download the BlueJeans installer package and create a straightforward app-dmg that copies the BlueJeans.app into `/Applications`.
+
+### DbVisualizer
+
+[DbVisualizer](https://www.dbvis.com/) is a database visualizer tool. The software has a Free version, and can be upgraded into Pro version with proper licensing.
+
+### Duo
+
+[Duo](https://www.duosecurity.com/) is a 2 factor authentication system. This recipe downloads the latest version of [Duo Unix](https://www.duosecurity.com/docs/duounix) and compiles it to be placed into /usr/local/bin/ rather than /usr/bin/, for compatibility with 10.11 El Capitan.
+
+Since this is a standard configure / make / make install Linux installer, the custom processors provided here will create a tiny sandbox to do the custom install into the AutoPkg cache, so it won't affect your current system.
+
+### ExpandDrive
+
+[ExpanDrive](http://www.expandrive.com/) can mount remote network storage (SFTP, WebDav, Amazon Cloud Drive, S3, etc.) as local file system storage.
 
 ### Intellij IDEA
 
@@ -69,6 +93,12 @@ Two custom processors are included, "FBGitHubReleasesInfoProvider" and "Mosh Ver
 Versioning is accomplished with the custom processor by naively looking at the package name, which is fragile and dependent on the developers maintaining consistency with filenames.
 
 The "FBGitHubReleasesInfoProvider" is nearly identical to the [AutoPkg GitHubReleasesInfoProvider](https://github.com/autopkg/autopkg/blob/master/Code/autopkglib/GitHubReleasesInfoProvider.py) processor, but contains some additional logic to parse the correct version, since the developers have been listing the release version as "mosh-1.2.x".
+
+### SQLDeveloper
+
+[SQLDeveloper](http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/index-097090.html) is an integrated development environment from Oracle that makes it easier to work with Oracle Databases and database applications.
+
+Unfortunately, the software is a native .app wrapped around a Java app, and the native .app version is static and does not change with updates.  A custom versioning processor looks for a file inside the Java core that thankfully is updated with new builds when new versions are released.
 
 ### VMware Fusion (Mass Deploy)
 
