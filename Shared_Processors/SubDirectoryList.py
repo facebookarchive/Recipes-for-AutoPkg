@@ -1,13 +1,18 @@
 #!/usr/bin/python
 #
-# Copyright (c) 2015-present, Facebook, Inc.
-# All rights reserved.
+# Copyright 2013 Jesse Peterson
 #
-# This source code is licensed under the BSD-style license found in the
-# LICENSE file in the root directory of this source tree. An additional grant
-# of patent rights can be found in the PATENTS file in the same directory.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """See docstring for SubDirectoryList class"""
 
 
@@ -18,8 +23,9 @@ __all__ = ["SubDirectoryList"]
 
 
 class SubDirectoryList(Processor):
-  '''Returns a string-converted list of comma-separated items inside
-  a directory, relative to path root, for use in other Processors.'''
+  '''Finds a filename for use in other Processors.
+  Currently only supports glob filename patterns.
+  '''
 
   input_variables = {
     'root_path': {
@@ -52,6 +58,13 @@ class SubDirectoryList(Processor):
   description = __doc__
 
   def main(self):
+    sip_dirs = [
+      'usr',
+      'usr/local',
+      'private',
+      'private/etc',
+      'Library'
+    ]
     format_string = '%s' % self.env['suffix_string']
     # search_string = '  \'{0}\''
     search_string = '{0}'
@@ -60,9 +73,9 @@ class SubDirectoryList(Processor):
     if not os.path.isdir(self.env['root_path']):
       raise ProcessorError("Can't find root path!")
     for dirName, subdirList, fileList in os.walk(self.env['root_path']):
-      # print('Found directory: %s' % dirName)
       relative_path = os.path.relpath(dirName, self.env['root_path'])
-      if not relative_path == '.':
+      # We need to remove the SIP folders so Chef doesn't try to create them
+      if not relative_path == '.' and not (relative_path in sip_dirs):
         dir_list.append(relative_path)
       # search_string.format(format_string.join(dirName)).strip()
       for fname in fileList:
