@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Description</key>
+  <string>Downloads and makes a DMG of the latest version of DbVisualizer, and imports into Munki.</string>
+  <key>Identifier</key>
+  <string>com.facebook.autopkg.munki.dbvisualizer</string>
+  <key>Input</key>
+  <dict>
+    <key>NAME</key>
+    <string>DbVisualizer</string>
+    <key>MUNKI_REPO_SUBDIR</key>
+    <string>apps/DbVis</string>
+    <key>pkginfo</key>
+    <dict>
+      <key>catalogs</key>
+      <array>
+      <string>testing</string>
+      </array>
+      <key>description</key>
+      <string>DbVisualizer is the universal database tool for developers,  DBAs and analysts. It is the perfect solution since the same tool can be used on all major operating systems accessing a wide range of databases.</string>
+      <key>display_name</key>
+      <string>DbVisualizer</string>
+      <key>category</key>
+      <string>Database Tools</string>
+      <key>developer</key>
+      <string>DbVis Software</string>
+      <key>requires</key>
+      <array>
+        <string>OracleJava7</string>
+      </array>
+      <key>unattended_install</key>
+      <true/>
+    </dict>
+  </dict>
+  <key>MinimumVersion</key>
+  <string>0.5.0</string>
+  <key>ParentRecipe</key>
+  <string>com.facebook.autopkg.dmg.dbvisualizer</string>
+  <key>Process</key>
+  <array>
+    <dict>
+      <key>Processor</key>
+      <string>MunkiPkginfoMerger</string>
+      <key>Arguments</key>
+      <dict>
+        <key>additional_pkginfo</key>
+        <dict>
+          <key>version</key>
+          <string>%version%</string>
+        </dict>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>MunkiImporter</string>
+      <key>Arguments</key>
+      <dict>
+        <key>repo_subdirectory</key>
+        <string>%MUNKI_REPO_SUBDIR%</string>
+        <key>pkg_path</key>
+        <string>%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg</string>
+      </dict>
+    </dict>
+  </array>
+</dict>
+</plist>

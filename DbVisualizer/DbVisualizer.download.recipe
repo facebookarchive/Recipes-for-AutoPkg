@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Description</key>
+  <string>Downloads the latest version of DbVisualizer.</string>
+  <key>Identifier</key>
+  <string>com.facebook.autopkg.download.dbvisualizer</string>
+  <key>Input</key>
+  <dict>
+    <key>NAME</key>
+    <string>DbVisualizer</string>
+  </dict>
+  <key>MinimumVersion</key>
+  <string>0.5.0</string>
+  <key>Process</key>
+  <array>
+    <dict>
+      <key>Processor</key>
+      <string>URLTextSearcher</string>
+      <key>Arguments</key>
+      <dict>
+        <key>url</key>
+        <string>https://www.dbvis.com/download/</string>
+        <key>re_pattern</key>
+        <string>\/.*.tgz(?=")</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Arguments</key>
+      <dict>
+        <key>url</key>
+        <string>https://www.dbvis.com/%match%</string>
+        <key>filename</key>
+        <string>dbvis.tgz</string>
+      </dict>
+      <key>Processor</key>
+      <string>URLDownloader</string>
+    </dict>
+    <!-- Done -->
+    <dict>
+      <key>Processor</key>
+      <string>EndOfCheckPhase</string>
+    </dict>
+  </array>
+</dict>
+</plist>
