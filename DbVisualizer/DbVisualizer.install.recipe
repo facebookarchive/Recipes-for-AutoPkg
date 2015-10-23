@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>Description</key>
-    <string>Downloads the current release version of DbVisualizer, builds a disk image and installs it.</string>
+    <string>Downloads the current release version of DbVisualizer, builds an installer package and installs it.</string>
     <key>Identifier</key>
     <string>com.facebook.autopkg.install.dbvisualizer</string>
     <key>Input</key>
