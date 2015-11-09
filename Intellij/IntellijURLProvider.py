@@ -65,7 +65,7 @@ class IntellijURLProvider(Processor):
     version_url = self.env.get('version_url', intellij_version_url)
     version = self.get_intellij_version(version_url)
     download_url = "http://download-cf.jetbrains.com/" \
-        "idea/ideaIC-%s.dmg" % version
+        "idea/ideaIC-%s-custom-jdk-bundled.dmg" % version
 
     self.env["url"] = download_url
     self.output("URL: %s" % self.env["url"])
