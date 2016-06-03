@@ -36,7 +36,7 @@ class SHAChecksum(Processor):
   }
   output_variables = {
     "checksum": {
-      "description": "Version returned from pkg-info field in PacakgeInfo."
+      "description": "SHA checksum calculated from path."
     }
   }
 
