@@ -16,7 +16,7 @@ from autopkglib import Processor, ProcessorError
 
 __all__ = ["IntellijURLProvider"]
 
-intellij_version_url = 'http://www.jetbrains.com/updates/updates.xml'
+intellij_version_url = 'https://www.jetbrains.com/updates/updates.xml'
 
 
 class IntellijURLProvider(Processor):
@@ -27,7 +27,7 @@ class IntellijURLProvider(Processor):
     "base_url": {
       "required": False,
       "description": ('Default is '
-                      'http://www.jetbrains.com/updates/updates.xml'),
+                      'https://www.jetbrains.com/updates/updates.xml'),
     },
     "edition": {
       "required": False,
@@ -70,7 +70,7 @@ class IntellijURLProvider(Processor):
     version_url = self.env.get('version_url', intellij_version_url)
     version = self.get_intellij_version(version_url)
     download_url = (
-      "http://download.jetbrains.com/idea/"
+      "https://download.jetbrains.com/idea/"
       "ideaI%s-%s.dmg" % (self.env.get('edition', 'C'), version)
     )
 
