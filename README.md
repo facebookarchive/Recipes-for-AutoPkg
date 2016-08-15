@@ -54,7 +54,7 @@ Since this is a standard configure / make / make install Linux installer, the cu
 
 ### Intellij IDEA
 
-[IntelliJ IDEA](http://www.jetbrains.com/js2) is a lightweight developer IDE for Java, Groovy, and Scala.
+[IntelliJ IDEA](http://www.jetbrains.com/idea/) is a lightweight developer IDE for Java, Groovy, and Scala.
 
 This recipe contains a custom URL provider, "IntellijURLProvider" that searches their versioning API for the latest download.  
 
