@@ -1,0 +1,1452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Description</key>
+  <string>Downloads version 2 of the Munki tools via
+the official releases listing on GitHub and creates a Chef recipe.</string>
+  <key>Identifier</key>
+  <string>com.facebook.cpe.chef.munkitools2</string>
+  <key>Input</key>
+  <dict>
+    <key>INCLUDE_PRERELEASES</key>
+    <string></string>
+    <key>NAME</key>
+    <string>cpe_munki</string>
+    <key>MUNKI_URL</key>
+    <string>http://munki/repo</string>
+    <key>MUNKI_MANIFEST</key>
+    <string>release</string>
+    <key>ATTRIBUTE_CATEGORY</key>
+    <string>cpe</string>
+    <key>ATTRIBUTE_PREFIX</key>
+    <string>munki</string>
+  </dict>
+  <key>MinimumVersion</key>
+  <string>0.6.0</string>
+  <key>Process</key>
+  <array>
+    <dict>
+      <key>Processor</key>
+      <string>GitHubReleasesInfoProvider</string>
+      <key>Arguments</key>
+      <dict>
+          <key>asset_regex</key>
+          <string>^munkitools-2.*?pkg$</string>
+          <key>github_repo</key>
+          <string>munki/munki</string>
+          <key>include_prereleases</key>
+          <string>%INCLUDE_PRERELEASES%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>URLDownloader</string>
+      <key>Arguments</key>
+      <dict>
+        <key>url</key>
+        <string>%url%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>EndOfCheckPhase</string>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>PkgRootCreator</string>
+      <key>Arguments</key>
+      <dict>
+        <key>pkgroot</key>
+        <string>%RECIPE_CACHE_DIR%/%NAME%</string>
+        <key>pkgdirs</key>
+        <dict>
+          <key>attributes</key>
+          <string>0755</string>
+          <key>recipes</key>
+          <string>0755</string>
+          <key>files</key>
+          <string>0755</string>
+          <key>files/default</key>
+          <string>0755</string>
+          <key>files/default/munki</key>
+          <string>0755</string>
+          <key>files/default/munki/admin</key>
+          <string>0755</string>
+          <key>files/default/munki/core</key>
+          <string>0755</string>
+          <key>files/default/munki/launchd</key>
+          <string>0755</string>
+          <key>attributes</key>
+          <string>0755</string>
+        </dict>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>FlatPkgUnpacker</string>
+      <key>Arguments</key>
+      <dict>
+        <key>flat_pkg_path</key>
+        <string>%pathname%</string>
+        <key>destination_path</key>
+        <string>%RECIPE_CACHE_DIR%/unpack</string>
+      </dict>
+    </dict>
+<!-- get the version from Munki Core -->
+    <!-- Unpack Munki Core files -->
+    <dict>
+      <key>Processor</key>
+      <string>FileFinder</string>
+      <key>Comment</key>
+      <string>MUNKI CORE</string>
+      <key>Arguments</key>
+      <dict>
+        <key>pattern</key>
+        <string>%RECIPE_CACHE_DIR%/unpack/munkitools_core*</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>PkgPayloadUnpacker</string>
+      <key>Arguments</key>
+      <dict>
+        <key>pkg_payload_path</key>
+        <string>%found_filename%/Payload</string>
+        <key>destination_path</key>
+        <string>%RECIPE_CACHE_DIR%/core</string>
+      </dict>
+    </dict>
+    <!-- Put the Munki core version into the attributes file -->
+    <dict>
+      <key>Processor</key>
+      <string>MasterVersioner</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - get version</string>
+      <key>Arguments</key>
+      <dict>
+        <key>package_info_path</key>
+        <string>%found_filename%/PackageInfo</string>
+      </dict>
+    </dict>
+    <!-- Create the recipe file -->
+    <dict>
+      <key>Processor</key>
+      <string>FileCreator</string>
+      <key>Comment</key>
+      <string>Create the initial recipe file</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string># vim: syntax=ruby:expandtab:shiftwidth=2:softtabstop=2:tabstop=2
+#
+# Cookbook Name:: cpe_munki
+# Recipe:: install
+#
+# Copyright 2015-present, Facebook
+#
+# All rights reserved - Do Not Redistribute
+#
+
+return unless node.macosx?
+
+version_to_install = node['cpe_munki']['munki_version_to_install']
+munki = node['cpe_munki'][version_to_install]
+
+</string>
+      </dict>
+    </dict>
+    <!-- Create the attributes file -->
+    <dict>
+      <key>Processor</key>
+      <string>FileCreator</string>
+      <key>Comment</key>
+      <string>Create the initial attributes file</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>file_content</key>
+        <string># vim: syntax=ruby:expandtab:shiftwidth=2:softtabstop=2:tabstop=2
+#
+# Cookbook Name:: cpe_munki
+# Attributes:: %master_version%
+#
+# Copyright 2015-present Facebook
+#
+# All rights reserved - Do Not Redistribute
+#
+return unless node.macosx?
+munki = {}
+munki['%master_version%'] = {}
+
+</string>
+      </dict>
+    </dict>
+<!-- Start unpacking -->
+
+<!-- MUNKI CORE -->
+    <!-- Unpack Munki Core files -->
+    <dict>
+      <key>Processor</key>
+      <string>FileFinder</string>
+      <key>Comment</key>
+      <string>MUNKI CORE</string>
+      <key>Arguments</key>
+      <dict>
+        <key>pattern</key>
+        <string>%RECIPE_CACHE_DIR%/unpack/munkitools_core*</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>PkgPayloadUnpacker</string>
+      <key>Arguments</key>
+      <dict>
+        <key>pkg_payload_path</key>
+        <string>%found_filename%/Payload</string>
+        <key>destination_path</key>
+        <string>%RECIPE_CACHE_DIR%/core</string>
+      </dict>
+    </dict>
+    <!-- Put the Munki core version into the attributes file -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/PackageInfoVersioner</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - get version</string>
+      <key>Arguments</key>
+      <dict>
+        <key>package_info_path</key>
+        <string>%found_filename%/PackageInfo</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - write version variable to attributes</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>file_content</key>
+        <string>munki['%master_version%']['munki_core_version'] = &apos;%version%&apos;
+</string>
+      </dict>
+    </dict>
+    <!-- Copy the Munki Core files into the files folder -->
+    <dict>
+      <key>Processor</key>
+      <string>Copier</string>
+      <key>Comment</key>
+      <string>MUNKI CORE</string>
+      <key>Arguments</key>
+      <dict>
+        <key>destination_path</key>
+        <string>%pkgroot%/files/default/munki/core/%version%</string>
+        <key>source_path</key>
+        <string>%RECIPE_CACHE_DIR%/core</string>
+        <key>overwrite</key>
+        <true/>
+      </dict>
+    </dict>
+    <!-- Create the attribute variable for the list of folders -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/SubDirectoryList</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - get list of folder contents</string>
+      <key>Arguments</key>
+      <dict>
+        <key>root_path</key>
+        <string>%pkgroot%/files/default/munki/core/%version%/</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefAttributeList</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - create chef block for folder contents</string>
+      <key>Arguments</key>
+      <dict>
+        <key>attribute_version</key>
+        <string>%master_version%</string>
+        <key>attribute</key>
+        <string>munki_core_folders</string>
+        <key>value</key>
+        <string>%found_directories%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - write contents to attributes file</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+    <!-- Establish Munki core variable in recipe --> 
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - create variable in recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>munki_core_version = munki['munki_core_version']
+
+</string>
+      </dict>
+    </dict>
+    <!-- Write the directory array to the recipe -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefArray</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - create directory array</string>
+      <key>Arguments</key>
+      <dict>
+        <key>item_list</key>
+        <string>%attribute_variable%</string>
+        <key>remove_version</key>
+        <string>%master_version%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - write directory array to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%array_block%</string>
+      </dict>
+    </dict>
+    <!-- Write the munki core folders to recipe -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefDirectory</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - create directory block</string>
+      <key>Arguments</key>
+      <dict>
+        <key>resource_name</key>
+        <string>item</string>
+        <key>directory_action</key>
+        <string>:create</string>
+        <key>directory_mode</key>
+        <string>0755</string>
+        <key>directory_owner</key>
+        <string>'root'</string>
+        <key>directory_group</key>
+        <string>'wheel'</string>
+        <key>directory_extra_indentation</key>
+        <string>true</string>
+        <key>directory_indentation_end</key>
+        <string>true</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - write directory block to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+    <!-- Create the attribute variable for the list of files -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefAttributeList</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - create files list attribute variable</string>
+      <key>Arguments</key>
+      <dict>
+        <key>attribute_version</key>
+        <string>%master_version%</string>
+        <key>attribute</key>
+        <string>munki_core_files</string>
+        <key>value</key>
+        <string>%found_filenames%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - write files list variable to attributes</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+    <!-- Write the munki core file array to the recipe -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefArray</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - create files list array</string>
+      <key>Arguments</key>
+      <dict>
+        <key>item_list</key>
+        <string>%attribute_variable%</string>
+        <key>remove_version</key>
+        <string>%master_version%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - write files list array to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%array_block%</string>
+      </dict>
+    </dict>
+    <!-- Install the munki core files in recipe -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefCookbookFile</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - install Munki Core files</string>
+      <key>Arguments</key>
+      <dict>
+        <key>resource_name</key>
+        <string>item</string>
+        <key>cookbook_file_source</key>
+        <string>"munki/core/#{munki_core_version}/#{item}"</string>
+        <key>cookbook_file_action</key>
+        <string>:create</string>
+        <key>cookbook_file_owner</key>
+        <string>'root'</string>
+        <key>cookbook_file_group</key>
+        <string>'wheel'</string>
+        <key>cookbook_file_mode</key>
+        <string>0755</string>
+        <key>cookbook_file_not_if</key>
+        <string>{ ::File.exist?('/Library/CPE/tags/munki_test') }</string>
+        <key>cookbook_file_extra_indentation</key>
+        <string>true</string>
+        <key>cookbook_file_indentation_end</key>
+        <string>true</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI CORE - write cookbook_file block to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+
+<!-- Unpack Munki admin files -->
+    <dict>
+      <key>Processor</key>
+      <string>FileFinder</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN</string>
+      <key>Arguments</key>
+      <dict>
+        <key>pattern</key>
+        <string>%RECIPE_CACHE_DIR%/unpack/munkitools_admin*</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>PkgPayloadUnpacker</string>
+      <key>Arguments</key>
+      <dict>
+        <key>pkg_payload_path</key>
+        <string>%found_filename%/Payload</string>
+        <key>destination_path</key>
+        <string>%RECIPE_CACHE_DIR%/admin</string>
+      </dict>
+    </dict>
+    <!-- Put the Munki admin version into the attributes file -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/PackageInfoVersioner</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN</string>
+      <key>Arguments</key>
+      <dict>
+        <key>package_info_path</key>
+        <string>%found_filename%/PackageInfo</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>file_content</key>
+        <string>munki['%master_version%']['munki_admin_version'] = &apos;%version%&apos;
+</string>
+      </dict>
+    </dict>
+    <!-- Copy the Munki admin files into the files folder -->
+    <dict>
+      <key>Processor</key>
+      <string>Copier</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN</string>
+      <key>Arguments</key>
+      <dict>
+        <key>destination_path</key>
+        <string>%pkgroot%/files/default/munki/admin/%version%</string>
+        <key>source_path</key>
+        <string>%RECIPE_CACHE_DIR%/admin</string>
+        <key>overwrite</key>
+        <true/>
+      </dict>
+    </dict>
+    <!-- Create the attribute variable for the list of folders -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/SubDirectoryList</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN - get list of folder contents</string>
+      <key>Arguments</key>
+      <dict>
+        <key>root_path</key>
+        <string>%pkgroot%/files/default/munki/admin/%version%/</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefAttributeList</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN - create chef block for folder contents</string>
+      <key>Arguments</key>
+      <dict>
+        <key>attribute_version</key>
+        <string>%master_version%</string>
+        <key>attribute</key>
+        <string>munki_admin_folders</string>
+        <key>value</key>
+        <string>%found_directories%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN - write contents to attributes file</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+    <!-- Establish Munki admin variable in recipe --> 
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN - create variable in recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>munki_admin_version = munki['munki_admin_version']
+</string>
+      </dict>
+    </dict>
+    <!-- Write the directory array to the recipe -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefArray</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN - create directory array</string>
+      <key>Arguments</key>
+      <dict>
+        <key>item_list</key>
+        <string>%attribute_variable%</string>
+        <key>remove_version</key>
+        <string>%master_version%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN - write directory array to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%array_block%</string>
+      </dict>
+    </dict>
+    <!-- Write the munki admin folders to recipe -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefDirectory</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN - create directory block</string>
+      <key>Arguments</key>
+      <dict>
+        <key>resource_name</key>
+        <string>item</string>
+        <key>directory_action</key>
+        <string>:create</string>
+        <key>directory_mode</key>
+        <string>0755</string>
+        <key>directory_owner</key>
+        <string>'root'</string>
+        <key>directory_group</key>
+        <string>'wheel'</string>
+        <key>directory_extra_indentation</key>
+        <string>true</string>
+        <key>directory_indentation_end</key>
+        <string>true</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN - write directory block to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+    <!-- Create the attribute variable for the list of files -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefAttributeList</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN - create files list attribute variable</string>
+      <key>Arguments</key>
+      <dict>
+        <key>attribute_version</key>
+        <string>%master_version%</string>
+        <key>attribute</key>
+        <string>munki_admin_files</string>
+        <key>value</key>
+        <string>%found_filenames%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN - write files list variable to attributes</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+    <!-- Write the munki admin file array to the recipe -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefArray</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN - create files list array</string>
+      <key>Arguments</key>
+      <dict>
+        <key>item_list</key>
+        <string>%attribute_variable%</string>
+        <key>remove_version</key>
+        <string>%master_version%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN - write files list array to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%array_block%</string>
+      </dict>
+    </dict>
+    <!-- Install the munki admin files in recipe -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefCookbookFile</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN - install Munki Admin files</string>
+      <key>Arguments</key>
+      <dict>
+        <key>resource_name</key>
+        <string>item</string>
+        <key>cookbook_file_source</key>
+        <string>"munki/admin/#{munki_admin_version}/#{item}"</string>
+        <key>cookbook_file_action</key>
+        <string>:create</string>
+        <key>cookbook_file_owner</key>
+        <string>'root'</string>
+        <key>cookbook_file_group</key>
+        <string>'wheel'</string>
+        <key>cookbook_file_mode</key>
+        <string>0755</string>
+        <key>cookbook_file_not_if</key>
+        <string>{ ::File.exist?('/Library/CPE/tags/munki_test') }</string>
+        <key>cookbook_file_extra_indentation</key>
+        <string>true</string>
+        <key>cookbook_file_indentation_end</key>
+        <string>true</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI ADMIN - write cookbook_file block to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+
+<!-- MUNKI LAUNCHD -->
+  <!-- Unpack Munki launchd files -->
+    <dict>
+      <key>Processor</key>
+      <string>FileFinder</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD</string>
+      <key>Arguments</key>
+      <dict>
+        <key>pattern</key>
+        <string>%RECIPE_CACHE_DIR%/unpack/munkitools_launchd*</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>PkgPayloadUnpacker</string>
+      <key>Arguments</key>
+      <dict>
+        <key>pkg_payload_path</key>
+        <string>%found_filename%/Payload</string>
+        <key>destination_path</key>
+        <string>%RECIPE_CACHE_DIR%/launchd</string>
+      </dict>
+    </dict>
+    <!-- Put the Munki launchd version into the attributes file -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/PackageInfoVersioner</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - get version</string>
+      <key>Arguments</key>
+      <dict>
+        <key>package_info_path</key>
+        <string>%found_filename%/PackageInfo</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - write version variable to attributes</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>file_content</key>
+        <string>munki['%master_version%']['munki_launchd_version'] = &apos;%version%&apos;
+</string>
+      </dict>
+    </dict>
+    <!-- Copy the Munki launchd files into the files folder -->
+    <dict>
+      <key>Processor</key>
+      <string>Copier</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD</string>
+      <key>Arguments</key>
+      <dict>
+        <key>destination_path</key>
+        <string>%pkgroot%/files/default/munki/launchd/%version%</string>
+        <key>source_path</key>
+        <string>%RECIPE_CACHE_DIR%/launchd</string>
+        <key>overwrite</key>
+        <true/>
+      </dict>
+    </dict>
+    <!-- Create the attribute variable for the launchd items  -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/SubDirectoryList</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - get list of folder contents</string>
+      <key>Arguments</key>
+      <dict>
+        <key>root_path</key>
+        <string>%pkgroot%/files/default/munki/launchd/%version%/</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefAttributeList</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - create chef block for folder contents</string>
+      <key>Arguments</key>
+      <dict>
+        <key>attribute_version</key>
+        <string>%master_version%</string>
+        <key>attribute</key>
+        <string>munki_launchd_folders</string>
+        <key>value</key>
+        <string>%found_directories%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - write contents to attributes file</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+    <!-- Establish Munki launchd version variable in recipe --> 
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - create version variable in recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>munki_ld_version = munki['munki_launchd_version']
+
+</string>
+      </dict>
+    </dict>
+    <!-- Write the directory array to the recipe -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefArray</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - create directory array</string>
+      <key>Arguments</key>
+      <dict>
+        <key>item_list</key>
+        <string>%attribute_variable%</string>
+        <key>remove_version</key>
+        <string>%master_version%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - write directory array to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%array_block%</string>
+      </dict>
+    </dict>
+    <!-- Write the munki launchd folders to recipe -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefDirectory</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - create directory block</string>
+      <key>Arguments</key>
+      <dict>
+        <key>resource_name</key>
+        <string>item</string>
+        <key>directory_action</key>
+        <string>:create</string>
+        <key>directory_mode</key>
+        <string>0755</string>
+        <key>directory_owner</key>
+        <string>'root'</string>
+        <key>directory_group</key>
+        <string>'wheel'</string>
+        <key>directory_extra_indentation</key>
+        <string>true</string>
+        <key>directory_indentation_end</key>
+        <string>true</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - write directory block to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+    <!-- split up launch agents and launch daemons here -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/SubDirectoryList</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - get LaunchAgents only</string>
+      <key>Arguments</key>
+      <dict>
+        <key>root_path</key>
+        <string>%pkgroot%/files/default/munki/launchd/%version%/Library/LaunchAgents</string>
+      </dict>
+    </dict>
+    <!-- Create the attribute variable for the list of launchagents -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefAttributeList</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - create launchagent list attribute variable</string>
+      <key>Arguments</key>
+      <dict>
+        <key>attribute_version</key>
+        <string>%master_version%</string>
+        <key>attribute</key>
+        <string>munki_launcha_files</string>
+        <key>value</key>
+        <string>%found_filenames%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - write launchagent list variable to attributes</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+    <!-- Write the munki launchd file array to the recipe -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefArray</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - create launchagent list array</string>
+      <key>Arguments</key>
+      <dict>
+        <key>item_list</key>
+        <string>%attribute_variable%</string>
+        <key>remove_version</key>
+        <string>%master_version%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - write launchagent list array to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%array_block%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - write launchagent variable</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>  launcha_path = "/Library/LaunchAgents/#{item}"
+</string>
+      </dict>
+    </dict>
+    <!-- Install the munki launchd files in recipe -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefCookbookFile</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - install Munki launchagent files</string>
+      <key>Arguments</key>
+      <dict>
+        <key>resource_name</key>
+        <string>launcha_path</string>
+        <key>cookbook_file_source</key>
+        <string>"munki/launchd/#{munki_ld_version}/Library/LaunchAgents/#{item}"</string>
+        <key>cookbook_file_action</key>
+        <string>:create</string>
+        <key>cookbook_file_owner</key>
+        <string>'root'</string>
+        <key>cookbook_file_group</key>
+        <string>'wheel'</string>
+        <key>cookbook_file_mode</key>
+        <string>0755</string>
+        <key>cookbook_file_not_if</key>
+        <string>{ ::File.exist?('/Library/CPE/tags/munki_test') }</string>
+        <key>cookbook_file_extra_indentation</key>
+        <string>true</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - write launchagent cookbook_file block to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+    <!-- start the ManagedSoftwareCenter service -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - create new launcha variable for service starting</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>  launcha = item.sub('.plist', '')
+</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefLaunchd</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - start launch agent services</string>
+      <key>Arguments</key>
+      <dict>
+        <key>resource_name</key>
+        <string>launcha</string>
+        <key>launchd_action</key>
+        <string>:enable</string>
+        <key>launchd_not_if</key>
+        <string>{ node.console_user.include?('root') }</string>
+        <key>launchd_only_if</key>
+        <string>{ item.include?('ManagedSoftwareCenter') }</string>
+        <key>launchd_extra_indentation</key>
+        <string>true</string>
+        <key>launchd_indentation_end</key>
+        <string>true</string>
+        <key>launchd_path</key>
+        <string>launcha_path</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - write launch agent service block to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+    <!-- now install the launchdaemons -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/SubDirectoryList</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - get LaunchDaemons only</string>
+      <key>Arguments</key>
+      <dict>
+        <key>root_path</key>
+        <string>%pkgroot%/files/default/munki/launchd/%version%/Library/LaunchDaemons</string>
+      </dict>
+    </dict>
+    <!-- Create the attribute variable for the list of launchdaemons -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefAttributeList</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - create launchdaemon list attribute variable</string>
+      <key>Arguments</key>
+      <dict>
+        <key>attribute_version</key>
+        <string>%master_version%</string>
+        <key>attribute</key>
+        <string>munki_ld_files</string>
+        <key>value</key>
+        <string>%found_filenames%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - write launchdaemon list variable to attributes</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+    <!-- Write the munki launchd file array to the recipe -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefArray</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - create launchdaemon list array</string>
+      <key>Arguments</key>
+      <dict>
+        <key>item_list</key>
+        <string>%attribute_variable%</string>
+        <key>remove_version</key>
+        <string>%master_version%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - write launchdaemon list array to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%array_block%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - write launchdaemon variable</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>  launchd_path = "/Library/LaunchDaemons/#{item}"
+</string>
+      </dict>
+    </dict>
+    <!-- Install the munki launchd files in recipe -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefCookbookFile</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - install Munki launchdaemon files</string>
+      <key>Arguments</key>
+      <dict>
+        <key>resource_name</key>
+        <string>launchd_path</string>
+        <key>cookbook_file_source</key>
+        <string>"munki/launchd/#{munki_ld_version}/Library/LaunchDaemons/#{item}"</string>
+        <key>cookbook_file_action</key>
+        <string>:create</string>
+        <key>cookbook_file_owner</key>
+        <string>'root'</string>
+        <key>cookbook_file_group</key>
+        <string>'wheel'</string>
+        <key>cookbook_file_mode</key>
+        <string>0755</string>
+        <key>cookbook_file_not_if</key>
+        <string>{ ::File.exist?('/Library/CPE/tags/munki_test') }</string>
+        <key>cookbook_file_extra_indentation</key>
+        <string>true</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - write launchdaemon cookbook_file block to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+    <!-- start the all launchdaemons -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - create new launchd variable for service starting</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>  munki_launchd = item.sub('.plist', '')
+</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefLaunchd</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - start all launchdaemon services</string>
+      <key>Arguments</key>
+      <dict>
+        <key>resource_name</key>
+        <string>munki_launchd</string>
+        <key>launchd_action</key>
+        <string>:enable</string>
+        <key>launchd_extra_indentation</key>
+        <string>true</string>
+        <key>launchd_indentation_end</key>
+        <string>true</string>
+        <key>launchd_path</key>
+        <string>launchd_path</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI LAUNCHD - write daemon agent service block to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+
+<!-- MUNKI APP -->
+  <!-- Get the version for Munki app -->
+    <dict>
+      <key>Processor</key>
+      <string>FileFinder</string>
+      <key>Comment</key>
+      <string>MUNKI APP</string>
+      <key>Arguments</key>
+      <dict>
+          <key>pattern</key>
+          <string>%RECIPE_CACHE_DIR%/unpack/munkitools_app*</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>PackageInfoVersioner</string>
+      <key>Comment</key>
+      <string>MUNKI APP - get the version</string>
+      <key>Arguments</key>
+      <dict>
+        <key>package_info_path</key>
+        <string>%found_filename%/PackageInfo</string>
+      </dict>
+    </dict>
+    <!-- Put the Munki app version into the attributes file -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI APP - write version into attributes</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>file_content</key>
+        <string>munki['%master_version%']['munki_app_version'] = &apos;%version%&apos;
+</string>
+      </dict>
+    </dict>
+    <!-- Package up the Munki app bundle package -->
+    <dict>
+      <key>Processor</key>
+      <string>FlatPkgPacker</string>
+      <key>Comment</key>
+      <string>MUNKI APP - package up the bundle</string>
+      <key>Arguments</key>
+      <dict>
+          <key>source_flatpkg_dir</key>
+          <string>%found_filename%</string>
+          <key>destination_pkg</key>
+          <string>%RECIPE_CACHE_DIR%/munkitools_app-%version%.pkg</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/SHAChecksum</string>
+      <key>Comment</key>
+      <string>MUNKI APP - calculate SHA256 checksum</string>
+      <key>Arguments</key>
+      <dict>
+          <key>source_file</key>
+          <string>%RECIPE_CACHE_DIR%/munkitools_app-%version%.pkg</string>
+          <key>checksum_type</key>
+          <string>256</string>
+      </dict>
+    </dict>
+    <!-- Put the checksum into the attributes file -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI APP - write checksum variable into attributes</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>file_content</key>
+        <string>munki['%master_version%']['munki_app_checksum'] =
+  &apos;%checksum%&apos;
+</string>
+      </dict>
+    </dict>
+    <!-- Install munkitools_app with cpe_remote_pkg -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared.chef/ChefRemotePackage</string>
+      <key>Comment</key>
+      <string>MUNKI APP - install with cpe_remote_pkg</string>
+      <key>Arguments</key>
+      <dict>
+        <key>resource_name</key>
+        <string>'Managed Software Center'</string>
+        <key>app</key>
+        <string>'munkitools_app'</string>
+        <key>version</key>
+        <string>munki['munki_app_version']</string>
+        <key>receipt</key>
+        <string>'com.googlecode.munki.app'</string>
+        <key>checksum</key>
+        <string>munki['munki_app_checksum']</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>MUNKI APP - write cpe_remote_pkg block to recipe</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/recipes/install.rb</string>
+        <key>file_content</key>
+        <string>%chef_block%</string>
+      </dict>
+    </dict>
+<!-- Add final default node info -->
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/FileAppender</string>
+      <key>Comment</key>
+      <string>FINAL ASSIGNMENT - write version variable to attributes</string>
+      <key>Arguments</key>
+      <dict>
+        <key>file_path</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>file_content</key>
+        <string>default['%ATTRIBUTE_CATEGORY%-%ATTRIBUTE_PREFIX%']['%master_version%'] = munki['%master_version%']
+</string>
+      </dict>
+    </dict>
+
+<!-- move the files to their final names and locations -->
+    <dict>
+      <key>Processor</key>
+      <string>FileFinder</string>
+      <key>Comment</key>
+      <string>MUNKI - Determine version of Core to use for main recipe version</string>
+      <key>Arguments</key>
+      <dict>
+        <key>pattern</key>
+        <string>%RECIPE_CACHE_DIR%/unpack/munkitools_core*</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>com.facebook.autopkg.shared/PackageInfoVersioner</string>
+      <key>Comment</key>
+      <string>MUNKI - Get actual version</string>
+      <key>Arguments</key>
+      <dict>
+        <key>package_info_path</key>
+        <string>%found_filename%/PackageInfo</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>FileMover</string>
+      <key>Comment</key>
+      <string>MUNKI - Move the default atrtibute into a versioned one</string>
+      <key>Arguments</key>
+      <dict>
+        <key>source</key>
+        <string>%pkgroot%/attributes/default.rb</string>
+        <key>target</key>
+        <string>%pkgroot%/attributes/munki-%version%.rb</string>
+      </dict>
+    </dict>
+  </array>
+</dict>
+</plist>
