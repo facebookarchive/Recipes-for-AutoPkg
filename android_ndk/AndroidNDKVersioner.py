@@ -1,20 +1,26 @@
 #!/usr/bin/python
+"""Return version for Android NDK."""
 #
-# Copyright (c) 2015-present, Facebook, Inc.
-# All rights reserved.
+# Copyright 2014-present Facebook, Inc.
 #
-# This source code is licensed under the BSD-style license found in the
-# LICENSE file in the root directory of this source tree. An additional grant
-# of patent rights can be found in the PATENTS file in the same directory.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-"""See docstring for AndroidNDKVersioner class"""
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 # Disabling warnings for env members and imports that only affect recipe-
 # specific processors.
 # pylint: disable=e1101,f0401
 
-import subprocess
 import os
+import shlex
 
 from autopkglib import Processor, ProcessorError
 
@@ -22,55 +28,40 @@ __all__ = ["AndroidNDKVersioner"]
 
 
 class AndroidNDKVersioner(Processor):
-  # pylint: disable=missing-docstring
-  description = ("Detect version of downloaded Android NDK based on URL.")
+  """Return version for Android NDK."""
+
+  description = ("Detect version of downloaded Android NDK based on "
+                 "source.properties.")
   input_variables = {
-      "match": {
-          "required": True,
-          "description": "URL to parse for version info."
-      },
-      "localonly": {
-          "required": False,
-          "description": ("Use only",
-                          " local file for version checking. Assumes",
-                          " local file is %pathname%. Defaults to 0.")
-      }
+    "properties_path": {
+      "required": True,
+      "description": "File to parse for version info."
+    },
   }
   output_variables = {
-      "version": {
-          "description": "Version of download."
-      }
+    "release_num": {
+      "description": "Release of download."
+    },
+    "version": {
+      "description": "Version of download."
+    }
   }
 
-  __doc__ = description
-
   def main(self):
-    uselocal = False
-    if self.env.get("localonly"):
-        uselocal = True
-    if uselocal:
-      # We use the local file only
-      # Execute the file with argument "l" to get a list of the file
-      os.chdir(os.path.dirname(self.env["pathname"]))
-      cmd = ['./' + os.path.basename(self.env["pathname"]), 'l']
-      proc = subprocess.Popen(cmd,
-                              stdout=subprocess.PIPE,
-                              stderr=subprocess.PIPE)
-      (out, err) = proc.communicate()
-      if err:
-        raise ProcessorError(err)
-      # The top folder is the last line of output before the "footer",
-      # and the footer is 3 lines long.
-      # By parsing the 4th to last line and splitting on whitespace,
-      # we can simply get the top folder name.
-      self.env["version"] = \
-          out.split('\n')[-4].split()[-1].split('-')[-1]
-    else:
-      # Assuming the URL is always of this structure:
-      # .../android/ndk/android-ndk-r10e-darwin-x86_64.bin
-      # Filename is always android-ndk-VERSION-darwin-x86_64.bin
-      self.env["version"] = \
-          self.env["match"].split('/')[-1].split('-')[2]
+    """Main."""
+    path = self.env.get('properties_path')
+    if not os.path.isfile(path):
+      raise ProcessorError("%s doesn't exist!" % path)
+    with open(path, 'rb') as f:
+      data = f.read()
+    split_data = shlex.split(data)
+    # Version is defined in the files
+    version = split_data[split_data.index('Pkg.Revision') + 2]
+    self.env['version'] = version.split()
+    # Release is just based on filename
+    self.env['release_num'] = os.path.basename(
+      os.path.dirname(path)
+    ).split('-')[-1]
 
 if __name__ == "__main__":
   PROCESSOR = AndroidNDKVersioner()

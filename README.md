@@ -16,15 +16,11 @@ Then run any of the recipes with `autopkg run`.
 
 ### Android NDK
 
-The [Android Native Development Kit](https://developer.android.com/ndk/guides/index.html) recipes use two custom processors, "AndroidNDKVersioner" and "LinuxBinExtractor".  
+The [Android Native Development Kit](https://developer.android.com/ndk/guides/index.html) recipes a custom processor: "AndroidNDKVersioner".  
 
-The Android NDK downloads as a Linux self-extracting binary (see [here](http://stackoverflow.com/questions/955460/how-do-linux-binary-installers-bin-sh-work) and [here](http://www.linuxjournal.com/node/1005818) for more details), which contains no version information and only a collection of files.  The "LinuxBinExtractor" processor changes directory to the download location and locally executes the self-extracting binary.
+There are two versions of note for the NDK: the release number, which is arbitrarily determined by Google, and the version number inside the download. Release number is determined naively by parsing the download file name itself.  The version is parsed by looking in the "source.properties" file for the value of "Pkg.Version".
 
-Versioning is determined naively by parsing the download URL itself.  If a local file was provided instead of a download, the self-extracting binary itself is queried for its table of contents, and the topmost directory is parsed for a version string.
-
-Because of the way the self-extracting binary process executes, the DMG creation that takes place will generate a **new** DMG each time, which Munki would try to reimport each time because there's nothing on the disk image that Munki can use to determine a matching version. 
-
-The only way to avoid Munki reimporting the same DMG each time is to abort the recipe  if the download hasn't changed.  Thus, by definition, this recipe is technically **not idempotent**. 
+Unlike prior versions of this recipe, this is now idempotent.
 
 ### Android SDK
 
