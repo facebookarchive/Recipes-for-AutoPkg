@@ -57,7 +57,7 @@ class AndroidNDKVersioner(Processor):
     split_data = shlex.split(data)
     # Version is defined in the files
     version = split_data[split_data.index('Pkg.Revision') + 2]
-    self.env['version'] = version.split()
+    self.env['version'] = version.split()[-1]
     # Release is just based on filename
     self.env['release_num'] = os.path.basename(
       os.path.dirname(path)
