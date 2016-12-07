@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Description</key>
+  <string>Extract Xcode from a XIP. Requires passing in a XIP containing Xcode.</string>
+  <key>Identifier</key>
+  <string>com.facebook.autopkg.xcode.extract</string>
+  <key>Input</key>
+  <dict>
+    <key>NAME</key>
+    <string>Xcode</string>
+  </dict>
+  <key>MinimumVersion</key>
+  <string>0.6.0</string>
+  <key>Process</key>
+  <array>
+    <dict>
+      <key>Processor</key>
+      <string>PackageRequired</string>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>XcodeXIPUnpacker</string>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>PlistReader</string>
+      <key>Arguments</key>
+      <dict>
+        <key>info_path</key>
+        <string>%output_app%/Contents/version.plist</string>
+        <key>plist_keys</key>
+        <dict>
+          <key>ProductBuildVersion</key>
+          <string>productbuildversion</string>
+          <key>CFBundleShortVersionString</key>
+          <string>version</string>
+          <key>CFBundleVersion</key>
+          <string>bundleversion</string>
+        </dict>
+      </dict>
+    </dict>
+  </array>
+</dict>
+</plist>
