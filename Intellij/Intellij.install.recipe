@@ -5,7 +5,7 @@
 	<key>Description</key>
 	<string>Downloads Intellij Disk Image and then moves it to Applications</string>
 	<key>Identifier</key>
-	<string>com.facebook.autopkg.install.Intellij</string>
+	<string>com.facebook.autopkg.install.intellij</string>
 	<key>Input</key>
 	<dict>
 		<key>RELEASE</key>
