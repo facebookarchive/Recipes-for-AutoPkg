@@ -81,7 +81,7 @@ class XcodeXIPUnpacker(Processor):
     """Unpack the xz file into the same dir."""
     self.output("Gunzip unpacking %s" % xz_path)
     current_dir = os.getcwd()
-    os.chdir(os.path.join(output_dir, 'temp'))
+    os.chdir(output_dir)
     cmd = [
       '/usr/bin/gunzip',
       xz_path,
@@ -117,38 +117,71 @@ class XcodeXIPUnpacker(Processor):
     self.output("Finished xar unpack.")
 
   # This function was written by Mike Lynn:
-  # https://gist.github.com/pudquick/ac29c8c19432f2d200d4
-  def parse_pbzx(self, pbzx_path, xar_out_path):
-    """Unpack a pbzx file."""
-    self.output("PBZX unpacking %s" % pbzx_path)
-    with open(pbzx_path, 'rb') as f:
-      with open(xar_out_path, 'wb') as g:
-        real_magic = '\xfd7zXZ\x00'
-        magic = f.read(4)
-        if magic != 'pbzx':
-          raise Exception("Error: Not a pbzx file")
-        # Read 8 bytes for initial flags
-        tmp = f.read(8)
-        # Interpret the flags as a 64-bit big-endian unsigned int
-        flags = struct.unpack('>Q', tmp)[0]
-        # xar_f is a dummy variable
-        xar_f = open(xar_out_path, 'wb')
-        while (flags & (1 << 24)):
-          # Read in more flags
-          tmp1 = f.read(8)
-          if len(tmp1) < 8:
-            # We're at the end!
-            break
-          flags = struct.unpack('>Q', tmp1)[0]
-          # Read in length
-          tmp2 = f.read(8)
-          f_length = struct.unpack('>Q', tmp2)[0]
-          xzmagic = f.read(6)
-          if xzmagic != real_magic:
-            raise Exception("Error: Header is not xar file header")
-          f.seek(-6, 1)
-          g.write(f.read(f_length))
-    self.output("Finished pbzx decode.")
+  # https://gist.github.com/pudquick/ff412bcb29c9c1fa4b8d
+  def seekread(self, f, offset=None, length=0, relative=True):
+    """Seek read an archive."""
+    if (offset is not None):
+      # offset provided, let's seek
+      f.seek(offset, [0, 1, 2][relative])
+    if (length != 0):
+      return f.read(length)
+
+  def parse_pbzx(self, pbzx_path):
+    """Parse a pbzx archive."""
+    section = 0
+    xar_out_path = '%s.part%02d.cpio.xz' % (pbzx_path, section)
+    f = open(pbzx_path, 'rb')
+    # pbzx = f.read()
+    # f.close()
+    magic = self.seekread(f, length=4)
+    if magic != 'pbzx':
+      raise "Error: Not a pbzx file"
+    # Read 8 bytes for initial flags
+    flags = self.seekread(f, length=8)
+    # Interpret the flags as a 64-bit big-endian unsigned int
+    flags = struct.unpack('>Q', flags)[0]
+    xar_f = open(xar_out_path, 'wb')
+    while (flags & (1 << 24)):
+      # Read in more flags
+      flags = self.seekread(f, length=8)
+      flags = struct.unpack('>Q', flags)[0]
+      # Read in length
+      f_length = self.seekread(f, length=8)
+      f_length = struct.unpack('>Q', f_length)[0]
+      xzmagic = self.seekread(f, length=6)
+      if xzmagic != '\xfd7zXZ\x00':
+        # This isn't xz content, this is actually _raw decompressed cpio_
+        # chunk of 16MB in size...
+        # Let's back up ...
+        self.seekread(f, offset=-6, length=0)
+        # ... and split it out ...
+        f_content = self.seekread(f, length=f_length)
+        section += 1
+        decomp_out = '%s.part%02d.cpio' % (pbzx_path, section)
+        g = open(decomp_out, 'wb')
+        g.write(f_content)
+        g.close()
+        # Now to start the next section, which should hopefully be .xz
+        # (we'll just assume it is ...)
+        xar_f.close()
+        section += 1
+        new_out = '%s.part%02d.cpio.xz' % (pbzx_path, section)
+        xar_f = open(new_out, 'wb')
+      else:
+        f_length -= 6
+        # This part needs buffering
+        f_content = self.seekread(f, length=f_length)
+        tail = self.seekread(f, offset=-2, length=2)
+        xar_f.write(xzmagic)
+        xar_f.write(f_content)
+        if tail != 'YZ':
+          xar_f.close()
+          raise "Error: Footer is not xar file footer"
+    try:
+      f.close()
+      xar_f.close()
+    except:
+      pass
 
   def main(self):
     """Main."""
@@ -175,30 +208,24 @@ class XcodeXIPUnpacker(Processor):
       xar_path,
       'Content',
     )
-    xz_output = os.path.join(
-      output,
-      'temp',
-      'Content.xz',
-    )
-    if not os.path.isdir(os.path.dirname(xz_output)):
-      os.makedirs(os.path.dirname(xz_output))
-    self.parse_pbzx(content_path, xz_output)
-    # 3. gunzip the content
-    self.gunzip_unpack(xz_output, output)
-    # 4. Move to cpio format
-    current_cpio_path = os.path.join(
-      output,
-      'temp',
-      'Content',
-    )
+    self.parse_pbzx(content_path)
+    # 3. gunzip the xz packages
+    xz_list = glob.glob(os.path.join(xar_path, "*.xz"))
+    for xz_file in xz_list:
+      self.gunzip_unpack(xz_file, output)
+    # 4. Combine the cpio files into one
+    self.output("Combining .cpio files together")
+    cpio_list = glob.glob(os.path.join(xar_path, "*.cpio"))
     new_cpio_path = os.path.join(
       output,
-      'temp',
       'Content.cpio',
     )
-    os.rename(content_path, new_cpio_path)
+    with open(new_cpio_path, 'wb') as cpio_combined_file:
+      for cpio_file in cpio_list:
+        with open(cpio_file, 'rb') as f:
+          shutil.copyfileobj(f, cpio_combined_file)
     # 5. Ditto contents out of cpio archive
-    self.ditto_unpack(current_cpio_path, output)
+    self.ditto_unpack(new_cpio_path, output)
     # 6. Clean up if desired
     cleanup = True
     if bool(self.env.get('nocleanup')) is True:
@@ -206,7 +233,6 @@ class XcodeXIPUnpacker(Processor):
     if cleanup:
       self.output("Cleaning up temporary archives.")
       shutil.rmtree(xar_path)
-      shutil.rmtree(os.path.join(output, 'temp',))
     # Set output
     self.env['output_app'] = glob.glob(
       os.path.join(output, 'Xcode*'),
