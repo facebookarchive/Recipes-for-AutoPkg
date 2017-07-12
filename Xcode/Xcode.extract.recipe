@@ -25,6 +25,17 @@
     </dict>
     <dict>
       <key>Processor</key>
+      <string>CodeSignatureVerifier</string>
+      <key>Arguments</key>
+      <dict>
+        <key>input_path</key>
+        <string>%output_app%</string>
+        <key>requirement</key>
+        <string>identifier "com.apple.dt.Xcode" and anchor apple</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
       <string>PlistReader</string>
       <key>Arguments</key>
       <dict>
