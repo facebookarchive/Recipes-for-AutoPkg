@@ -14,6 +14,8 @@
     <string>apps/apple/xcode/</string>
     <key>ICON_NAME</key>
     <string>Xcode.png</string>
+    <key>DESTINATION_APP_NAME</key>
+    <string>Xcode.app</string>
     <key>pkginfo</key>
     <dict>
       <key>catalogs</key>
@@ -21,7 +23,7 @@
         <string>testing</string>
       </array>
       <key>description</key>
-      <string></string>
+      <string>Xcode</string>
       <key>display_name</key>
       <string>%NAME%</string>
       <key>name</key>
@@ -36,6 +38,15 @@
   <string>com.facebook.autopkg.xcode.extract</string>
   <key>Process</key>
   <array>
+    <dict>
+      <key>Processor</key>
+      <string>XcodeVersioner</string>
+      <key>Arguments</key>
+      <dict>
+        <key>version</key>
+        <string>%version%</string>
+      </dict>
+    </dict>
     <dict>
       <key>Processor</key>
       <string>PkgRootCreator</string>
@@ -58,7 +69,7 @@
         <key>source</key>
         <string>%output_app%</string>
         <key>target</key>
-        <string>%pkgroot%/Applications/%NAME%_%version%.app</string>
+        <string>%pkgroot%/Applications/%NAME%_%major_version%.%minor_version%.app</string>
       </dict>
     </dict>
     <dict>
@@ -70,7 +81,7 @@
         <string>%pkgroot%</string>
         <key>installs_item_paths</key>
         <array>
-          <key>/Applications/%NAME%_%version%.app</key>
+          <key>/Applications/%NAME%_%major_version%.%minor_version%.app</key>
         </array>
         <key>version_comparison_key</key>
         <string>CFBundleVersion</string>
@@ -89,7 +100,7 @@
         <array>
           <dict>
             <key>path</key>
-            <string>/Applications/%NAME%_%version%.app</string>
+            <string>/Applications/%NAME%_%major_version%.%minor_version%.app</string>
             <key>type</key>
             <string>bundle</string>
           </dict>
@@ -108,9 +119,9 @@
           <key>icon_name</key>
           <string>%ICON_NAME%</string>
           <key>name</key>
-          <string>%NAME%%version%</string>
+          <string>%NAME%%major_version%.%minor_version%</string>
           <key>version</key>
-          <string>%version%.%bundleversion%</string>
+          <string>%major_version%.%minor_version%.%patch_version%.%bundleversion%</string>
         </dict>
       </dict>
     </dict>
@@ -120,7 +131,7 @@
       <key>Arguments</key>
       <dict>
         <key>dmg_root</key>
-        <string>%pkgroot%</string>
+        <string>%pkgroot%/Applications</string>
         <key>dmg_path</key>
         <string>%RECIPE_CACHE_DIR%/%NAME%_%version%.dmg</string>
       </dict>
@@ -134,8 +145,7 @@
         <string>%MUNKI_REPO_SUBDIR%</string>
         <key>additional_makepkginfo_options</key>
         <array>
-          <string>--itemname=Applications/%NAME%_%version%.app</string>
-          <string>--destinationitemname=%NAME%_%version%.app</string>
+          <string>--destinationitemname=%DESTINATION_APP_NAME%</string>
           <string>--owner=root</string>
           <string>--group=wheel</string>
           <string>--mode=u+rwx,go+rx</string>
