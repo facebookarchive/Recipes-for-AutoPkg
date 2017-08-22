@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Description</key>
+    <string>Note: munkitools does not include a code signature. If your
+organization requires code signature, it is recommend to internally sign
+the application.
+
+Downloads and imports version 3 of the Munki tools via
+the official releases listing on GitHub. You can set INCLUDE_PRERELEASES
+to any value to have this recipe pull prerelease versions.
+
+Note that Munki 3 includes an additional component pkg, munkitools_app_usage.
+This recipe imports this to the Munki with the appropriate 'requires' key,
+however as it is considered an optional component, this recipe does not
+add it as an update_for any Munki component. Admins should add
+munkitools_app_usage to a manifest manually if its installation on clients
+is desired.
+
+This recipe cannot be overridden to pull a download from an
+alternate location such as munkibuilds.org - it will only download the
+official releases. For this, use the munkitools2-autobuild.munki
+recipe with a manually-provided DOWNLOAD_URL variable.
+
+The GitHubReleasesInfoProvider processor used by this recipe also
+respects an input variable: 'sort_by_highest_tag_names', which
+if set, will ignore the post dates of the releases and instead sort
+descending by tag names according to LooseVersion semantics.
+
+This particular recipe only produces packages of the subpackages of the
+primary Munki release. It does not take any action with the packages.
+</string>
+    <key>Identifier</key>
+    <string>com.facebook.autopkg.chef.munkitools3</string>
+    <key>Input</key>
+    <dict>
+        <key>INCLUDE_PRERELEASES</key>
+        <string></string>
+        <key>NAME</key>
+        <string>munkitools3</string>
+    </dict>
+    <key>MinimumVersion</key>
+    <string>0.5.0</string>
+    <key>ParentRecipe</key>
+    <string>com.facebook.autopkg.pkg.munkitools3</string>
+    <key>Process</key>
+    <array>
+        <dict>
+            <key>Processor</key>
+            <string>FileFinder</string>
+            <key>Arguments</key>
+            <dict>
+                <key>pattern</key>
+                <string>%RECIPE_CACHE_DIR%/unpack/munkitools_core-*/PackageInfo</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/PackageInfoVersioner</string>
+            <key>Arguments</key>
+            <dict>
+                <key>package_info_path</key>
+                <string>%found_filename%</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>FileCreator</string>
+            <key>Arguments</key>
+            <dict>
+              <key>file_path</key>
+              <string>%RECIPE_CACHE_DIR%/chef_recipe.rb</string>
+              <key>file_content</key>
+              <string>node.default['cpe_munki']['munki_version_to_install']['core'] = {
+  'version' =&gt; '%version%',</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>FileFinder</string>
+            <key>Arguments</key>
+            <dict>
+                <key>pattern</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_core.pkg</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/SHAChecksum</string>
+            <key>Arguments</key>
+            <dict>
+                <key>source_file</key>
+                <string>%found_filename%</string>
+                <key>checksum_type</key>
+                <string>256</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/FileAppender</string>
+            <key>Arguments</key>
+            <dict>
+              <key>file_path</key>
+              <string>%RECIPE_CACHE_DIR%/chef_recipe.rb</string>
+              <key>file_content</key>
+              <string>
+  'checksum' =&gt;
+    '%checksum%',
+}
+</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>FileFinder</string>
+            <key>Arguments</key>
+            <dict>
+                <key>pattern</key>
+                <string>%RECIPE_CACHE_DIR%/unpack/munkitools_admin-*/PackageInfo</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/PackageInfoVersioner</string>
+            <key>Arguments</key>
+            <dict>
+                <key>package_info_path</key>
+                <string>%found_filename%</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/FileAppender</string>
+            <key>Arguments</key>
+            <dict>
+              <key>file_path</key>
+              <string>%RECIPE_CACHE_DIR%/chef_recipe.rb</string>
+              <key>file_content</key>
+              <string>node.default['cpe_munki']['munki_version_to_install']['admin'] = {
+  'version' =&gt; '%version%',</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>FileFinder</string>
+            <key>Arguments</key>
+            <dict>
+                <key>pattern</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_admin.pkg</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/SHAChecksum</string>
+            <key>Arguments</key>
+            <dict>
+                <key>source_file</key>
+                <string>%found_filename%</string>
+                <key>checksum_type</key>
+                <string>256</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/FileAppender</string>
+            <key>Arguments</key>
+            <dict>
+              <key>file_path</key>
+              <string>%RECIPE_CACHE_DIR%/chef_recipe.rb</string>
+              <key>file_content</key>
+              <string>
+  'checksum' =&gt;
+    '%checksum%',
+}
+</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>FileFinder</string>
+            <key>Arguments</key>
+            <dict>
+                <key>pattern</key>
+                <string>%RECIPE_CACHE_DIR%/unpack/munkitools_app-*/PackageInfo</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/PackageInfoVersioner</string>
+            <key>Arguments</key>
+            <dict>
+                <key>package_info_path</key>
+                <string>%found_filename%</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/FileAppender</string>
+            <key>Arguments</key>
+            <dict>
+              <key>file_path</key>
+              <string>%RECIPE_CACHE_DIR%/chef_recipe.rb</string>
+              <key>file_content</key>
+              <string>node.default['cpe_munki']['munki_version_to_install']['app'] = {
+  'version' =&gt; '%version%',</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>FileFinder</string>
+            <key>Arguments</key>
+            <dict>
+                <key>pattern</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_app.pkg</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/SHAChecksum</string>
+            <key>Arguments</key>
+            <dict>
+                <key>source_file</key>
+                <string>%found_filename%</string>
+                <key>checksum_type</key>
+                <string>256</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/FileAppender</string>
+            <key>Arguments</key>
+            <dict>
+              <key>file_path</key>
+              <string>%RECIPE_CACHE_DIR%/chef_recipe.rb</string>
+              <key>file_content</key>
+              <string>
+  'checksum' =&gt;
+    '%checksum%',
+}
+</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>FileFinder</string>
+            <key>Arguments</key>
+            <dict>
+                <key>pattern</key>
+                <string>%RECIPE_CACHE_DIR%/unpack/munkitools_app_usage-*/PackageInfo</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/PackageInfoVersioner</string>
+            <key>Arguments</key>
+            <dict>
+                <key>package_info_path</key>
+                <string>%found_filename%</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/FileAppender</string>
+            <key>Arguments</key>
+            <dict>
+              <key>file_path</key>
+              <string>%RECIPE_CACHE_DIR%/chef_recipe.rb</string>
+              <key>file_content</key>
+              <string>node.default['cpe_munki']['munki_version_to_install']['app_usage'] = {
+  'version' =&gt; '%version%',</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>FileFinder</string>
+            <key>Arguments</key>
+            <dict>
+                <key>pattern</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_app_usage.pkg</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/SHAChecksum</string>
+            <key>Arguments</key>
+            <dict>
+                <key>source_file</key>
+                <string>%found_filename%</string>
+                <key>checksum_type</key>
+                <string>256</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/FileAppender</string>
+            <key>Arguments</key>
+            <dict>
+              <key>file_path</key>
+              <string>%RECIPE_CACHE_DIR%/chef_recipe.rb</string>
+              <key>file_content</key>
+              <string>
+  'checksum' =&gt;
+    '%checksum%',
+}
+</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>FileFinder</string>
+            <key>Arguments</key>
+            <dict>
+                <key>pattern</key>
+                <string>%RECIPE_CACHE_DIR%/unpack/munkitools_launchd-*/PackageInfo</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/PackageInfoVersioner</string>
+            <key>Arguments</key>
+            <dict>
+                <key>package_info_path</key>
+                <string>%found_filename%</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/FileAppender</string>
+            <key>Arguments</key>
+            <dict>
+              <key>file_path</key>
+              <string>%RECIPE_CACHE_DIR%/chef_recipe.rb</string>
+              <key>file_content</key>
+              <string>node.default['cpe_munki']['munki_version_to_install']['launchd'] = {
+  'version' =&gt; '%version%',</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>FileFinder</string>
+            <key>Arguments</key>
+            <dict>
+                <key>pattern</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_launchd.pkg</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/SHAChecksum</string>
+            <key>Arguments</key>
+            <dict>
+                <key>source_file</key>
+                <string>%found_filename%</string>
+                <key>checksum_type</key>
+                <string>256</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.facebook.autopkg.shared/FileAppender</string>
+            <key>Arguments</key>
+            <dict>
+              <key>file_path</key>
+              <string>%RECIPE_CACHE_DIR%/chef_recipe.rb</string>
+              <key>file_content</key>
+              <string>
+  'checksum' =&gt;
+    '%checksum%',
+}
+</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>PathDeleter</string>
+            <key>Arguments</key>
+            <dict>
+                <key>path_list</key>
+                <string>%RECIPE_CACHE_DIR%/unpack</string>
+            </dict>
+        </dict>
+    </array>
+</dict>
+</plist>
