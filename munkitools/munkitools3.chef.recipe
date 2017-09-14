@@ -113,6 +113,17 @@ primary Munki release. It does not take any action with the packages.
         </dict>
         <dict>
             <key>Processor</key>
+            <string>FileMover</string>
+            <key>Arguments</key>
+            <dict>
+                <key>source</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_core.pkg</string>
+                <key>target</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_core-%version%.pkg</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
             <string>FileFinder</string>
             <key>Arguments</key>
             <dict>
@@ -174,6 +185,17 @@ primary Munki release. It does not take any action with the packages.
     '%checksum%',
 }
 </string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>FileMover</string>
+            <key>Arguments</key>
+            <dict>
+                <key>source</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_admin.pkg</string>
+                <key>target</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_admin-%version%.pkg</string>
             </dict>
         </dict>
         <dict>
@@ -243,6 +265,17 @@ primary Munki release. It does not take any action with the packages.
         </dict>
         <dict>
             <key>Processor</key>
+            <string>FileMover</string>
+            <key>Arguments</key>
+            <dict>
+                <key>source</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_app.pkg</string>
+                <key>target</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_app-%version%.pkg</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
             <string>FileFinder</string>
             <key>Arguments</key>
             <dict>
@@ -308,6 +341,17 @@ primary Munki release. It does not take any action with the packages.
         </dict>
         <dict>
             <key>Processor</key>
+            <string>FileMover</string>
+            <key>Arguments</key>
+            <dict>
+                <key>source</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_app_usage.pkg</string>
+                <key>target</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_app_usage-%version%.pkg</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
             <string>FileFinder</string>
             <key>Arguments</key>
             <dict>
@@ -369,6 +413,17 @@ primary Munki release. It does not take any action with the packages.
     '%checksum%',
 }
 </string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>FileMover</string>
+            <key>Arguments</key>
+            <dict>
+                <key>source</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_launchd.pkg</string>
+                <key>target</key>
+                <string>%RECIPE_CACHE_DIR%/repack/munkitools_launchd-%version%.pkg</string>
             </dict>
         </dict>
         <dict>
