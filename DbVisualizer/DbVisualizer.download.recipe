@@ -21,7 +21,7 @@
       <key>Arguments</key>
       <dict>
         <key>url</key>
-        <string>https://www.dbvis.com/download/</string>
+        <string>https://www.dbvis.com/download/10.0</string>
         <key>re_pattern</key>
         <string>\/.*.tgz(?=")</string>
       </dict>
@@ -30,9 +30,7 @@
       <key>Arguments</key>
       <dict>
         <key>url</key>
-        <string>https://www.dbvis.com/%match%</string>
-        <key>filename</key>
-        <string>dbvis.tgz</string>
+        <string>https:%match%</string>
       </dict>
       <key>Processor</key>
       <string>URLDownloader</string>
