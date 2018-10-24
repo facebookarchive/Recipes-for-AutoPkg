@@ -1,11 +1,11 @@
 #!/usr/bin/python
 #
-#  Copyright (c) 2015, Facebook, Inc.
-#  All rights reserved.
+# Copyright (c) Facebook, Inc. and its affiliates.
 #
-#  This source code is licensed under the BSD-style license found in the
-#  LICENSE file in the root directory of this source tree. An additional grant
-#  of patent rights can be found in the PATENTS file in the same directory.
+# This source code is licensed under the BSD-style license found in the
+# LICENSE file in the root directory of this source tree. An additional grant
+# of patent rights can be found in the PATENTS file in the same directory.
+#
 """See docstring for Rsync class"""
 
 # Disabling warnings for env members and imports that only affect recipe-
