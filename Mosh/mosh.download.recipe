@@ -24,9 +24,9 @@
             <key>Arguments</key>
             <dict>
                 <key>url</key>
-                <string>https://mosh.mit.edu/#getting</string>
+                <string>https://mosh.org/#getting</string>
                 <key>re_pattern</key>
-                <string>https://mosh.mit.edu/mosh-[0-9,.]\..\..\.pkg</string>
+                <string>https://mosh.org/mosh-[0-9,.]\..\..\.pkg</string>
             </dict>
         </dict>
         <dict>
