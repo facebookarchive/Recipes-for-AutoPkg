@@ -58,11 +58,14 @@ class IntellijURLProvider(Processor):
         )
     # Search for download link.
     root = ET.fromstring(html)
-    # root[0][-1] is always the last IDEA release
-    build = root[0][-1].find('build')
-    version = build.attrib['version']
-    # Return pkg url.
-    return str(version)
+    # Use XPath to select the IntelliJ node; will always
+    # select the first instance which *should* be the
+    # latest version.
+    latest_version = root.find(
+        "./product[@name='IntelliJ IDEA']/"
+        "channel[@name='IntelliJ IDEA RELEASE']//")
+    # Return version number
+    return str(latest_version.attrib['version'])
 
   def main(self):
     """Main function."""
