@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<!-- Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved -->
+<dict>
+  <key>Description</key>
+  <string>Download Xcode from the Apple dev portal.</string>
+  <key>Identifier</key>
+  <string>com.facebook.autopkg.xcodeclitools.downloader</string>
+  <key>Input</key>
+  <dict>
+    <key>NAME</key>
+    <string>Xcode</string>
+    <key>APPLE_ID</key>
+    <string>dev@domain.com</string>
+    <key>PASSWORD</key>
+    <string>password</string>
+    <key>MACOS_VERSION</key>
+    <string>10.14</string>
+    <key>PATTERN</key>
+    <string>(.*Command_Line_Tools.*%MACOS_VERSION%.*.dmg)</string>
+  </dict>
+  <key>MinimumVersion</key>
+  <string>1.0.5</string>
+  <key>Process</key>
+  <array>
+    <dict>
+      <key>Processor</key>
+      <string>AppleDataGatherer</string>
+      <key>Arguments</key>
+      <dict>
+        <key>apple_id</key>
+        <string>%APPLE_ID%</string>
+        <key>password</key>
+        <string>%PASSWORD%</string>
+        <key>appID_key</key>
+        <string>891bd3417a7776362562d2197f89480a8547b108fd934911bcbea0110d07f757</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>AppleCookieDownloader</string>
+      <key>Arguments</key>
+      <dict>
+        <key>login_data</key>
+        <string>%RECIPE_CACHE_DIR%/downloads/login_data</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>AppleURLSearcher</string>
+      <key>Arguments</key>
+      <dict>
+        <key>re_pattern</key>
+        <string>%PATTERN%</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>URLDownloader</string>
+      <key>Arguments</key>
+      <dict>
+        <key>url</key>
+        <string>%match%</string>
+        <key>curl_opts</key>
+        <array>
+          <string>--request</string>
+          <string>GET</string>
+          <string>--cookie</string>
+          <string>%download_cookies%</string>
+        </array>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>CodeSignatureVerifier</string>
+      <key>Arguments</key>
+      <dict>
+        <key>input_path</key>
+        <string>%pathname%/*.pkg</string>
+        <key>expected_authority_names</key>
+        <array>
+          <string>Software Update</string>
+          <string>Apple Software Update Certification Authority</string>
+          <string>Apple Root CA</string>
+        </array>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>PathDeleter</string>
+      <key>Arguments</key>
+      <dict>
+        <key>path_list</key>
+        <array>
+          <string>%RECIPE_CACHE_DIR%/downloads/login_data</string>
+        </array>
+      </dict>
+    </dict>
+  </array>
+</dict>
+</plist>
