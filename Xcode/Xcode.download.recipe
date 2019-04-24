@@ -69,16 +69,31 @@
         </array>
       </dict>
     </dict>
-<!--      <dict>
+    <dict>
       <key>Processor</key>
       <string>CodeSignatureVerifier</string>
       <key>Arguments</key>
       <dict>
         <key>input_path</key>
-        <string>%output_app%</string>
-        <key>requirement</key>
-        <string>identifier "com.apple.dt.Xcode" and anchor apple</string>
-      </dict> -->
+        <string>%pathname%</string>
+        <key>expected_authority_names</key>
+        <array>
+          <string>Software Update</string>
+          <string>Apple Software Update Certification Authority</string>
+          <string>Apple Root CA</string>
+        </array>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>PathDeleter</string>
+      <key>Arguments</key>
+      <dict>
+        <key>path_list</key>
+        <array>
+          <string>%RECIPE_CACHE_DIR%/downloads/login_data</string>
+        </array>
+      </dict>
     </dict>
   </array>
 </dict>
