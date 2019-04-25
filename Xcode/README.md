@@ -13,7 +13,7 @@ variables:
 This override can be used for the .download alone, or with the .munki recipes.
 
 *WARNING! Your password will appear in plain text in the AutoPkg verbose logs. 
-If you use more than one -v, this password will not be secert.*
+If you use more than one -v, this password will not be secret.*
 
 ## A note about version numbers
 
