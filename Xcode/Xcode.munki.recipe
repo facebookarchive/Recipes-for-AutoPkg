@@ -34,7 +34,7 @@
     </dict>
   </dict>
   <key>MinimumVersion</key>
-  <string>0.6.0</string>
+  <string>1.0.5</string>
   <key>ParentRecipe</key>
   <string>com.facebook.autopkg.xcode.extract</string>
   <key>Process</key>
@@ -50,62 +50,13 @@
     </dict>
     <dict>
       <key>Processor</key>
-      <string>PkgRootCreator</string>
+      <string>DmgCreator</string>
       <key>Arguments</key>
       <dict>
-        <key>pkgroot</key>
-        <string>%RECIPE_CACHE_DIR%/%NAME%</string>
-        <key>pkgdirs</key>
-        <dict>
-          <key>Applications</key>
-          <string>0755</string>
-        </dict>
-      </dict>
-    </dict>
-    <dict>
-      <key>Processor</key>
-      <string>FileMover</string>
-      <key>Arguments</key>
-      <dict>
-        <key>source</key>
-        <string>%output_app%</string>
-        <key>target</key>
-        <string>%pkgroot%/Applications/%NAME%_%major_version%.%minor_version%.app</string>
-      </dict>
-    </dict>
-    <dict>
-      <key>Processor</key>
-      <string>MunkiInstallsItemsCreator</string>
-      <key>Arguments</key>
-      <dict>
-        <key>faux_root</key>
-        <string>%pkgroot%</string>
-        <key>installs_item_paths</key>
-        <array>
-          <key>/Applications/%NAME%_%major_version%.%minor_version%.app</key>
-        </array>
-        <key>version_comparison_key</key>
-        <string>CFBundleVersion</string>
-      </dict>
-    </dict>
-    <dict>
-      <key>Processor</key>
-      <string>MunkiPkginfoMerger</string>
-    </dict>
-    <dict>
-      <key>Processor</key>
-      <string>com.facebook.autopkg.shared/InstallsArrayFineTuning</string>
-      <key>Arguments</key>
-      <dict>
-        <key>changes</key>
-        <array>
-          <dict>
-            <key>path</key>
-            <string>/Applications/%NAME%_%major_version%.%minor_version%.app</string>
-            <key>type</key>
-            <string>bundle</string>
-          </dict>
-        </array>
+        <key>dmg_root</key>
+        <string>%found_filename%</string>
+        <key>dmg_path</key>
+        <string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
       </dict>
     </dict>
     <dict>
@@ -116,41 +67,21 @@
         <key>additional_pkginfo</key>
         <dict>
           <key>display_name</key>
-          <string>%NAME% %version% (%productbuildversion%)</string>
+          <string>%NAME% %major_version%.%minor_version%.%patch_version%</string>
           <key>icon_name</key>
           <string>%ICON_NAME%</string>
-          <key>name</key>
-          <string>%NAME%%major_version%.%minor_version%</string>
           <key>version</key>
           <string>%major_version%.%minor_version%.%patch_version%.%bundleversion%</string>
         </dict>
       </dict>
     </dict>
     <dict>
-      <key>Processor</key>
-      <string>DmgCreator</string>
-      <key>Arguments</key>
-      <dict>
-        <key>dmg_root</key>
-        <string>%pkgroot%/Applications</string>
-        <key>dmg_path</key>
-        <string>%RECIPE_CACHE_DIR%/%NAME%_%version%.dmg</string>
-      </dict>
-    </dict>
-    <dict>
       <key>Arguments</key>
       <dict>
         <key>pkg_path</key>
-        <string>%RECIPE_CACHE_DIR%/%NAME%_%version%.dmg</string>
+        <string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
         <key>repo_subdirectory</key>
         <string>%MUNKI_REPO_SUBDIR%</string>
-        <key>additional_makepkginfo_options</key>
-        <array>
-          <string>--destinationitemname=%DESTINATION_APP_NAME%</string>
-          <string>--owner=root</string>
-          <string>--group=wheel</string>
-          <string>--mode=u+rwx,go+rx</string>
-        </array>
       </dict>
       <key>Processor</key>
       <string>MunkiImporter</string>
@@ -162,7 +93,6 @@
       <dict>
         <key>path_list</key>
         <array>
-          <string>%pkgroot%</string>
           <string>%RECIPE_CACHE_DIR%/%NAME%_unpack</string>
         </array>
       </dict>
