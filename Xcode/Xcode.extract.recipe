@@ -13,7 +13,7 @@
     <string>Xcode</string>
   </dict>
   <key>MinimumVersion</key>
-  <string>1.0.5</string>
+  <string>1.0.4</string>
   <key>ParentRecipe</key>
   <string>com.facebook.autopkg.xcode.downloader</string>
   <key>Process</key>

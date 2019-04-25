@@ -19,7 +19,7 @@
     <string>(.*Developer_Tools\/Xcode_.*\/Xcode_[^\/]*xip)</string>
   </dict>
   <key>MinimumVersion</key>
-  <string>1.0.5</string>
+  <string>1.0.4</string>
   <key>Process</key>
   <array>
     <dict>
