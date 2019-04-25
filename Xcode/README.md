@@ -10,6 +10,8 @@ variables:
 * APPLE_ID: an AppleID that has access to the developer downloads portal
 * PASSWORD: the password to the AppleID
 
+*KNOWN LIMITATION: This does not work on an account with 2fa or 2-step.*
+
 This override can be used for the .download alone, or with the .munki recipes.
 
 *WARNING! Your password will appear in plain text in the AutoPkg verbose logs. 
