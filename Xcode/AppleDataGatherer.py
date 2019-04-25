@@ -18,6 +18,7 @@ from urllib import quote
 
 from autopkglib import Processor, ProcessorError
 
+
 __all__ = ["AppleDataGatherer"]
 
 
@@ -47,20 +48,19 @@ class AppleDataGatherer(Processor):
         passwordstring = "accountPassword={}".format(self.env["password"])
 
         login_data = appleIDstring + appIDKeystring + passwordstring
-        download_dir = os.path.join(
-            self.env["RECIPE_CACHE_DIR"], "downloads"
-        )
+        download_dir = os.path.join(self.env["RECIPE_CACHE_DIR"], "downloads")
         filename = "login_data"
         # create download_dir if needed
         if not os.path.exists(download_dir):
             try:
                 os.makedirs(download_dir)
-            except OSError, err:
+            except OSError as err:
                 raise ProcessorError(
-                    "Can't create %s: %s" % (download_dir, err.strerror))
+                    "Can't create %s: %s" % (download_dir, err.strerror)
+                )
         self.output("Writing data to file")
-        self.env['data_pathname'] = os.path.join(download_dir, filename)
-        with open(self.env['data_pathname'], "w") as f:
+        self.env["data_pathname"] = os.path.join(download_dir, filename)
+        with open(self.env["data_pathname"], "w") as f:
             f.write(login_data)
 
 
