@@ -6,7 +6,7 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
-"""Get all Version information from Xcode."""
+"""See docstring for AppleDataGatherer class"""
 
 
 # Disabling warnings for env members and imports that only affect recipe-
