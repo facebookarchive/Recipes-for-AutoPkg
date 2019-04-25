@@ -65,12 +65,12 @@ class XcodeXIPUnpacker(Processor):
       '--expand',
       xip_path,
     ]
-    # proc = subprocess.Popen(cmd,
-    #                         stdout=subprocess.PIPE,
-    #                         stderr=subprocess.PIPE)
-    # (out, err) = proc.communicate()
-    # if err:
-    #   raise ProcessorError(err)
+    proc = subprocess.Popen(cmd,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE)
+    (out, err) = proc.communicate()
+    if err:
+      raise ProcessorError(err)
     self.output("Finished xip unpack.")
 
 
