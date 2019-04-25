@@ -4,11 +4,15 @@
 <!-- Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved -->
 <dict>
   <key>Description</key>
-  <string>Import Xcode as a unique entry into Munki. Requires passing in a XIP containing Xcode. Override ICON_NAME with the name of your Xcode icon.</string>
+  <string>Download, extract, and import Xcode into Munki. You must override the APPLE_ID and PASSWORD.</string>
   <key>Identifier</key>
   <string>com.facebook.autopkg.xcode.munki</string>
   <key>Input</key>
   <dict>
+    <key>APPLE_ID</key>
+    <string>dev@domain.com</string>
+    <key>PASSWORD</key>
+    <string>password</string>
     <key>NAME</key>
     <string>Xcode</string>
     <key>MUNKI_REPO_SUBDIR</key>

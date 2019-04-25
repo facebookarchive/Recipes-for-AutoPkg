@@ -4,7 +4,7 @@
 <!-- Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved -->
 <dict>
   <key>Description</key>
-  <string>Download Xcode from the Apple dev portal.</string>
+  <string>Download Xcode from the Apple dev portal. You must override the APPLE_ID and PASSWORD.</string>
   <key>Identifier</key>
   <string>com.facebook.autopkg.xcodeclitools.downloader</string>
   <key>Input</key>
