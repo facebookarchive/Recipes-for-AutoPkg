@@ -61,6 +61,14 @@ disk. The app that is installed on disk is named similarly,
 named similarly as well, although the DMG name is ignored by Munki as it 
 renames it accordingly.
 
+Example output:
+```
+The following new items were imported into Munki:
+    Name         Version           Catalogs  Pkginfo Path                                         Pkg Repo Path
+    ----         -------           --------  ------------                                         -------------
+    Xcode10.2.1  10.2.1.14490.122  testing   apps/apple/xcode/Xcode10.2.1-10.2.1.14490.122.plist  apps/apple/xcode/Xcode_10.2-10.2.1.14490.122.dmg
+```
+
 ### XcodeCLITools.download
 
 This download recipe shows how you can easily create new recipes, or even 
@@ -110,7 +118,7 @@ madness.
 ## Important Notes
 
 Xcode is a nasty beast. Apple has no compunction against changing it any time of
-time or night, or renaming it, or breaking assumptions. Since they provide no 
+day or night, or renaming it, or breaking assumptions. Since they provide no 
 useful API of any kind to automate this, we have to use hacky workarounds like 
 this to do something straightforward like downloading software.
 
