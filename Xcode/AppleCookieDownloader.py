@@ -15,12 +15,11 @@ import time
 
 from autopkglib import Processor, ProcessorError
 
-
 __all__ = ["AppleCookieDownloader"]
 
 
 class AppleCookieDownloader(Processor):
-    """Downloads a URL to the specified download_dir using curl."""
+    """Acquire the necessary cookies from Apple to access developer downloads."""
 
     description = __doc__
     input_variables = {
