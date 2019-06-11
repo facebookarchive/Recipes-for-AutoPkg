@@ -22,9 +22,9 @@
       <key>Arguments</key>
       <dict>
         <key>url</key>
-        <string>https://developer.android.com/sdk/index.html#Other</string>
+        <string>https://developer.android.com/studio#downloads</string>
         <key>re_pattern</key>
-        <string>"(http:\/\/dl.google.com\/.*\/.*macosx.zip)"</string>
+        <string>"(https:\/\/dl\.google\.com\/android\/repository\/sdk-tools-darwin-\d+\.zip)"</string>
       </dict>
     </dict>
     <dict>
