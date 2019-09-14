@@ -2,17 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Copyright</key>
-    <string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
-    <key>Description</key>
-    <string>Recipe stub for any Shared Processors in this directory.</string>
-    <key>Identifier</key>
-    <string>com.facebook.autopkg.shared.chef</string>
-    <key>Input</key>
-    <dict/>
-    <key>MinimumVersion</key>
-    <string>0.4.0</string>
-    <key>Process</key>
-    <dict/>
+	<key>Copyright</key>
+	<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
+	<key>Description</key>
+	<string>Recipe stub for any Shared Processors in this directory.</string>
+	<key>Identifier</key>
+	<string>com.facebook.autopkg.shared.chef</string>
+	<key>Input</key>
+	<dict/>
+	<key>MinimumVersion</key>
+	<string>0.4.0</string>
+	<key>Process</key>
+	<dict/>
 </dict>
 </plist>

@@ -2,27 +2,27 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Copyright</key>
-    <string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
-    <key>Description</key>
-    <string>Downloads the current release version of DbVisualizer, builds an installer package and installs it.</string>
-    <key>Identifier</key>
-    <string>com.facebook.autopkg.install.dbvisualizer</string>
-    <key>Input</key>
-    <dict>
-        <key>NAME</key>
-        <string>DbVisualizer</string>
-    </dict>
-    <key>MinimumVersion</key>
-    <string>0.4.0</string>
-    <key>ParentRecipe</key>
-    <string>com.facebook.autopkg.pkg.dbvisualizer</string>
-    <key>Process</key>
-    <array>
-        <dict>
-            <key>Processor</key>
-            <string>Installer</string>
-        </dict>
-    </array>
+	<key>Copyright</key>
+	<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
+	<key>Description</key>
+	<string>Downloads the current release version of DbVisualizer, builds an installer package and installs it.</string>
+	<key>Identifier</key>
+	<string>com.facebook.autopkg.install.dbvisualizer</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>DbVisualizer</string>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>0.4.0</string>
+	<key>ParentRecipe</key>
+	<string>com.facebook.autopkg.pkg.dbvisualizer</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Processor</key>
+			<string>Installer</string>
+		</dict>
+	</array>
 </dict>
 </plist>

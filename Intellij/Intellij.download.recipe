@@ -2,51 +2,51 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Copyright</key>
-    <string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
-    <key>Description</key>
-    <string>Downloads latest Intellij disk image.</string>
-    <key>Identifier</key>
-    <string>com.facebook.autopkg.download.intellij</string>
-    <key>Input</key>
-    <dict>
-        <key>NAME</key>
-        <string>Intellij</string>
-    </dict>
-    <key>MinimumVersion</key>
-    <string>0.6.0</string>
-    <key>Process</key>
-    <array>
-        <dict>
-            <key>Processor</key>
-            <string>IntellijURLProvider</string>
-        </dict>
-        <dict>
-            <key>Processor</key>
-            <string>URLDownloader</string>
-            <key>Arguments</key>
-            <dict>
-                <key>url</key>
-                <string>%url%</string>
-                <key>filename</key>
-                <string>%NAME%.dmg</string>
-            </dict>
-        </dict>
-        <dict>
-            <key>Processor</key>
-            <string>EndOfCheckPhase</string>
-        </dict>
-        <dict>
-          <key>Processor</key>
-          <string>CodeSignatureVerifier</string>
-          <key>Arguments</key>
-          <dict>
-            <key>input_path</key>
-            <string>%pathname%/IntelliJ IDEA CE.app</string>
-            <key>requirement</key>
-            <string>anchor apple generic and identifier "com.jetbrains.intellij.ce" and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */) and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "2ZEFAR8TH3"</string>
-          </dict>
-        </dict>
-    </array>
+	<key>Copyright</key>
+	<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
+	<key>Description</key>
+	<string>Downloads latest Intellij disk image.</string>
+	<key>Identifier</key>
+	<string>com.facebook.autopkg.download.intellij</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>Intellij</string>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>0.6.0</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Processor</key>
+			<string>IntellijURLProvider</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>filename</key>
+				<string>%NAME%.dmg</string>
+				<key>url</key>
+				<string>%url%</string>
+			</dict>
+			<key>Processor</key>
+			<string>URLDownloader</string>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>EndOfCheckPhase</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>input_path</key>
+				<string>%pathname%/IntelliJ IDEA CE.app</string>
+				<key>requirement</key>
+				<string>anchor apple generic and identifier "com.jetbrains.intellij.ce" and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */) and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "2ZEFAR8TH3"</string>
+			</dict>
+			<key>Processor</key>
+			<string>CodeSignatureVerifier</string>
+		</dict>
+	</array>
 </dict>
 </plist>

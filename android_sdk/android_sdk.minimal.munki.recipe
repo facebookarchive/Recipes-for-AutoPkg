@@ -2,69 +2,69 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Copyright</key>
-    <string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
-    <key>Description</key>
-    <string>Downloads a minimal set of Android SDK tools, creates a PKG out of it, and imports into Munki.</string>
-    <key>Identifier</key>
-    <string>com.facebook.autopkg.munki.android_sdk.minimal</string>
-    <key>Input</key>
-    <dict>
-      <key>NAME</key>
-      <string>android_sdk</string>
-      <key>DESTINATION_PATH</key>
-      <string>/opt/android_sdk</string>        
-      <key>MUNKI_REPO_SUBDIR</key>
-      <string>apps/%NAME%</string>
-      <key>pkginfo</key>
-      <dict>
-        <key>catalogs</key>
-        <array>
-        <string>testing</string>
-        </array>
-        <key>description</key>
-        <string>Android SDK.</string>
-        <key>display_name</key>
-        <string>Android SDK</string>
-        <key>category</key>
-        <string>Developer Tools</string>
-        <key>developer</key>
-        <string>Google</string>
-        <key>unattended_install</key>
-        <true/>
-      </dict>
-    </dict>
-    <key>MinimumVersion</key>
-    <string>0.2.0</string>
-    <key>ParentRecipe</key>
-    <string>com.facebook.autopkg.pkg.android_sdk.minimal</string>
-    <key>Process</key>
-    <array>
-      <dict>
-        <key>Processor</key>
-        <string>MunkiPkginfoMerger</string>
-        <key>Arguments</key>
-        <dict>
-          <key>additional_pkginfo</key>
-          <dict>
-            <key>name</key>
-            <string>%NAME%</string>            
-            <key>version</key>
-            <string>%version%</string>
-          </dict>
-        </dict>
-      </dict>
-      <dict>
-        <key>Arguments</key>
-        <dict>
-          <key>pkg_path</key>
-          <string>%pkg_path%</string>
-          <key>repo_subdirectory</key>
-          <string>%MUNKI_REPO_SUBDIR%</string>
-        </dict>
-        <key>Processor</key>
-        <string>MunkiImporter</string>
-      </dict>
-    </array>
+	<key>Copyright</key>
+	<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
+	<key>Description</key>
+	<string>Downloads a minimal set of Android SDK tools, creates a PKG out of it, and imports into Munki.</string>
+	<key>Identifier</key>
+	<string>com.facebook.autopkg.munki.android_sdk.minimal</string>
+	<key>Input</key>
+	<dict>
+		<key>DESTINATION_PATH</key>
+		<string>/opt/android_sdk</string>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/%NAME%</string>
+		<key>NAME</key>
+		<string>android_sdk</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>testing</string>
+			</array>
+			<key>category</key>
+			<string>Developer Tools</string>
+			<key>description</key>
+			<string>Android SDK.</string>
+			<key>developer</key>
+			<string>Google</string>
+			<key>display_name</key>
+			<string>Android SDK</string>
+			<key>unattended_install</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>0.2.0</string>
+	<key>ParentRecipe</key>
+	<string>com.facebook.autopkg.pkg.android_sdk.minimal</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>name</key>
+					<string>%NAME%</string>
+					<key>version</key>
+					<string>%version%</string>
+				</dict>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%pkg_path%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -2,68 +2,68 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Copyright</key>
-    <string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
-  <key>Description</key>
-  <string>Downloads the latest Framer zip file and imports into Munki.</string>
-  <key>Identifier</key>
-  <string>com.facebook.autopkg.munki.framer</string>
-  <key>Input</key>
-  <dict>
-    <key>NAME</key>
-    <string>Framer</string>
-    <key>MUNKI_REPO_SUBDIR</key>
-    <string>apps/Framer</string>
-    <key>pkginfo</key>
-    <dict>
-      <key>catalogs</key>
-      <array>
-        <string>prod</string>
-        <string>trusted_testers</string>
-        <string>testing</string>
-      </array>
-      <key>category</key>
-      <string>Design</string>
-      <key>developer</key>
-      <string>Motiv Tools, BV</string>
-      <key>description</key>
-      <string>Framer is a design tool that uses code to make anything possible. Pioneer new patterns and groundbreaking designs. Find the best solution, not just the expected one.</string>
-      <key>display_name</key>
-      <string>Framer Studio</string>
-      <key>name</key>
-      <string>%NAME%</string>
-      <key>unattended_install</key>
-      <true/>
-    </dict>
-  </dict>
-  <key>MinimumVersion</key>
-  <string>0.2.0</string>
-  <key>ParentRecipe</key>
-  <string>com.facebook.autopkg.download.framer</string>
-  <key>Process</key>
-  <array>
-    <dict>
-      <key>Arguments</key>
-      <dict>
-        <key>dmg_root</key>
-        <string>%RECIPE_CACHE_DIR%/%NAME%</string>
-        <key>dmg_path</key>
-        <string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
-      </dict>
-      <key>Processor</key>
-      <string>DmgCreator</string>
-    </dict>
-    <dict>
-      <key>Arguments</key>
-      <dict>
-        <key>pkg_path</key>
-        <string>%dmg_path%</string>
-        <key>repo_subdirectory</key>
-        <string>%MUNKI_REPO_SUBDIR%</string>
-      </dict>
-      <key>Processor</key>
-      <string>MunkiImporter</string>
-    </dict>
-  </array>
+	<key>Copyright</key>
+	<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
+	<key>Description</key>
+	<string>Downloads the latest Framer zip file and imports into Munki.</string>
+	<key>Identifier</key>
+	<string>com.facebook.autopkg.munki.framer</string>
+	<key>Input</key>
+	<dict>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>apps/Framer</string>
+		<key>NAME</key>
+		<string>Framer</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>prod</string>
+				<string>trusted_testers</string>
+				<string>testing</string>
+			</array>
+			<key>category</key>
+			<string>Design</string>
+			<key>description</key>
+			<string>Framer is a design tool that uses code to make anything possible. Pioneer new patterns and groundbreaking designs. Find the best solution, not just the expected one.</string>
+			<key>developer</key>
+			<string>Motiv Tools, BV</string>
+			<key>display_name</key>
+			<string>Framer Studio</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>unattended_install</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>0.2.0</string>
+	<key>ParentRecipe</key>
+	<string>com.facebook.autopkg.download.framer</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>dmg_path</key>
+				<string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
+				<key>dmg_root</key>
+				<string>%RECIPE_CACHE_DIR%/%NAME%</string>
+			</dict>
+			<key>Processor</key>
+			<string>DmgCreator</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%dmg_path%</string>
+				<key>repo_subdirectory</key>
+				<string>%MUNKI_REPO_SUBDIR%</string>
+			</dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+	</array>
 </dict>
 </plist>

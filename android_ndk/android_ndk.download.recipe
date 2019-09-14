@@ -2,47 +2,47 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Copyright</key>
-    <string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
-  <key>Description</key>
-  <string>Downloads latest release of Android NDK.</string>
-  <key>Identifier</key>
-  <string>com.facebook.autopkg.download.android_ndk</string>
-  <key>Input</key>
-  <dict>
-    <key>NAME</key>
-    <string>android_ndk</string>
-    <key>RELEASE</key>
-    <string>r.*</string>
-  </dict>
-  <key>MinimumVersion</key>
-  <string>0.5.0</string>
-  <key>Process</key>
-  <array>
-    <dict>
-      <key>Processor</key>
-      <string>URLTextSearcher</string>
-      <key>Arguments</key>
-      <dict>
-        <key>url</key>
-        <string>https://github.com/android-ndk/ndk/wiki</string>
-        <key>re_pattern</key>
-        <string>"(https:\/\/dl\.google\.com\/android\/repository\/android-ndk-%RELEASE%-darwin-x86_64.zip)"</string>
-      </dict>
-    </dict>
-    <dict>
-      <key>Arguments</key>
-      <dict>
-        <key>url</key>
-        <string>%match%</string>
-      </dict>
-      <key>Processor</key>
-      <string>URLDownloader</string>
-    </dict>
-    <dict>
-      <key>Processor</key>
-      <string>EndOfCheckPhase</string>
-    </dict>
-  </array>
+	<key>Copyright</key>
+	<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
+	<key>Description</key>
+	<string>Downloads latest release of Android NDK.</string>
+	<key>Identifier</key>
+	<string>com.facebook.autopkg.download.android_ndk</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>android_ndk</string>
+		<key>RELEASE</key>
+		<string>r.*</string>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>0.5.0</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>re_pattern</key>
+				<string>"(https:\/\/dl\.google\.com\/android\/repository\/android-ndk-%RELEASE%-darwin-x86_64.zip)"</string>
+				<key>url</key>
+				<string>https://github.com/android-ndk/ndk/wiki</string>
+			</dict>
+			<key>Processor</key>
+			<string>URLTextSearcher</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>url</key>
+				<string>%match%</string>
+			</dict>
+			<key>Processor</key>
+			<string>URLDownloader</string>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>EndOfCheckPhase</string>
+		</dict>
+	</array>
 </dict>
 </plist>
