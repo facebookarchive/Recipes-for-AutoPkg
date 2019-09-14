@@ -4,7 +4,7 @@
 #
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.#
-"""See docstring for PackageInfoVersioner class"""
+"""See docstring for PackageInfoVersioner class."""
 
 # Disabling warnings for env members and imports that only affect recipe-
 # specific processors.
@@ -20,7 +20,7 @@ __all__ = ["PackageInfoVersioner"]
 
 
 class PackageInfoVersioner(Processor):
-    """Get version from a PackageInfo file in a distribution/bundle package"""
+    """Get version from a PackageInfo file in a distribution/bundle package."""
 
     description = __doc__
     input_variables = {

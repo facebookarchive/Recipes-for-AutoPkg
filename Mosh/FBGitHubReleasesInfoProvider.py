@@ -10,7 +10,7 @@
 #
 
 
-"""See docstring for FBGitHubReleasesInfoProvider class"""
+"""See docstring for FBGitHubReleasesInfoProvider class."""
 
 # Disabling warnings for env members and imports that only affect recipe-
 # specific processors.
@@ -82,8 +82,10 @@ class FBGitHubReleasesInfoProvider(Processor):
     __doc__ = description
 
     def get_releases(self, repo):
-        """Return a list of releases dicts for a given GitHub repo. repo must
-    be of the form 'user/repo'"""
+        """Return a list of releases dicts for a given GitHub repo.
+
+        repo must be of the form 'user/repo'
+        """
         # pylint: disable=no-self-use
         releases = None
         github = autopkglib.github.GitHubSession()
@@ -103,12 +105,14 @@ class FBGitHubReleasesInfoProvider(Processor):
 
     def select_asset(self, releases, regex):
         """Iterates through the releases in order and determines the first
-    eligible asset that matches the criteria. Sets the selected release
-    and asset data in class variables.
-    - Release 'type' depending on whether 'include_prereleases' is set
-    - If 'asset_regex' is set, whether the asset's 'name' (the filename)
-      matches the regex. If not, then the first asset will be
-      returned."""
+        eligible asset that matches the criteria. Sets the selected release and
+        asset data in class variables.
+
+        - Release 'type' depending on whether 'include_prereleases' is set
+        - If 'asset_regex' is set, whether the asset's 'name' (the filename)
+          matches the regex. If not, then the first asset will be
+          returned.
+        """
         selected = None
         for rel in releases:
             if selected:
@@ -148,7 +152,7 @@ class FBGitHubReleasesInfoProvider(Processor):
 
     def process_release_asset(self):
         """Extract what we need from the release and chosen asset, set env
-    variables"""
+        variables."""
         tag = self.selected_release["tag_name"]
         # Versioned tags usually start with 'v'
         if tag.startswith("v"):

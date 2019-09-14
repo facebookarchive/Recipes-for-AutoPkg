@@ -4,7 +4,7 @@
 #
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.#
-"""See docstring for AndroidXMLParser class"""
+"""See docstring for AndroidXMLParser class."""
 
 # Disabling warnings for env members and imports that only affect recipe-
 # specific processors.

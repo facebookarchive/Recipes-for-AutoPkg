@@ -4,7 +4,7 @@
 #
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.#
-"""See docstring for DirectoryList class"""
+"""See docstring for DirectoryList class."""
 
 
 from __future__ import absolute_import
@@ -18,10 +18,11 @@ __all__ = ["DirectoryList"]
 
 
 class DirectoryList(Processor):
-    """Returns a list of items in a subdirectory as
-   a string, separated by commas. Does not recurse
-   into subdirectories.
-  """
+    """Returns a list of items in a subdirectory as a string, separated by
+    commas.
+
+    Does not recurse into subdirectories.
+    """
 
     input_variables = {
         "pattern": {
@@ -54,7 +55,7 @@ class DirectoryList(Processor):
     description = __doc__
 
     def globfind(self, pattern):
-        """Returns multiple files matching a glob"""
+        """Returns multiple files matching a glob."""
         # pylint: disable=no-self-use
 
         glob_matches = glob(pattern)

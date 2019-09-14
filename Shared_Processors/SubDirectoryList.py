@@ -4,7 +4,7 @@
 #
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.#
-"""See docstring for SubDirectoryList class"""
+"""See docstring for SubDirectoryList class."""
 
 
 from __future__ import absolute_import
@@ -18,8 +18,9 @@ __all__ = ["SubDirectoryList"]
 
 class SubDirectoryList(Processor):
     """Finds a filename for use in other Processors.
-  Currently only supports glob filename patterns.
-  """
+
+    Currently only supports glob filename patterns.
+    """
 
     input_variables = {
         "root_path": {

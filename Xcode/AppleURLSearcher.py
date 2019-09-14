@@ -4,7 +4,7 @@
 #
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.#
-"""See docstring for AppleURLSearcher class"""
+"""See docstring for AppleURLSearcher class."""
 
 from __future__ import absolute_import
 
@@ -22,8 +22,8 @@ __all__ = ["AppleURLSearcher"]
 
 
 class MunkiLooseVersion(version.LooseVersion):
-    """Subclass version.LooseVersion to compare things like
-    "10.6" and "10.6.0" as equal"""
+    """Subclass version.LooseVersion to compare things like "10.6" and "10.6.0"
+    as equal."""
 
     def __init__(self, vstring=None):
         if vstring is None:
@@ -37,8 +37,8 @@ class MunkiLooseVersion(version.LooseVersion):
             self.parse(str(vstring))
 
     def _pad(self, version_list, max_length):
-        """Pad a version list by adding extra 0
-        components to the end if needed"""
+        """Pad a version list by adding extra 0 components to the end if
+        needed."""
         # copy the version_list so we don't modify it
         cmp_list = list(version_list)
         while len(cmp_list) < max_length:

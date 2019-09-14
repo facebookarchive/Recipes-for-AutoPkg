@@ -4,7 +4,7 @@
 #
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.#
-"""See docstring for AppleCookieDownloader class"""
+"""See docstring for AppleCookieDownloader class."""
 
 from __future__ import absolute_import
 
@@ -19,7 +19,8 @@ __all__ = ["AppleCookieDownloader"]
 
 
 class AppleCookieDownloader(Processor):
-    """Acquire the necessary cookies from Apple to access developer downloads."""
+    """Acquire the necessary cookies from Apple to access developer
+    downloads."""
 
     description = __doc__
     input_variables = {
