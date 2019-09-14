@@ -10,8 +10,10 @@
 # specific processors.
 # pylint: disable=e1101,f0401
 
-import xml.etree.cElementTree as ET
+from __future__ import absolute_import
+
 import urllib2
+import xml.etree.cElementTree as ET
 
 from autopkglib import Processor, ProcessorError
 

@@ -11,11 +11,12 @@
 # pylint: disable=e1101,f0401
 
 
+from __future__ import absolute_import
+
 import os
 import subprocess
 
 from autopkglib import Processor, ProcessorError
-
 
 __all__ = ["XcodeXIPUnpacker"]
 

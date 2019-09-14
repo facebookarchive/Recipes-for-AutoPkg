@@ -16,6 +16,8 @@
 # specific processors.
 # pylint: disable=e1101,f0401
 
+from __future__ import absolute_import
+
 import re
 import urllib2
 

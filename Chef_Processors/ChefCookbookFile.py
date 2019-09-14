@@ -7,6 +7,8 @@
 #
 """See docstring for ChefCookbookFile class"""
 
+from __future__ import absolute_import
+
 from autopkglib import Processor
 
 __all__ = ["ChefCookbookFile"]

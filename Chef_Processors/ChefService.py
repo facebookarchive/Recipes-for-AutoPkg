@@ -6,6 +6,8 @@
 # LICENSE file in the root directory of this source tree.#
 """See docstring for ChefService class"""
 
+from __future__ import absolute_import
+
 from autopkglib import Processor
 
 __all__ = ["ChefService"]

@@ -7,8 +7,11 @@
 """See docstring for DirectoryList class"""
 
 
-from glob import glob
+from __future__ import absolute_import
+
 import os
+from glob import glob
+
 from autopkglib import Processor, ProcessorError
 
 __all__ = ["DirectoryList"]

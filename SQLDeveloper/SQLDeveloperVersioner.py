@@ -10,8 +10,10 @@
 # specific processors.
 # pylint: disable=e1101,f0401
 
-import os.path
+from __future__ import absolute_import
+
 import ConfigParser
+import os.path
 
 from autopkglib import Processor, ProcessorError
 

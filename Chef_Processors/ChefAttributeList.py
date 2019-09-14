@@ -6,7 +6,10 @@
 # LICENSE file in the root directory of this source tree.#
 """See docstring for ChefAttributeList class."""
 
+from __future__ import absolute_import
+
 import os.path
+
 from autopkglib import Processor
 
 __all__ = ["ChefAttributeList"]

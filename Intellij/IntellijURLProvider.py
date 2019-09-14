@@ -6,11 +6,12 @@
 # LICENSE file in the root directory of this source tree.#
 """Intellij URL Provider."""
 
+from __future__ import absolute_import
+
 import urllib2
 import xml.etree.cElementTree as ET
 
 from autopkglib import Processor, ProcessorError
-
 
 __all__ = ["IntellijURLProvider"]
 

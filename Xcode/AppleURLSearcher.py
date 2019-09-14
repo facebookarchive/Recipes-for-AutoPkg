@@ -6,6 +6,8 @@
 # LICENSE file in the root directory of this source tree.#
 """See docstring for AppleURLSearcher class"""
 
+from __future__ import absolute_import
+
 import json
 import os.path
 import posixpath
@@ -15,7 +17,6 @@ from distutils import version
 from types import StringType
 
 from autopkglib import Processor, ProcessorError
-
 
 __all__ = ["AppleURLSearcher"]
 

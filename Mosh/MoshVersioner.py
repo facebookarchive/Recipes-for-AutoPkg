@@ -13,11 +13,14 @@
 # The majority of this code is taken from MunkiCommon:
 # https://github.com/munki/munki/blob/master/code/client/munkilib/munkicommon.py
 
-from autopkglib import Processor, ProcessorError
-import tempfile
-import subprocess
+from __future__ import absolute_import
+
 import os
+import subprocess
+import tempfile
 from xml.dom import minidom
+
+from autopkglib import Processor, ProcessorError
 
 __all__ = ["MoshVersioner"]
 
