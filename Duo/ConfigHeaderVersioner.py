@@ -28,7 +28,7 @@ class ConfigHeaderVersioner(Processor):
         "version_key": {
             "required": False,
             "description": (
-                "Key to look for for versioning. Defaults " "to PACKAGE_VERSION."
+                "Key to look for for versioning. Defaults to PACKAGE_VERSION."
             ),
             "default": "PACKAGE_VERSION",
         },

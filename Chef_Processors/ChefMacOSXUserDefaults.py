@@ -15,7 +15,7 @@ __all__ = ["ChefMacOSXUserDefaults"]
 
 class ChefMacOSXUserDefaults(Processor):
     description = (
-        "Produces a mac_os_x_user_defaults Chef block. See " "README in mac_os_x."
+        "Produces a mac_os_x_user_defaults Chef block. See README in mac_os_x."
     )
     input_variables = {
         "resource_name": {

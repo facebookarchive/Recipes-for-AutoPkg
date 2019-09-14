@@ -40,19 +40,19 @@ class ChefService(Processor):
         "service_ignore_failure": {
             "required": False,
             "description": (
-                "Continue running a recipe if a resource fails " "for any reason."
+                "Continue running a recipe if a resource fails for any reason."
             ),
         },
         "service_init_command": {
             "required": False,
             "description": (
-                "The path to the init script that is associated " "with the service."
+                "The path to the init script that is associated with the service."
             ),
         },
         "service_notifies": {
             "required": False,
             "description": (
-                "Which resource takes action when this resource's " "state changes."
+                "Which resource takes action when this resource's state changes."
             ),
         },
         "service_pattern": {
@@ -66,7 +66,7 @@ class ChefService(Processor):
         "service_reload_command": {
             "required": False,
             "description": (
-                "The command used to tell a service to " "reload its configuration."
+                "The command used to tell a service to reload its configuration."
             ),
         },
         "service_restart_command": {
@@ -76,7 +76,7 @@ class ChefService(Processor):
         "service_retries": {
             "required": False,
             "description": (
-                "The number of times to catch exceptions " "and retry the resource."
+                "The number of times to catch exceptions and retry the resource."
             ),
         },
         "service_retry_delay": {

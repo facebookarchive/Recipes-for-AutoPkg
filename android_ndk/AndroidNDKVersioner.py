@@ -24,7 +24,7 @@ class AndroidNDKVersioner(Processor):
     """Return version for Android NDK."""
 
     description = (
-        "Detect version of downloaded Android NDK based on " "source.properties."
+        "Detect version of downloaded Android NDK based on source.properties."
     )
     input_variables = {
         "properties_path": {

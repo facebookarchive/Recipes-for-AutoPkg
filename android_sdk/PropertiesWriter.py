@@ -34,7 +34,7 @@ class EqualsSpaceRemover:
 
 class PropertiesWriter(Processor):
     # pylint: disable=missing-docstring
-    description = "Read the version.properties file inside the " "SQLDeveloper.app."
+    description = "Read the version.properties file inside the SQLDeveloper.app."
     input_variables = {
         "file_path": {
             "required": True,

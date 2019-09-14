@@ -29,7 +29,7 @@ class SubDirectoryList(Processor):
         },
         "suffix_string": {
             "description": (
-                "String to append to each found item name in dir." "Defaults to ','"
+                "String to append to each found item name in dir. Defaults to ','"
             ),
             "default": ",",
             "required": False,

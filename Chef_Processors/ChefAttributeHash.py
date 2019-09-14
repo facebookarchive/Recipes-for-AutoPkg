@@ -34,7 +34,7 @@ class ChefAttributeHash(Processor):
         "in_array": {
             "required": False,
             "description": (
-                "Is this hash inside an array? If yes, a comma is " "added to the end"
+                "Is this hash inside an array? If yes, a comma is added to the end"
             ),
         },
     }

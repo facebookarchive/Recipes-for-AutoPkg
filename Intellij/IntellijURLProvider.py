@@ -26,7 +26,7 @@ class IntellijURLProvider(Processor):
         "base_url": {
             "required": False,
             "description": (
-                "Default is " "https://www.jetbrains.com/updates/updates.xml"
+                "Default is https://www.jetbrains.com/updates/updates.xml"
             ),
         },
         "edition": {
@@ -68,7 +68,7 @@ class IntellijURLProvider(Processor):
         # Determine values.
         version_url = self.env.get("version_url", intellij_version_url)
         version = self.get_intellij_version(version_url)
-        download_url = "https://download.jetbrains.com/idea/" "ideaI%s-%s.dmg" % (
+        download_url = "https://download.jetbrains.com/idea/ideaI%s-%s.dmg" % (
             self.env.get("edition", "C"),
             version,
         )

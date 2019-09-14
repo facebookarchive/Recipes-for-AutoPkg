@@ -32,7 +32,7 @@ class SHAChecksum(Processor):
             "required": False,
             "description": (
                 "Checksum type, will be passed directly to ",
-                "shasum -a. See manpage for available options. " "Defaults to SHA1.",
+                "shasum -a. See manpage for available options. Defaults to SHA1.",
             ),
         },
     }

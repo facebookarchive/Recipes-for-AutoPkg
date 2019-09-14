@@ -60,7 +60,7 @@ class ChefTemplate(Processor):
         "ignore_failure": {
             "required": False,
             "description": (
-                "Continue running a recipe if a resource fails for " "any reason."
+                "Continue running a recipe if a resource fails for any reason."
             ),
         },
         "inherits": {
@@ -84,13 +84,13 @@ class ChefTemplate(Processor):
         "mode": {
             "required": False,
             "description": (
-                "A quoted 3-5 character string that defines the " "octal mode."
+                "A quoted 3-5 character string that defines the octal mode."
             ),
         },
         "notifies": {
             "required": False,
             "description": (
-                "Which resource takes action when this resource's " "state changes."
+                "Which resource takes action when this resource's state changes."
             ),
         },
         "owner": {
@@ -105,7 +105,7 @@ class ChefTemplate(Processor):
         "retries": {
             "required": False,
             "description": (
-                "The number of times to catch exceptions and retry " "the resource."
+                "The number of times to catch exceptions and retry the resource."
             ),
         },
         "retry_delay": {
@@ -144,7 +144,7 @@ class ChefTemplate(Processor):
         "variables": {
             "required": True,
             "description": (
-                "A Hash of variables that are passed into a Ruby " "template file."
+                "A Hash of variables that are passed into a Ruby template file."
             ),
         },
         "verify": {

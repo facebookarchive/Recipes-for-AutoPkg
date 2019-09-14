@@ -44,7 +44,7 @@ class ChefDirectory(Processor):
         "directory_ignore_failure": {
             "required": False,
             "description": (
-                "Continue running a recipe if a resource fails for " "any reason."
+                "Continue running a recipe if a resource fails for any reason."
             ),
         },
         "directory_inherits": {
@@ -57,13 +57,13 @@ class ChefDirectory(Processor):
         "directory_mode": {
             "required": False,
             "description": (
-                "A quoted 3-5 character string that defines the " "octal mode."
+                "A quoted 3-5 character string that defines the octal mode."
             ),
         },
         "directory_notifies": {
             "required": False,
             "description": (
-                "Which resource takes action when this resource's " "state changes."
+                "Which resource takes action when this resource's state changes."
             ),
         },
         "directory_owner": {
@@ -85,7 +85,7 @@ class ChefDirectory(Processor):
         "directory_retries": {
             "required": False,
             "description": (
-                "The number of times to catch exceptions and retry " "the resource."
+                "The number of times to catch exceptions and retry the resource."
             ),
         },
         "directory_retry_delay": {

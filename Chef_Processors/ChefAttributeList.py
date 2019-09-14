@@ -32,7 +32,7 @@ class ChefAttributeList(Processor):
         "value": {
             "required": True,
             "description": (
-                "Single string containing list of items, " "separated by commas."
+                "Single string containing list of items, separated by commas."
             ),
         },
         "path_prefix": {

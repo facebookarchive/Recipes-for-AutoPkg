@@ -40,7 +40,7 @@ class ChefRemoteDirectory(Processor):
         "files_backup": {
             "required": False,
             "description": (
-                "The number of backup copies to keep for files in the " "directory."
+                "The number of backup copies to keep for files in the directory."
             ),
         },
         "files_group": {
@@ -65,7 +65,7 @@ class ChefRemoteDirectory(Processor):
         "ignore_failure": {
             "required": False,
             "description": (
-                "Continue running a recipe if a resource fails for " "any reason."
+                "Continue running a recipe if a resource fails for any reason."
             ),
         },
         "inherits": {
@@ -78,13 +78,13 @@ class ChefRemoteDirectory(Processor):
         "mode": {
             "required": False,
             "description": (
-                "A quoted 3-5 character string that defines the " "octal mode."
+                "A quoted 3-5 character string that defines the octal mode."
             ),
         },
         "notifies": {
             "required": False,
             "description": (
-                "Which resource takes action when this resource's " "state changes."
+                "Which resource takes action when this resource's state changes."
             ),
         },
         "overwrite": {
@@ -111,7 +111,7 @@ class ChefRemoteDirectory(Processor):
         "retries": {
             "required": False,
             "description": (
-                "The number of times to catch exceptions and retry " "the resource."
+                "The number of times to catch exceptions and retry the resource."
             ),
         },
         "retry_delay": {

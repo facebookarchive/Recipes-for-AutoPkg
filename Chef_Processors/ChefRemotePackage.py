@@ -35,7 +35,7 @@ class ChefRemotePackage(Processor):
         "cleanup": {
             "required": False,
             "description": (
-                "Specify whether we should keep the " "downloaded package."
+                "Specify whether we should keep the downloaded package."
             ),
         },
         "pkg_name": {
@@ -48,13 +48,13 @@ class ChefRemotePackage(Processor):
         "receipt": {
             "required": True,
             "description": (
-                "The package receipt to determine if it's " "already installed."
+                "The package receipt to determine if it's already installed."
             ),
         },
         "remote": {
             "required": False,
             "description": (
-                "Specify whether we should try to " "download the package."
+                "Specify whether we should try to download the package."
             ),
         },
         "version": {

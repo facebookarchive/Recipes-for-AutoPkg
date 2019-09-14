@@ -38,13 +38,13 @@ class DirectoryList(Processor):
             "required": False,
         },
         "remove_extension": {
-            "description": ("Remove the extension at the end. Default to " "False."),
+            "description": ("Remove the extension at the end. Default to False."),
             "default": False,
             "required": False,
         },
         "suffix_string": {
             "description": (
-                "String to append to each found item name in dir." "Defaults to ','"
+                "String to append to each found item name in dir. Defaults to ','"
             ),
             "default": ",",
             "required": False,

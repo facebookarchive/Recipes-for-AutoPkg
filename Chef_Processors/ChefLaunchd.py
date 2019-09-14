@@ -40,7 +40,7 @@ class ChefLaunchd(Processor):
         "launchd_notifies": {
             "required": False,
             "description": (
-                "Which resource takes action when this resource's " "state changes."
+                "Which resource takes action when this resource's state changes."
             ),
         },
         "launchd_launchd_name": {

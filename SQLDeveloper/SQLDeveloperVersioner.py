@@ -39,7 +39,7 @@ class FakeSecHead(object):
 
 class SQLDeveloperVersioner(Processor):
     # pylint: disable=missing-docstring
-    description = "Read the version.properties file inside the " "SQLDeveloper.app."
+    description = "Read the version.properties file inside the SQLDeveloper.app."
     input_variables = {
         "app_path": {
             "required": True,

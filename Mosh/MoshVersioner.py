@@ -34,7 +34,7 @@ class MoshVersioner(Processor):
     output_variables = {
         "version": {
             "description": (
-                "Version info parsed, naively derived from the " "package's name."
+                "Version info parsed, naively derived from the package's name."
             )
         }
     }
@@ -56,7 +56,7 @@ class MoshVersioner(Processor):
             self.output("Found version: %s" % self.env["version"])
         else:
             raise ProcessorError(
-                "An error occurred while extracting " "Distribution file"
+                "An error occurred while extracting Distribution file"
             )
 
 

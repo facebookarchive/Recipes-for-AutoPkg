@@ -64,7 +64,7 @@ class ChefCookbookFile(Processor):
         "cookbook_file_ignore_failure": {
             "required": False,
             "description": (
-                "Continue running a recipe if a resource fails for " "any reason."
+                "Continue running a recipe if a resource fails for any reason."
             ),
         },
         "cookbook_file_inherits": {
@@ -84,13 +84,13 @@ class ChefCookbookFile(Processor):
         "cookbook_file_mode": {
             "required": False,
             "description": (
-                "A quoted 3-5 character string that defines the " "octal mode."
+                "A quoted 3-5 character string that defines the octal mode."
             ),
         },
         "cookbook_file_notifies": {
             "required": False,
             "description": (
-                "Which resource takes action when this resource's " "state changes."
+                "Which resource takes action when this resource's state changes."
             ),
         },
         "cookbook_file_owner": {
@@ -108,7 +108,7 @@ class ChefCookbookFile(Processor):
         "cookbook_file_retries": {
             "required": False,
             "description": (
-                "The number of times to catch exceptions and retry " "the resource."
+                "The number of times to catch exceptions and retry the resource."
             ),
         },
         "cookbook_file_retry_delay": {
