@@ -41,7 +41,7 @@ class ConfigHeaderVersioner(Processor):
   __doc__ = description
 
   def main(self):
-    print "Version key: %s" % self.env['version_key']
+    print("Version key: %s" % self.env['version_key'])
     try:
       with open(self.env['header_file'], 'rb') as f:
         for line in f:

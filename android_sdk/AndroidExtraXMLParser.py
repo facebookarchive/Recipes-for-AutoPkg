@@ -113,7 +113,7 @@ class AndroidExtraXMLParser(Processor):
       if record.find('%sname-display' % schema).text != self.env['name']:
         continue
       for key, outputVar in self.env['tags'].iteritems():
-        print "Key: %s" % key
+        print("Key: %s" % key)
         if key == 'license':
             # Look for license - it's a special case
             match = root.findall('%s%s' % (schema, 'license'))
@@ -140,7 +140,7 @@ class AndroidExtraXMLParser(Processor):
           self.output("Revision: %s" % self.env[self.env['tags']['revision']])
           continue
         value = find_value_in_dict(result_dict, key)
-        print "Found value: %s" % value
+        print("Found value: %s" % value)
 
 
 if __name__ == "__main__":
