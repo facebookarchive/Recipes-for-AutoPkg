@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<!-- Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved -->
 <dict>
+	<key>Copyright</key>
+	<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
 	<key>Description</key>
 	<string>Downloads Intellij Disk Image and then moves it to Applications</string>
 	<key>Identifier</key>
@@ -19,8 +20,6 @@
 	<key>Process</key>
 	<array>
 		<dict>
-			<key>Processor</key>
-			<string>InstallFromDMG</string>
 			<key>Arguments</key>
 			<dict>
 				<key>dmg_path</key>
@@ -28,13 +27,15 @@
 				<key>items_to_copy</key>
 				<array>
 					<dict>
-						<key>source_item</key>
-						<string>IntelliJ IDEA CE.app</string>
 						<key>destination_path</key>
 						<string>/Applications/</string>
+						<key>source_item</key>
+						<string>IntelliJ IDEA CE.app</string>
 					</dict>
 				</array>
 			</dict>
+			<key>Processor</key>
+			<string>InstallFromDMG</string>
 		</dict>
 	</array>
 </dict>
