@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<!-- Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved -->
 <dict>
+    <key>Copyright</key>
+    <string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
   <key>Description</key>
   <string>Download Xcode from the Apple dev portal. You must override the APPLE_ID and PASSWORD.</string>
   <key>Identifier</key>
