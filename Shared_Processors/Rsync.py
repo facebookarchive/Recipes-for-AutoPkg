@@ -8,10 +8,11 @@
 #  of patent rights can be found in the PATENTS file in the same directory.
 """See docstring for Rsync class"""
 
+from __future__ import absolute_import
+
 import subprocess
 
 from autopkglib import Processor, ProcessorError
-
 
 __all__ = ["Rsync"]
 
