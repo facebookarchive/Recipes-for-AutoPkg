@@ -34,7 +34,7 @@ class FileAppender(Processor):
       with open(self.env['file_path'], "a") as fileref:
         fileref.write(self.env['file_content'])
       self.output("Appened to file at %s" % self.env['file_path'])
-    except BaseException, err:
+    except BaseException as err:
       raise ProcessorError("Can't append to file at %s: %s"
                            % (self.env['file_path'], err))
     # clean the variable up afterwards to not poison future runs
