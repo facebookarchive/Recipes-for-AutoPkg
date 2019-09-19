@@ -28,7 +28,7 @@ The [Android Software Development Kit](https://developer.android.com/sdk/index.h
 
 This recipe parses two XML files that Google uses to inform the URLs, versions, and names of all packages related to the SDK. The Android SDK installer, which is a Java app, can download all of these manually (and uses those two XML URLs to figure out what to download).
 
-This is a *minimal* set of packages necessary to start developing with the Android SDK. It is not the *complete* SDK. 
+This is a *minimal* set of packages necessary to start developing with the Android SDK. It is not the *complete* SDK.
 
 The Android SDK requires Java 7 in order to function.
 

@@ -87,7 +87,7 @@ This example will calculate the SHA-256 sum:
 ```
 
 ## SubDirectoryList
-This is a more complex processor with more specific usage.  For a given root path, this processor will walk through and create two lists: one for all files found relative to the root path, and one for all directories found relative to the root path. 
+This is a more complex processor with more specific usage.  For a given root path, this processor will walk through and create two lists: one for all files found relative to the root path, and one for all directories found relative to the root path.
 
 Both of these lists are stored as strings, with each item separated by the contents of the "suffix_string" input variable (which defaults to "," comma).
 
