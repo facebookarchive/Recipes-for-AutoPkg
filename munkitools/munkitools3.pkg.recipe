@@ -43,29 +43,10 @@ MUNKI_ICON should be overridden with your icon name.
 	</dict>
 	<key>MinimumVersion</key>
 	<string>0.5.0</string>
+	<key>ParentRecipe</key>
+	<string>com.facebook.autopkg.download.munkitools3</string>
 	<key>Process</key>
 	<array>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>asset_regex</key>
-				<string>^munkitools-3.*?pkg$</string>
-				<key>github_repo</key>
-				<string>munki/munki</string>
-				<key>include_prereleases</key>
-				<string>%INCLUDE_PRERELEASES%</string>
-			</dict>
-			<key>Processor</key>
-			<string>GitHubReleasesInfoProvider</string>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>URLDownloader</string>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>EndOfCheckPhase</string>
-		</dict>
 		<dict>
 			<key>Arguments</key>
 			<dict>
