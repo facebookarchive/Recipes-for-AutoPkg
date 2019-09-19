@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 """Return version for Android NDK."""
 #
 # Copyright (c) Facebook, Inc. and its affiliates.
