@@ -1,10 +1,11 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 #
 # Copyright (c) Facebook, Inc. and its affiliates.
 #
 # This source code is licensed under the BSD-style license found in the
-# LICENSE file in the root directory of this source tree.#
+# LICENSE file in the root directory of this source tree. An additional grant
+# of patent rights can be found in the PATENTS file in the same directory.
+#
 """Get all Version information from Xcode."""
 
 
@@ -12,9 +13,15 @@
 # specific processors.
 # pylint: disable=e1101,f0401
 
-from __future__ import absolute_import
+from collections import namedtuple
 
 from autopkglib import Processor, ProcessorError
+
+
+try:
+    import objc
+except ImportError:
+    pass
 
 __all__ = ["XcodeVersioner"]
 
@@ -30,7 +37,13 @@ class XcodeVersioner(Processor):
                 "CFBundleShortVersionString from an Xcode Info.plist. Produced by "
                 "PlistReader."
             ),
-        }
+        },
+        "app_path": {
+            "required": True,
+            "description": (
+                "Path to Xcode app to look up version information from the bundle."
+            ),
+        },
     }
     output_variables = {
         "major_version": {"description": "Major version of Xcode - i.e. Xcode 7, 8."},
@@ -44,9 +57,54 @@ class XcodeVersioner(Processor):
                 "becomes 8.3.0)."
             )
         },
+        "is_beta": {
+            "description": (
+                "Boolean that is true if this Xcode is a beta version."
+            )
+        },
+        "beta_version": {
+            "description": (
+                "The beta number - 1, 2, 3, etc."
+            )
+        },
     }
 
     __doc__ = description
+
+    def _load_objc_framework(self, f_name, f_path, class_whitelist):
+        loaded = {}
+        framework_bundle = objc.loadBundle(  # NOQA
+            f_name, bundle_path=f_path, module_globals=loaded
+        )
+        desired = {}
+        for x in class_whitelist:
+            if x in loaded:
+                desired[x] = loaded[x]
+        return namedtuple("AttributedFramework", desired.keys())(**desired)
+
+    def xcode_info(self, app_path):
+        DVTFoundation_path = (
+            "%s/Contents/SharedFrameworks/" + "DVTFoundation.framework"
+        ) % app_path
+        desired_classes = ["DVTToolsInfo"]
+        DVTFoundation = self._load_objc_framework(
+            "DVTFoundation", DVTFoundation_path, desired_classes
+        )
+        x_info = DVTFoundation.DVTToolsInfo.toolsInfo()
+        x_v = x_info.toolsVersion()
+        x_b = x_info.toolsBuildVersion()
+        app_info = []
+        app_info.append(["major_version", str(x_v.versionMajorComponent())])
+        app_info.append(["minor_version", str(x_v.versionMinorComponent())])
+        app_info.append(["patch_version", str(x_v.versionUpdateComponent())])
+        app_info.append(["build_version", x_b.name()])
+        is_beta = bool(x_info.isBeta())
+        app_info.append(["is_beta", is_beta])
+        if is_beta:
+            app_info.append(["beta_version", str(x_info.toolsBetaVersion())])
+        else:
+            app_info.append(["beta_version", "0"])
+        return app_info
 
     def main(self):
         """Main."""
@@ -66,6 +124,15 @@ class XcodeVersioner(Processor):
         except IndexError:
             self.output("Normalizing patch to 0")
             self.env["patch_version"] = str("0")
+        self.env["is_beta"] = False
+        xcode_info_results = self.xcode_info(self.env["app_path"])
+        xcode_data = {}
+        for info_pair in xcode_info_results:
+            xcode_data[info_pair[0]] = info_pair[1]
+        if xcode_data["is_beta"]:
+            self.output("Beta version: %s" % xcode_data["beta_version"])
+            self.env["is_beta"] = xcode_data["is_beta"]
+            self.env["beta_version"] = xcode_data["beta_version"]
         self.output("Patch version: %s" % self.env["patch_version"])
 
 

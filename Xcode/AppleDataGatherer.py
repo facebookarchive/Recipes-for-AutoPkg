@@ -1,23 +1,23 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 #
 # Copyright (c) Facebook, Inc. and its affiliates.
 #
 # This source code is licensed under the BSD-style license found in the
-# LICENSE file in the root directory of this source tree.#
-"""See docstring for AppleDataGatherer class."""
+# LICENSE file in the root directory of this source tree. An additional grant
+# of patent rights can be found in the PATENTS file in the same directory.
+#
+"""See docstring for AppleDataGatherer class"""
 
 
 # Disabling warnings for env members and imports that only affect recipe-
 # specific processors.
 # pylint: disable=e1101,f0401
 
-from __future__ import absolute_import
-
 import os
 from urllib import quote
 
 from autopkglib import Processor, ProcessorError
+
 
 __all__ = ["AppleDataGatherer"]
 
@@ -32,8 +32,15 @@ class AppleDataGatherer(Processor):
             "description": ("AppleID that can log into the Apple dev portal."),
         },
         "password": {
-            "required": True,
+            "required": False,
             "description": ("Password for AppleID that can log into Apple dev portal."),
+        },
+        "password_file": {
+            "required": False,
+            "description": (
+                "A path to a file to read the password from. Using this will "
+                "ignore the 'password' argument."
+            ),
         },
         "appID_key": {"required": True, "description": ("App ID key to log into.")},
     }
@@ -45,7 +52,15 @@ class AppleDataGatherer(Processor):
         """Store the login data file."""
         appleIDstring = "appleId={}&".format(quote(self.env["apple_id"]))
         appIDKeystring = "appIdKey={}&".format(self.env["appID_key"])
-        passwordstring = "accountPassword={}".format(self.env["password"])
+        if not self.env.get("password") and not self.env.get("password_file"):
+            raise ProcessorError(
+                "You must provide either a password, or a password_file argument."
+            )
+        password = self.env.get("password")
+        if self.env.get("password_file"):
+            with open(self.env["password_file"]) as f:
+                password = f.read()
+        passwordstring = "accountPassword={}".format(password)
 
         login_data = appleIDstring + appIDKeystring + passwordstring
         download_dir = os.path.join(self.env["RECIPE_CACHE_DIR"], "downloads")

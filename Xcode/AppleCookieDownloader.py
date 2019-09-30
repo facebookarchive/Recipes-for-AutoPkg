@@ -1,13 +1,12 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 #
 # Copyright (c) Facebook, Inc. and its affiliates.
 #
 # This source code is licensed under the BSD-style license found in the
-# LICENSE file in the root directory of this source tree.#
-"""See docstring for AppleCookieDownloader class."""
-
-from __future__ import absolute_import
+# LICENSE file in the root directory of this source tree. An additional grant
+# of patent rights can be found in the PATENTS file in the same directory.
+#
+"""See docstring for AppleCookieDownloader class"""
 
 import json
 import os.path
@@ -16,12 +15,12 @@ import time
 
 from autopkglib import Processor, ProcessorError
 
+
 __all__ = ["AppleCookieDownloader"]
 
 
 class AppleCookieDownloader(Processor):
-    """Acquire the necessary cookies from Apple to access developer
-    downloads."""
+    """Downloads a URL to the specified download_dir using curl."""
 
     description = __doc__
     input_variables = {
@@ -197,6 +196,8 @@ class AppleCookieDownloader(Processor):
                 raise ProcessorError(
                     "Unable to list downloads. Check your Apple credentials."
                 )
+        except IOError:
+            raise ProcessorError("Unable to load listDownloads.gz file.")
         except ValueError:
             pass
         # While we're at it, let's unzip the download list
