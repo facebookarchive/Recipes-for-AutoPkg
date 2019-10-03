@@ -52,10 +52,10 @@ The following new items were imported into Munki:
 
 If you want to be able to install multiple versions of Xcode side-by-side, or
 otherwise want to differentiate each version of Xcode, we can't name each
-version "Xcode". Instead, each version of Xcode is individually named.
+version "Xcode". Instead, each version of Xcode is named by major version.
 
-This Munki recipe imports an item named "XcodeMajorMinorPatch", where the
-numbers are inserted accordingly: "Xcode10.2.1".
+This Munki recipe imports an item named "XcodeMajor", where the
+numbers are inserted accordingly: "Xcode10".
 
 Unlike the regular Xcode.munki recipe, this recipe also renames the .app on
 disk. The app that is installed on disk is named similarly,
@@ -68,7 +68,7 @@ Example output:
 The following new items were imported into Munki:
     Name         Version           Catalogs  Pkginfo Path                                         Pkg Repo Path
     ----         -------           --------  ------------                                         -------------
-    Xcode10.2.1  10.2.1.14490.122  testing   apps/apple/xcode/Xcode10.2.1-10.2.1.14490.122.plist  apps/apple/xcode/Xcode_10.2-10.2.1.14490.122.dmg
+    Xcode10  10.2.1.14490.122  testing   apps/apple/xcode/Xcode10.2.1-10.2.1.14490.122.plist  apps/apple/xcode/Xcode_10.2-10.2.1.14490.122.dmg
 ```
 
 ### XcodeCLITools.download
