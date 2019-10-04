@@ -20,8 +20,11 @@
 		<string>apps/apple/xcode/</string>
 		<key>NAME</key>
 		<string>Xcode</string>
-		<key>PASSWORD</key>
-		<string>password</string>
+		<key>PASSWORD_FILE</key>
+		<string>secret.txt</string>
+		<!-- Arbitrary_suffix optionally adds string between Xcode_X.Y.Z and .app -->
+		<key>ARBITRARY_SUFFIX</key>
+		<string></string>
 		<key>pkginfo</key>
 		<dict>
 			<key>catalogs</key>
@@ -59,7 +62,7 @@
 				<key>source</key>
 				<string>%found_filename%</string>
 				<key>target</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%_%major_version%.%minor_version%.%patch_version%.app</string>
+				<string>%RECIPE_CACHE_DIR%/%NAME%_%major_version%.%minor_version%.%patch_version%%ARBITRARY_SUFFIX%.app</string>
 			</dict>
 			<key>Processor</key>
 			<string>FileMover</string>
@@ -70,7 +73,7 @@
 				<key>dmg_path</key>
 				<string>%RECIPE_CACHE_DIR%/%NAME%_%major_version%.%minor_version%.%patch_version%.dmg</string>
 				<key>dmg_root</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%_%major_version%.%minor_version%.%patch_version%.app</string>
+				<string>%RECIPE_CACHE_DIR%/%NAME%_%major_version%.%minor_version%.%patch_version%%ARBITRARY_SUFFIX%.app</string>
 			</dict>
 			<key>Processor</key>
 			<string>DmgCreator</string>
@@ -81,13 +84,13 @@
 				<key>additional_pkginfo</key>
 				<dict>
 					<key>display_name</key>
-					<string>%NAME% %major_version%.%minor_version%.%patch_version% (%productbuildversion%)</string>
+					<string>%NAME% %major_version%.%minor_version%.%patch_version%</string>
 					<key>icon_name</key>
 					<string>%ICON_NAME%</string>
 					<key>name</key>
-					<string>%NAME%%major_version%.%minor_version%.%patch_version%</string>
+					<string>%NAME%%major_version%</string>
 					<key>version</key>
-					<string>%major_version%.%minor_version%.%patch_version%.%bundle_version%</string>
+					<string>%major_version%.%minor_version%.%patch_version%</string>
 				</dict>
 			</dict>
 			<key>Processor</key>
@@ -110,7 +113,7 @@
 				<key>path_list</key>
 				<array>
 					<string>%RECIPE_CACHE_DIR%/%NAME%_unpack</string>
-					<string>%RECIPE_CACHE_DIR%/%NAME%_%major_version%.%minor_version%.%patch_version%.app</string>
+					<string>%RECIPE_CACHE_DIR%/%NAME%_%major_version%.%minor_version%.%patch_version%%ARBITRARY_SUFFIX%.app</string>
 				</array>
 			</dict>
 			<key>Processor</key>
