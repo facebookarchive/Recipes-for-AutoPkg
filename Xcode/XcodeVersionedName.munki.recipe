@@ -84,13 +84,13 @@
 				<key>additional_pkginfo</key>
 				<dict>
 					<key>display_name</key>
-					<string>%NAME% %major_version%.%minor_version%.%patch_version% (%productbuildversion%)</string>
+					<string>%NAME% %major_version%.%minor_version%.%patch_version%</string>
 					<key>icon_name</key>
 					<string>%ICON_NAME%</string>
 					<key>name</key>
 					<string>%NAME%%major_version%</string>
 					<key>version</key>
-					<string>%major_version%.%minor_version%.%patch_version%.%bundle_version%</string>
+					<string>%major_version%.%minor_version%.%patch_version%</string>
 				</dict>
 			</dict>
 			<key>Processor</key>
