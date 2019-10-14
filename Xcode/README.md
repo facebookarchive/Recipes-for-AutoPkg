@@ -113,7 +113,7 @@ which also uses the download cookie to access the data.
 
 ### Xip extraction
 
-Hat tip to Graham Gilbert for pointing out that `xip --extract` does a great job
+Hat tip to Graham Gilbert for pointing out that `xip --expand` does a great job
 at extracting xips without all the hard work of using xar, cpio, or pbzx
 madness.
 
