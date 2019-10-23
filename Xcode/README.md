@@ -8,7 +8,7 @@ recipes.
 To download Xcode, you need to create an override with the following two input
 variables:
 * APPLE_ID: an AppleID that has access to the developer downloads portal
-* PASSWORD: the password to the AppleID
+* PASSWORD_FILE: path to a text file containing the APPLE_ID password in cleartext
 
 *KNOWN LIMITATION: This does not work on an account with 2fa or 2-step.*
 
