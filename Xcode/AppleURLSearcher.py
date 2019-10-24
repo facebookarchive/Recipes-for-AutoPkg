@@ -8,52 +8,18 @@
 #
 """See docstring for AppleURLSearcher class"""
 
+import datetime
 import json
 import os.path
 import posixpath
 import re
 import subprocess
 import urlparse
-from distutils import version
-from types import StringType
 
 from autopkglib import Processor, ProcessorError
 
 
 __all__ = ["AppleURLSearcher"]
-
-
-class MunkiLooseVersion(version.LooseVersion):
-    """Subclass version.LooseVersion to compare things like
-    "10.6" and "10.6.0" as equal"""
-
-    def __init__(self, vstring=None):
-        if vstring is None:
-            # treat None like an empty string
-            self.parse("")
-        if vstring is not None:
-            if isinstance(vstring, unicode):
-                # unicode string! Why? Oh well...
-                # convert to string so version.LooseVersion doesn't choke
-                vstring = vstring.encode("UTF-8")
-            self.parse(str(vstring))
-
-    def _pad(self, version_list, max_length):
-        """Pad a version list by adding extra 0
-        components to the end if needed"""
-        # copy the version_list so we don't modify it
-        cmp_list = list(version_list)
-        while len(cmp_list) < max_length:
-            cmp_list.append(0)
-        return cmp_list
-
-    def __cmp__(self, other):
-        if isinstance(other, StringType):
-            other = MunkiLooseVersion(other)
-        max_length = max(len(self.version), len(other.version))
-        self_cmp_version = self._pad(self.version, max_length)
-        other_cmp_version = self._pad(other.version, max_length)
-        return cmp(self_cmp_version, other_cmp_version)
 
 
 class AppleURLSearcher(Processor):
@@ -129,7 +95,20 @@ class AppleURLSearcher(Processor):
         # return the last matched group with the dict of named groups
         return (match.group(match.lastindex or 0), match.groupdict())
 
+    def output_result(self, url):
+        """Output the desired result."""
+        # The final entry is the highest one
+        self.output("Full URL: %s" % url)
+        self.env[self.env["result_output_var_name"]] = url
+        self.output_variables = {}
+        self.output_variables[self.env["result_output_var_name"]] = url
+
     def main(self):
+        # If we have "URL" already passed in, we should just use it
+        if self.env.get("URL"):
+            self.output_result(self.env["URL"])
+            return
+
         if self.env.get("BETA"):
             self.output("Beta flag is set, searching Apple downloads URL...")
             beta_url = "https://developer.apple.com/download/"
@@ -166,42 +145,52 @@ class AppleURLSearcher(Processor):
         if not os.path.exists(downloads):
             raise ProcessorError("Missing the download data from AppleCookieDownloader")
 
+        pattern = self.env["re_pattern"]
         with open(downloads) as f:
             data = json.load(f)
         dl_base_url = "https://download.developer.apple.com"
-        dl_urls = []
+        xcode_list = []
         for x in data["downloads"]:
             for y in x["files"]:
                 url = dl_base_url + y["remotePath"]
                 # Regex the results
-                re_pattern = re.compile(self.env["re_pattern"])
+                re_pattern = re.compile(pattern)
                 dl_match = re_pattern.findall(url)
                 if not dl_match:
                     continue
-                dl_urls.append(url)
+                filename = os.path.splitext(
+                    posixpath.basename(urlparse.urlsplit(y["remotePath"]).path)
+                )[0]
+                xcode_item = {
+                    "datePublished_str": x["datePublished"],
+                    "datePublished_obj": datetime.datetime.strptime(
+                        x["datePublished"], "%m/%d/%y %H:%M"
+                    ),
+                    "remotePath": y["remotePath"],
+                    "filename": filename,
+                    "full_url": url,
+                }
+                xcode_list.append(xcode_item)
 
-        match = re_pattern.findall("\n".join(sorted(dl_urls)))
+        matches = sorted(xcode_list, key=lambda i: i["datePublished_obj"])
+        match = matches[-1]
 
-        if not match or not dl_urls:
+        if not match or not xcode_list:
             raise ProcessorError("No match found!")
 
-        # Now we have a list of matching URLs, find the highest version
-        filenames = [
-            os.path.splitext(posixpath.basename(urlparse.urlsplit(x).path))[0]
-            for x in match
-        ]
-        filenames.sort(key=MunkiLooseVersion)
-        self.output("Found matching item: %s" % filenames[-1])
-        full_url_match = [x for x in match if filenames[-1] in x]
+        self.output(
+            "Sorted list of possible filenames: {}".format(
+                [x["filename"] for x in matches]
+            ),
+            verbose_level=2,
+        )
+        self.output("Found matching item: {}".format(match["filename"]))
+        full_url_match = match["full_url"]
 
         if not full_url_match:
             raise ProcessorError("No matching URL found!")
 
-        # The final entry is the highest one
-        self.output("Full URL: %s" % full_url_match[0])
-        self.env[self.env["result_output_var_name"]] = full_url_match[0]
-        self.output_variables = {}
-        self.output_variables[self.env["result_output_var_name"]] = full_url_match[0]
+        self.output_result(full_url_match)
 
 
 if __name__ == "__main__":

@@ -58,15 +58,9 @@ class XcodeVersioner(Processor):
             )
         },
         "is_beta": {
-            "description": (
-                "Boolean that is true if this Xcode is a beta version."
-            )
+            "description": ("Boolean that is true if this Xcode is a beta version.")
         },
-        "beta_version": {
-            "description": (
-                "The beta number - 1, 2, 3, etc."
-            )
-        },
+        "beta_version": {"description": ("The beta number - 1, 2, 3, etc.")},
     }
 
     __doc__ = description

@@ -48,16 +48,9 @@ class XcodeVersionEmitter(Processor):
         url_split_object = urlsplit(url)
         # "https://download.developer.apple.com/Developer_Tools/Xcode_10.2.1/Xcode_10.2.1.xip"  # noqa
         # "https://developer.apple.com//services-account/download?path=/Developer_Tools/Xcode_11_Beta_2/Xcode_11_Beta_2.xip"  # noqa
-        if "beta" in url.lower():
-            # For beta, the file path is in the URL query.
-            filename = os.path.splitext(
-                os.path.basename(url_split_object.query.split("=")[1])
-            )[0].lower()
-        else:
-            # For release, the file path is in the URL path itself.
-            filename = os.path.splitext(os.path.basename(url_split_object.path))[
-                0
-            ].lower()
+        filename = os.path.splitext(os.path.basename(url_split_object.path))[
+            0
+        ].lower()
         self.output("Derived filename: {}".format(filename))
         self.env["derived_filename"] = filename
         destination = os.path.expandvars(self.env["output_filepath"])

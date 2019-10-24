@@ -8,7 +8,8 @@ recipes.
 To download Xcode, you need to create an override with the following two input
 variables:
 * APPLE_ID: an AppleID that has access to the developer downloads portal
-* PASSWORD_FILE: path to a text file containing the APPLE_ID password in cleartext
+* PASSWORD_FILE: path to a text file containing the APPLE_ID password in plain
+    text
 
 *KNOWN LIMITATION: This does not work on an account with 2fa or 2-step.*
 
@@ -68,17 +69,87 @@ The following new items were imported into Munki:
     Xcode10  10.2.1.14490.122  testing   apps/apple/xcode/Xcode10.2.1-10.2.1.14490.122.plist  apps/apple/xcode/Xcode_10.2-10.2.1.14490.122.dmg
 ```
 
-### XcodeCLITools.download
+## Using Xcode.munki to get Xcode Betas
+There are two possible ways to get an Xcode version, based on what you're
+looking for:
+* The latest Xcode Beta posted on the [Developer download portal](https://developer.apple.com/download/)
+* The latest Xcode version posted in the ["More" downloads](https://developer.apple.com/download/more/) section
 
-This download recipe shows how you can easily create new recipes, or even
-overrides, that change what files to look for in the list of URLs from the
-download portal.
+Xcode.download has a `BETA` input variable to determine which location it
+searches. By default, `BETA` is an empty string. If you populate it with
+any contents, Xcode.download will _only_ search for the Xcode URL posted on
+the Developer download portal.
 
-This recipe will download the Command Line Tools for a given version of macOS,
-which is specified as the `MACOS_VERSION` input variable. You could swap this
-out for previous versions of macOS, although please bear in mind that Apple
-has a tendency to change naming conventions randomly with new versions, so the
-existing regex pattern might break at any time.
+If `BETA` is an empty string, Xcode.download will _only_ search for the most
+recently published Xcode xip file from the "More" downloads list. However,
+because Apple is Apple, the latest Xcode version posted in the "More"
+downloads section may be a beta, GM seed, or release.
+
+In order to effectively limit which kind of Xcode you get, you can create
+multiple overrides.
+
+### Latest Xcode from "More" downloads
+If `BETA` is empty (the default behavior), Xcode.download will look for the
+latest published Xcode xip that matches the regex. As of writing time, the
+most recently published Xcode is 11.2 beta 2:
+
+![More downloads](/../screenshots/screenshots/xcode_more.png)
+
+It may be confusing and irritating that leaving `BETA` empty still results in
+obtaining a Beta release by default, but it's impossible to predict which
+versions of Xcode Apple will choose to publish to the "More" list.
+
+### Developer download portal
+As of writing time, the current released beta version of Xcode is 11.2 beta 2:
+
+![Developer download portal](/../screenshots/screenshots/xcode_beta.png)
+
+Thus, if `BETA` is populated, this is the version that will be obtained:
+```
+AppleURLSearcher
+{'Input': {'re_pattern': u'(.*\/Xcode_.*\/Xcode.*.xip)'}}
+AppleURLSearcher: No value supplied for result_output_var_name, setting default value of: match
+AppleURLSearcher: Beta flag is set, searching Apple downloads URL...
+AppleURLSearcher: New fixed URL: https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_11.2_beta_2/Xcode_11.2_beta_2.xip
+{'Output': {'match': 'https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_11.2_beta_2/Xcode_11.2_beta_2.xip'}}
+```
+
+It's predicted that Apple will only ever publish the most recent Xcode beta
+here, even after a release of a newer version. As with all Apple predictions,
+this behavior could change at any point.
+
+**Override for latest beta**
+For the latest release Xcode beta, you'll want to leave the `PATTERN` as is
+and populate the `BETA` tag:
+
+```
+		<key>BETA</key>
+		<string>Beta</string>
+		<key>PATTERN</key>
+		<string>(.*\/Xcode_.*\/Xcode.*.xip)</string>
+```
+
+**Override for latest non-beta**
+For the latest release of any *non-beta* Xcode, change the `PATTERN` regex and
+populate the `BETA` tag:
+
+```
+		<key>BETA</key>
+		<string>Beta</string>
+		<key>PATTERN</key>
+		<string>((?!.*beta).*\/Xcode_.*\/Xcode.*.xip)</string>
+```
+
+**Override for latest Xcode of any type**
+For the latest release of any type of Xcode, leave the `PATTERN` regex and
+leave the `BETA` tag empty:
+
+```
+		<key>BETA</key>
+		<string></string>
+		<key>PATTERN</key>
+		<string>(.*\/Xcode_.*\/Xcode.*.xip)</string>
+```
 
 ## How It Works
 
@@ -100,13 +171,23 @@ will be how we tell - the downloads list will actually be raw JSON indicating an
 error response from the server, rather than JSON wrapped in gzip.
 
 ### Parsing the list of downloads
-The file is stored inside the AutoPkg cache, in
-`%RECIPE_CACHE_DIR%/downloads/listDownloads`. You can read this file yourself if
- you wish to see a full list of all information available for download.
+All of the logic is done in the AppleURLSearcher processor.
+
+As described in the Beta section above, the behavior for obtaining the URL is
+different based on whether the `BETA` tag is set. If the `BETA` input variable
+is empty, then the "More" downloads list is searched.
+
+Rather than using URLTextSearcher, the "More" downloads list is a zip-compressed
+JSON blob that populates a table. The file is stored inside the AutoPkg cache,
+in `%RECIPE_CACHE_DIR%/downloads/listDownloads`. You can read this file yourself
+if you wish to see a full list of all information available for download.
 
 We use regex to parse the list of download URLs for the given pattern we want.
 The result will be a single download URL that can be passed to URLDownloader,
 which also uses the download cookie to access the data.
+
+If the `BETA` tag is populated, we instead use the logic from URLTextSearcher to
+parse the Developer downloads page for a matching regex to an Xcode beta xip.
 
 ### Xip extraction
 
@@ -123,7 +204,7 @@ this to do something straightforward like downloading software.
 
 Be warned that it could break at any moment.
 
-Also, Xcode is a roughly ~5 GB download, so depending on your internet, the
+Also, Xcode is a roughly ~7 GB download, so depending on your internet, the
 download portion alone could take significant time. Then, extracting the xip
 into the app takes at least 10-15 minutes on an SSD drive. Then we need to
 wrap the app in a disk image, which takes another 10-15 minutes depending on
