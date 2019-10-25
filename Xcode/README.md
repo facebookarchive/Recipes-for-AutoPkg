@@ -135,7 +135,7 @@ populate the `BETA` tag:
 
 ```
 		<key>BETA</key>
-		<string>Beta</string>
+		<string></string>
 		<key>PATTERN</key>
 		<string>((?!.*beta).*\/Xcode_.*\/Xcode.*.xip)</string>
 ```
