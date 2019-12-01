@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>Copyright</key>
-	<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
-	<key>Description</key>
-	<string>Downloads and makes a DMG of the latest version of DbVisualizer.</string>
-	<key>Identifier</key>
-	<string>com.facebook.autopkg.dmg.dbvisualizer</string>
-	<key>Input</key>
 	<dict>
-		<key>NAME</key>
-		<string>DbVisualizer</string>
+		<key>Copyright</key>
+		<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
+		<key>Description</key>
+		<string>Downloads and makes a DMG of the latest version of DbVisualizer.</string>
+		<key>Identifier</key>
+		<string>com.facebook.autopkg.dmg.dbvisualizer</string>
+		<key>Input</key>
+		<dict>
+			<key>NAME</key>
+			<string>DbVisualizer</string>
+		</dict>
+		<key>MinimumVersion</key>
+		<string>0.5.0</string>
+		<key>ParentRecipe</key>
+		<string>com.facebook.autopkg.download.dbvisualizer</string>
+		<key>Process</key>
+		<array>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>purge_destination</key>
+					<true/>
+				</dict>
+				<key>Processor</key>
+				<string>Unarchiver</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>pattern</key>
+					<string>%RECIPE_CACHE_DIR%/%NAME%/*.app</string>
+				</dict>
+				<key>Processor</key>
+				<string>FileFinder</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>info_path</key>
+					<string>%found_filename%</string>
+				</dict>
+				<key>Processor</key>
+				<string>PlistReader</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>dmg_path</key>
+					<string>%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg</string>
+					<key>dmg_root</key>
+					<string>%RECIPE_CACHE_DIR%/%NAME%</string>
+				</dict>
+				<key>Processor</key>
+				<string>DmgCreator</string>
+			</dict>
+		</array>
 	</dict>
-	<key>MinimumVersion</key>
-	<string>0.5.0</string>
-	<key>ParentRecipe</key>
-	<string>com.facebook.autopkg.download.dbvisualizer</string>
-	<key>Process</key>
-	<array>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>purge_destination</key>
-				<true/>
-			</dict>
-			<key>Processor</key>
-			<string>Unarchiver</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>pattern</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%/*.app</string>
-			</dict>
-			<key>Processor</key>
-			<string>FileFinder</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>info_path</key>
-				<string>%found_filename%</string>
-			</dict>
-			<key>Processor</key>
-			<string>PlistReader</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>dmg_path</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg</string>
-				<key>dmg_root</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%</string>
-			</dict>
-			<key>Processor</key>
-			<string>DmgCreator</string>
-		</dict>
-	</array>
-</dict>
 </plist>

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>Copyright</key>
-	<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
-	<key>Description</key>
-	<string>Creates a VMwareFusion mass deployment package DMG. Requires justinrummel-recipes to download. You can substitute your own deploy.ini file in an override by placing the content in the DEPLOY_INI_FILE input variable. At a minimum, you'll need to put your license key in, or the postflight will fail.</string>
-	<key>Identifier</key>
-	<string>com.facebook.autopkg.pkg.deploy.VMwareFusion</string>
-	<key>Input</key>
 	<dict>
-		<key>DEPLOY_INI_FILE</key>
-		<string>[Volume License]
+		<key>Copyright</key>
+		<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
+		<key>Description</key>
+		<string>Creates a VMwareFusion mass deployment package DMG. Requires justinrummel-recipes to download. You can substitute your own deploy.ini file in an override by placing the content in the DEPLOY_INI_FILE input variable. At a minimum, you'll need to put your license key in, or the postflight will fail.</string>
+		<key>Identifier</key>
+		<string>com.facebook.autopkg.pkg.deploy.VMwareFusion</string>
+		<key>Input</key>
+		<dict>
+			<key>DEPLOY_INI_FILE</key>
+			<string>[Volume License]
 key = XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 
 [UI Defaults]
@@ -21,174 +21,174 @@ key = XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 [Applications]
 
 [Virtual Machines]
-</string>
-		<key>NAME</key>
-		<string>VMwareFusionDeploy</string>
-	</dict>
-	<key>MinimumVersion</key>
-	<string>0.2.5</string>
-	<key>ParentRecipe</key>
-	<string>com.justinrummel.download.VMwareFusion</string>
-	<key>Process</key>
-	<array>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>archive_format</key>
-				<string>tar</string>
-				<key>archive_path</key>
-				<string>%pathname%</string>
-				<key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/tar</string>
-				<key>purge_destination</key>
-				<true/>
-			</dict>
-			<key>Processor</key>
-			<string>Unarchiver</string>
+			</string>
+			<key>NAME</key>
+			<string>VMwareFusionDeploy</string>
 		</dict>
-		<dict>
-			<key>Arguments</key>
+		<key>MinimumVersion</key>
+		<string>0.2.5</string>
+		<key>ParentRecipe</key>
+		<string>com.justinrummel.download.VMwareFusion</string>
+		<key>Process</key>
+		<array>
 			<dict>
-				<key>archive_format</key>
-				<string>zip</string>
-				<key>archive_path</key>
-				<string>%RECIPE_CACHE_DIR%/tar/com.vmware.fusion.zip</string>
-				<key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/source</string>
-				<key>purge_destination</key>
-				<true/>
-			</dict>
-			<key>Processor</key>
-			<string>Unarchiver</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>info_path</key>
-				<string>%RECIPE_CACHE_DIR%/source/payload/VMware Fusion.app/Contents/Info.plist</string>
-				<key>plist_keys</key>
+				<key>Arguments</key>
 				<dict>
-					<key>CFBundleShortVersionString</key>
-					<string>version</string>
-					<key>LSMinimumSystemVersion</key>
-					<string>ls_minimum_system_version</string>
+					<key>archive_format</key>
+					<string>tar</string>
+					<key>archive_path</key>
+					<string>%pathname%</string>
+					<key>destination_path</key>
+					<string>%RECIPE_CACHE_DIR%/tar</string>
+					<key>purge_destination</key>
+					<true/>
 				</dict>
+				<key>Processor</key>
+				<string>Unarchiver</string>
 			</dict>
-			<key>Comment</key>
-			<string>Extract version strings from Info.plist to use for the pkginfo.</string>
-			<key>Processor</key>
-			<string>PlistReader</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
 			<dict>
-				<key>pkgdirs</key>
+				<key>Arguments</key>
 				<dict>
-					<key>Applications</key>
-					<string>01775</string>
+					<key>archive_format</key>
+					<string>zip</string>
+					<key>archive_path</key>
+					<string>%RECIPE_CACHE_DIR%/tar/com.vmware.fusion.zip</string>
+					<key>destination_path</key>
+					<string>%RECIPE_CACHE_DIR%/source</string>
+					<key>purge_destination</key>
+					<true/>
 				</dict>
-				<key>pkgroot</key>
-				<string>%RECIPE_CACHE_DIR%/fauxroot</string>
-				<key>purge_destination</key>
-				<true/>
+				<key>Processor</key>
+				<string>Unarchiver</string>
 			</dict>
-			<key>Processor</key>
-			<string>PkgRootCreator</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
 			<dict>
-				<key>source</key>
-				<string>%RECIPE_CACHE_DIR%/source/payload/VMware Fusion.app</string>
-				<key>target</key>
-				<string>%RECIPE_CACHE_DIR%/fauxroot/Applications/VMware Fusion.app</string>
+				<key>Arguments</key>
+				<dict>
+					<key>info_path</key>
+					<string>%RECIPE_CACHE_DIR%/source/payload/VMware Fusion.app/Contents/Info.plist</string>
+					<key>plist_keys</key>
+					<dict>
+						<key>CFBundleShortVersionString</key>
+						<string>version</string>
+						<key>LSMinimumSystemVersion</key>
+						<string>ls_minimum_system_version</string>
+					</dict>
+				</dict>
+				<key>Comment</key>
+				<string>Extract version strings from Info.plist to use for the pkginfo.</string>
+				<key>Processor</key>
+				<string>PlistReader</string>
 			</dict>
-			<key>Processor</key>
-			<string>FileMover</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
 			<dict>
-				<key>pkgdirs</key>
-				<dict/>
-				<key>pkgroot</key>
-				<string>%RECIPE_CACHE_DIR%/Deploy VMware Fusion</string>
+				<key>Arguments</key>
+				<dict>
+					<key>pkgdirs</key>
+					<dict>
+						<key>Applications</key>
+						<string>01775</string>
+					</dict>
+					<key>pkgroot</key>
+					<string>%RECIPE_CACHE_DIR%/fauxroot</string>
+					<key>purge_destination</key>
+					<true/>
+				</dict>
+				<key>Processor</key>
+				<string>PkgRootCreator</string>
 			</dict>
-			<key>Processor</key>
-			<string>PkgRootCreator</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
 			<dict>
-				<key>source</key>
-				<string>%RECIPE_CACHE_DIR%/fauxroot/Applications/VMware Fusion.app/Contents/Library/Deploy VMware Fusion.mpkg</string>
-				<key>target</key>
-				<string>%pkgroot%/Deploy VMware Fusion.mpkg</string>
+				<key>Arguments</key>
+				<dict>
+					<key>source</key>
+					<string>%RECIPE_CACHE_DIR%/source/payload/VMware Fusion.app</string>
+					<key>target</key>
+					<string>%RECIPE_CACHE_DIR%/fauxroot/Applications/VMware Fusion.app</string>
+				</dict>
+				<key>Processor</key>
+				<string>FileMover</string>
 			</dict>
-			<key>Processor</key>
-			<string>FileMover</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
 			<dict>
-				<key>faux_root</key>
-				<string>%RECIPE_CACHE_DIR%/fauxroot</string>
-				<key>installs_item_paths</key>
-				<array>
-					<string>/Applications/VMware Fusion.app</string>
-				</array>
+				<key>Arguments</key>
+				<dict>
+					<key>pkgdirs</key>
+					<dict/>
+					<key>pkgroot</key>
+					<string>%RECIPE_CACHE_DIR%/Deploy VMware Fusion</string>
+				</dict>
+				<key>Processor</key>
+				<string>PkgRootCreator</string>
 			</dict>
-			<key>Processor</key>
-			<string>MunkiInstallsItemsCreator</string>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>MunkiPkginfoMerger</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
 			<dict>
-				<key>source</key>
-				<string>%RECIPE_CACHE_DIR%/fauxroot/Applications/VMware Fusion.app</string>
-				<key>target</key>
-				<string>%pkgroot%/Deploy VMware Fusion.mpkg/Contents/00Fusion_Deployment_Items/VMware Fusion.app</string>
+				<key>Arguments</key>
+				<dict>
+					<key>source</key>
+					<string>%RECIPE_CACHE_DIR%/fauxroot/Applications/VMware Fusion.app/Contents/Library/Deploy VMware Fusion.mpkg</string>
+					<key>target</key>
+					<string>%pkgroot%/Deploy VMware Fusion.mpkg</string>
+				</dict>
+				<key>Processor</key>
+				<string>FileMover</string>
 			</dict>
-			<key>Processor</key>
-			<string>FileMover</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
 			<dict>
-				<key>path_list</key>
-				<array>
+				<key>Arguments</key>
+				<dict>
+					<key>faux_root</key>
+					<string>%RECIPE_CACHE_DIR%/fauxroot</string>
+					<key>installs_item_paths</key>
+					<array>
+						<string>/Applications/VMware Fusion.app</string>
+					</array>
+				</dict>
+				<key>Processor</key>
+				<string>MunkiInstallsItemsCreator</string>
+			</dict>
+			<dict>
+				<key>Processor</key>
+				<string>MunkiPkginfoMerger</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>source</key>
+					<string>%RECIPE_CACHE_DIR%/fauxroot/Applications/VMware Fusion.app</string>
+					<key>target</key>
+					<string>%pkgroot%/Deploy VMware Fusion.mpkg/Contents/00Fusion_Deployment_Items/VMware Fusion.app</string>
+				</dict>
+				<key>Processor</key>
+				<string>FileMover</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>path_list</key>
+					<array>
+						<string>%pkgroot%/Deploy VMware Fusion.mpkg/Contents/00Fusion_Deployment_Items/Deploy.ini</string>
+					</array>
+				</dict>
+				<key>Processor</key>
+				<string>PathDeleter</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>file_content</key>
+					<string>%DEPLOY_INI_FILE%</string>
+					<key>file_path</key>
 					<string>%pkgroot%/Deploy VMware Fusion.mpkg/Contents/00Fusion_Deployment_Items/Deploy.ini</string>
-				</array>
+				</dict>
+				<key>Processor</key>
+				<string>FileCreator</string>
 			</dict>
-			<key>Processor</key>
-			<string>PathDeleter</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
 			<dict>
-				<key>file_content</key>
-				<string>%DEPLOY_INI_FILE%</string>
-				<key>file_path</key>
-				<string>%pkgroot%/Deploy VMware Fusion.mpkg/Contents/00Fusion_Deployment_Items/Deploy.ini</string>
+				<key>Arguments</key>
+				<dict>
+					<key>source</key>
+					<string>%pkgroot%/Deploy VMware Fusion.mpkg</string>
+					<key>target</key>
+					<string>%pkgroot%/%NAME%-%version%.mpkg</string>
+				</dict>
+				<key>Processor</key>
+				<string>FileMover</string>
 			</dict>
-			<key>Processor</key>
-			<string>FileCreator</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>source</key>
-				<string>%pkgroot%/Deploy VMware Fusion.mpkg</string>
-				<key>target</key>
-				<string>%pkgroot%/%NAME%-%version%.mpkg</string>
-			</dict>
-			<key>Processor</key>
-			<string>FileMover</string>
-		</dict>
-	</array>
-</dict>
+		</array>
+	</dict>
 </plist>

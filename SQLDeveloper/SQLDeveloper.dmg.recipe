@@ -1,83 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>Copyright</key>
-	<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
-	<key>Description</key>
-	<string>Creates a DMG for SQLDeveloper. You must provide your own .zip download using the -p argument.</string>
-	<key>Identifier</key>
-	<string>com.facebook.autopkg.dmg.sqldeveloper</string>
-	<key>Input</key>
 	<dict>
-		<key>NAME</key>
-		<string>SQLDeveloper</string>
+		<key>Copyright</key>
+		<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
+		<key>Description</key>
+		<string>Creates a DMG for SQLDeveloper. You must provide your own .zip download using the -p argument.</string>
+		<key>Identifier</key>
+		<string>com.facebook.autopkg.dmg.sqldeveloper</string>
+		<key>Input</key>
+		<dict>
+			<key>NAME</key>
+			<string>SQLDeveloper</string>
+		</dict>
+		<key>MinimumVersion</key>
+		<string>0.5.1</string>
+		<key>Process</key>
+		<array>
+			<dict>
+				<key>Comment</key>
+				<string>Requires manually providing SQLDeveloper .zip download.</string>
+				<key>Processor</key>
+				<string>PackageRequired</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>pkgdirs</key>
+					<dict/>
+					<key>pkgroot</key>
+					<string>%RECIPE_CACHE_DIR%/%NAME%</string>
+				</dict>
+				<key>Processor</key>
+				<string>PkgRootCreator</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>archive_path</key>
+					<string>%PKG%</string>
+					<key>destination_path</key>
+					<string>%pkgroot%</string>
+					<key>purge_destination</key>
+					<true/>
+				</dict>
+				<key>Processor</key>
+				<string>Unarchiver</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>input_path</key>
+					<string>%pkgroot%/SQLDeveloper.app</string>
+					<key>requirement</key>
+					<string>identifier "com.oracle.SQLDeveloper" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = VB5E2TV963</string>
+				</dict>
+				<key>Processor</key>
+				<string>CodeSignatureVerifier</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>app_path</key>
+					<string>%pkgroot%/SQLDeveloper.app</string>
+				</dict>
+				<key>Processor</key>
+				<string>SQLDeveloperVersioner</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>dmg_path</key>
+					<string>%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg</string>
+					<key>dmg_root</key>
+					<string>%pkgroot%</string>
+				</dict>
+				<key>Processor</key>
+				<string>DmgCreator</string>
+			</dict>
+		</array>
 	</dict>
-	<key>MinimumVersion</key>
-	<string>0.5.1</string>
-	<key>Process</key>
-	<array>
-		<dict>
-			<key>Comment</key>
-			<string>Requires manually providing SQLDeveloper .zip download.</string>
-			<key>Processor</key>
-			<string>PackageRequired</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>pkgdirs</key>
-				<dict/>
-				<key>pkgroot</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%</string>
-			</dict>
-			<key>Processor</key>
-			<string>PkgRootCreator</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>archive_path</key>
-				<string>%PKG%</string>
-				<key>destination_path</key>
-				<string>%pkgroot%</string>
-				<key>purge_destination</key>
-				<true/>
-			</dict>
-			<key>Processor</key>
-			<string>Unarchiver</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>input_path</key>
-				<string>%pkgroot%/SQLDeveloper.app</string>
-				<key>requirement</key>
-				<string>identifier "com.oracle.SQLDeveloper" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = VB5E2TV963</string>
-			</dict>
-			<key>Processor</key>
-			<string>CodeSignatureVerifier</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>app_path</key>
-				<string>%pkgroot%/SQLDeveloper.app</string>
-			</dict>
-			<key>Processor</key>
-			<string>SQLDeveloperVersioner</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>dmg_path</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg</string>
-				<key>dmg_root</key>
-				<string>%pkgroot%</string>
-			</dict>
-			<key>Processor</key>
-			<string>DmgCreator</string>
-		</dict>
-	</array>
-</dict>
 </plist>

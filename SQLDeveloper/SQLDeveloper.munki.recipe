@@ -1,107 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>Copyright</key>
-	<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
-	<key>Description</key>
-	<string>Creates a DMG for SQLDeveloper and imports into Munki. You must provide your own .zip download using the -p argument.</string>
-	<key>Identifier</key>
-	<string>com.facebook.autopkg.munki.sqldeveloper</string>
-	<key>Input</key>
 	<dict>
-		<key>JDK_NAME</key>
-		<string>OracleJava8JDK</string>
-		<key>MUNKI_REPO_SUBDIR</key>
-		<string>apps/Oracle</string>
-		<key>NAME</key>
-		<string>SQLDeveloper</string>
-		<key>pkginfo</key>
+		<key>Copyright</key>
+		<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
+		<key>Description</key>
+		<string>Creates a DMG for SQLDeveloper and imports into Munki. You must provide your own .zip download using the -p argument.</string>
+		<key>Identifier</key>
+		<string>com.facebook.autopkg.munki.sqldeveloper</string>
+		<key>Input</key>
 		<dict>
-			<key>catalogs</key>
-			<array>
-				<string>testing</string>
-			</array>
-			<key>category</key>
-			<string>Developer Tools</string>
-			<key>description</key>
-			<string>SQL Developer is a free integrated development environment that simplifies the development and management of Oracle Database.</string>
-			<key>developer</key>
-			<string>Oracle</string>
-			<key>display_name</key>
-			<string>SQL Developer</string>
-			<key>name</key>
-			<string>%NAME%</string>
-		</dict>
-	</dict>
-	<key>MinimumVersion</key>
-	<string>0.5.1</string>
-	<key>ParentRecipe</key>
-	<string>com.facebook.autopkg.dmg.sqldeveloper</string>
-	<key>Process</key>
-	<array>
-		<dict>
-			<key>Arguments</key>
+			<key>JDK_NAME</key>
+			<string>OracleJava8JDK</string>
+			<key>MUNKI_REPO_SUBDIR</key>
+			<string>apps/Oracle</string>
+			<key>NAME</key>
+			<string>SQLDeveloper</string>
+			<key>pkginfo</key>
 			<dict>
-				<key>faux_root</key>
-				<string>%pkgroot</string>
-				<key>installs_item_paths</key>
+				<key>catalogs</key>
 				<array>
-					<string>SQLDeveloper.app/Contents/Resources/sqldeveloper/sqldeveloper/bin/version.properties</string>
+					<string>testing</string>
 				</array>
+				<key>category</key>
+				<string>Developer Tools</string>
+				<key>description</key>
+				<string>SQL Developer is a free integrated development environment that simplifies the development and management of Oracle Database.</string>
+				<key>developer</key>
+				<string>Oracle</string>
+				<key>display_name</key>
+				<string>SQL Developer</string>
+				<key>name</key>
+				<string>%NAME%</string>
 			</dict>
-			<key>Processor</key>
-			<string>MunkiInstallsItemsCreator</string>
 		</dict>
-		<dict>
-			<key>Arguments</key>
+		<key>MinimumVersion</key>
+		<string>0.5.1</string>
+		<key>ParentRecipe</key>
+		<string>com.facebook.autopkg.dmg.sqldeveloper</string>
+		<key>Process</key>
+		<array>
 			<dict>
-				<key>additional_pkginfo</key>
+				<key>Arguments</key>
 				<dict>
-					<key>installs</key>
+					<key>faux_root</key>
+					<string>%pkgroot</string>
+					<key>installs_item_paths</key>
 					<array>
-						<dict>
-							<key>md5checksum</key>
-							<string>2e7650fee02f3ac91838397daf5f8817</string>
-							<key>path</key>
-							<string>/Applications/SQLDeveloper.app/Contents/Resources/sqldeveloper/sqldeveloper/bin/version.properties</string>
-							<key>type</key>
-							<string>file</string>
-						</dict>
+						<string>SQLDeveloper.app/Contents/Resources/sqldeveloper/sqldeveloper/bin/version.properties</string>
 					</array>
-					<key>requires</key>
-					<array>
-						<string>%JDK_NAME%</string>
-					</array>
-					<key>version</key>
-					<string>%version%</string>
 				</dict>
+				<key>Processor</key>
+				<string>MunkiInstallsItemsCreator</string>
 			</dict>
-			<key>Processor</key>
-			<string>MunkiPkginfoMerger</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
 			<dict>
-				<key>pkg_path</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg</string>
-				<key>repo_subdirectory</key>
-				<string>%MUNKI_REPO_SUBDIR%</string>
+				<key>Arguments</key>
+				<dict>
+					<key>additional_pkginfo</key>
+					<dict>
+						<key>installs</key>
+						<array>
+							<dict>
+								<key>md5checksum</key>
+								<string>2e7650fee02f3ac91838397daf5f8817</string>
+								<key>path</key>
+								<string>/Applications/SQLDeveloper.app/Contents/Resources/sqldeveloper/sqldeveloper/bin/version.properties</string>
+								<key>type</key>
+								<string>file</string>
+							</dict>
+						</array>
+						<key>requires</key>
+						<array>
+							<string>%JDK_NAME%</string>
+						</array>
+						<key>version</key>
+						<string>%version%</string>
+					</dict>
+				</dict>
+				<key>Processor</key>
+				<string>MunkiPkginfoMerger</string>
 			</dict>
-			<key>Processor</key>
-			<string>MunkiImporter</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
 			<dict>
-				<key>path_list</key>
-				<array>
+				<key>Arguments</key>
+				<dict>
+					<key>pkg_path</key>
 					<string>%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg</string>
-				</array>
+					<key>repo_subdirectory</key>
+					<string>%MUNKI_REPO_SUBDIR%</string>
+				</dict>
+				<key>Processor</key>
+				<string>MunkiImporter</string>
 			</dict>
-			<key>Processor</key>
-			<string>PathDeleter</string>
-		</dict>
-	</array>
-</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>path_list</key>
+					<array>
+						<string>%RECIPE_CACHE_DIR%/%NAME%-%version%.dmg</string>
+					</array>
+				</dict>
+				<key>Processor</key>
+				<string>PathDeleter</string>
+			</dict>
+		</array>
+	</dict>
 </plist>

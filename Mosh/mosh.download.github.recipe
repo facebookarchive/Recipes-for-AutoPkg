@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>Copyright</key>
-	<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
-	<key>Description</key>
-	<string>Downloads latest release of mosh from Github releases.</string>
-	<key>Identifier</key>
-	<string>com.facebook.autopkg.download.github.mosh</string>
-	<key>Input</key>
 	<dict>
-		<key>NAME</key>
-		<string>Mosh</string>
-		<key>PRERELEASES</key>
-		<string>True</string>
+		<key>Copyright</key>
+		<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
+		<key>Description</key>
+		<string>Downloads latest release of mosh from Github releases.</string>
+		<key>Identifier</key>
+		<string>com.facebook.autopkg.download.github.mosh</string>
+		<key>Input</key>
+		<dict>
+			<key>NAME</key>
+			<string>Mosh</string>
+			<key>PRERELEASES</key>
+			<string>True</string>
+		</dict>
+		<key>MinimumVersion</key>
+		<string>0.5.0</string>
+		<key>Process</key>
+		<array>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>asset_regex</key>
+					<string>^((?!leopard).)*$</string>
+					<key>github_repo</key>
+					<string>keithw/mosh</string>
+					<key>include_prereleases</key>
+					<string>%PRERELEASES%</string>
+				</dict>
+				<key>Processor</key>
+				<string>FBGitHubReleasesInfoProvider</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict/>
+				<key>Processor</key>
+				<string>URLDownloader</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>cask_name</key>
+					<string>mobile-shell</string>
+				</dict>
+				<key>Processor</key>
+				<string>BrewCaskInfoProvider</string>
+			</dict>
+		</array>
 	</dict>
-	<key>MinimumVersion</key>
-	<string>0.5.0</string>
-	<key>Process</key>
-	<array>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>asset_regex</key>
-				<string>^((?!leopard).)*$</string>
-				<key>github_repo</key>
-				<string>keithw/mosh</string>
-				<key>include_prereleases</key>
-				<string>%PRERELEASES%</string>
-			</dict>
-			<key>Processor</key>
-			<string>FBGitHubReleasesInfoProvider</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict/>
-			<key>Processor</key>
-			<string>URLDownloader</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>cask_name</key>
-				<string>mobile-shell</string>
-			</dict>
-			<key>Processor</key>
-			<string>BrewCaskInfoProvider</string>
-		</dict>
-	</array>
-</dict>
 </plist>

@@ -1,129 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>Copyright</key>
-	<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
-	<key>Description</key>
-	<string>Imports the latest release of BlueJeans into Munki.</string>
-	<key>Identifier</key>
-	<string>com.facebook.autopkg.munki.bluejeans</string>
-	<key>Input</key>
 	<dict>
-		<key>MUNKI_REPO_SUBDIR</key>
-		<string>apps/%NAME%</string>
-		<key>NAME</key>
-		<string>BlueJeans</string>
-		<key>pkginfo</key>
+		<key>Copyright</key>
+		<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
+		<key>Description</key>
+		<string>Imports the latest release of BlueJeans into Munki.</string>
+		<key>Identifier</key>
+		<string>com.facebook.autopkg.munki.bluejeans</string>
+		<key>Input</key>
 		<dict>
-			<key>catalogs</key>
-			<array>
-				<string>testing</string>
-			</array>
-			<key>category</key>
-			<string>Productivity</string>
-			<key>description</key>
-			<string>As an alternate to the browser plugin, Mac and Windows users can participate in live meetings using the Blue Jeans desktop app. This app will download automatically when you choose the Desktop App connection option to join a Blue Jeans meeting.
+			<key>MUNKI_REPO_SUBDIR</key>
+			<string>apps/%NAME%</string>
+			<key>NAME</key>
+			<string>BlueJeans</string>
+			<key>pkginfo</key>
+			<dict>
+				<key>catalogs</key>
+				<array>
+					<string>testing</string>
+				</array>
+				<key>category</key>
+				<string>Productivity</string>
+				<key>description</key>
+				<string>As an alternate to the browser plugin, Mac and Windows users can participate in live meetings using the Blue Jeans desktop app. This app will download automatically when you choose the Desktop App connection option to join a Blue Jeans meeting.
 
 With the Blue Jeans desktop app, you can:
 
 Host and join live meetings
 Start an instant meeting
 See and share video, audio, and content</string>
-			<key>developer</key>
-			<string>BlueJeans</string>
-			<key>display_name</key>
-			<string>Blue Jeans</string>
-			<key>name</key>
-			<string>%NAME%</string>
-			<key>unattended_install</key>
-			<true/>
-		</dict>
-	</dict>
-	<key>MinimumVersion</key>
-	<string>0.2.0</string>
-	<key>ParentRecipe</key>
-	<string>com.facebook.autopkg.download.bluejeans</string>
-	<key>Process</key>
-	<array>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/unpack</string>
-				<key>flat_pkg_path</key>
-				<string>%pathname%</string>
-			</dict>
-			<key>Processor</key>
-			<string>FlatPkgUnpacker</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>pkgdirs</key>
-				<dict/>
-				<key>pkgroot</key>
-				<string>%RECIPE_CACHE_DIR%/BlueJeans</string>
-			</dict>
-			<key>Processor</key>
-			<string>PkgRootCreator</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>destination_path</key>
-				<string>%pkgroot%</string>
-				<key>pkg_payload_path</key>
-				<string>%RECIPE_CACHE_DIR%/unpack/BlueJeansSetup.pkg/Payload</string>
-				<key>purge_destination</key>
+				<key>developer</key>
+				<string>BlueJeans</string>
+				<key>display_name</key>
+				<string>Blue Jeans</string>
+				<key>name</key>
+				<string>%NAME%</string>
+				<key>unattended_install</key>
 				<true/>
 			</dict>
-			<key>Processor</key>
-			<string>PkgPayloadUnpacker</string>
 		</dict>
-		<dict>
-			<key>Arguments</key>
+		<key>MinimumVersion</key>
+		<string>0.2.0</string>
+		<key>ParentRecipe</key>
+		<string>com.facebook.autopkg.download.bluejeans</string>
+		<key>Process</key>
+		<array>
 			<dict>
-				<key>info_path</key>
-				<string>%pkgroot%/Blue Jeans.app</string>
-			</dict>
-			<key>Processor</key>
-			<string>PlistReader</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>dmg_path</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
-				<key>dmg_root</key>
-				<string>%pkgroot%</string>
-			</dict>
-			<key>Processor</key>
-			<string>DmgCreator</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>additional_pkginfo</key>
+				<key>Arguments</key>
 				<dict>
-					<key>version</key>
-					<string>%version%</string>
+					<key>destination_path</key>
+					<string>%RECIPE_CACHE_DIR%/unpack</string>
+					<key>flat_pkg_path</key>
+					<string>%pathname%</string>
 				</dict>
+				<key>Processor</key>
+				<string>FlatPkgUnpacker</string>
 			</dict>
-			<key>Processor</key>
-			<string>MunkiPkginfoMerger</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
 			<dict>
-				<key>pkg_path</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
-				<key>repo_subdirectory</key>
-				<string>%MUNKI_REPO_SUBDIR%</string>
+				<key>Arguments</key>
+				<dict>
+					<key>pkgdirs</key>
+					<dict/>
+					<key>pkgroot</key>
+					<string>%RECIPE_CACHE_DIR%/BlueJeans</string>
+				</dict>
+				<key>Processor</key>
+				<string>PkgRootCreator</string>
 			</dict>
-			<key>Processor</key>
-			<string>MunkiImporter</string>
-		</dict>
-	</array>
-</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>destination_path</key>
+					<string>%pkgroot%</string>
+					<key>pkg_payload_path</key>
+					<string>%RECIPE_CACHE_DIR%/unpack/BlueJeansSetup.pkg/Payload</string>
+					<key>purge_destination</key>
+					<true/>
+				</dict>
+				<key>Processor</key>
+				<string>PkgPayloadUnpacker</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>info_path</key>
+					<string>%pkgroot%/Blue Jeans.app</string>
+				</dict>
+				<key>Processor</key>
+				<string>PlistReader</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>dmg_path</key>
+					<string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
+					<key>dmg_root</key>
+					<string>%pkgroot%</string>
+				</dict>
+				<key>Processor</key>
+				<string>DmgCreator</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>additional_pkginfo</key>
+					<dict>
+						<key>version</key>
+						<string>%version%</string>
+					</dict>
+				</dict>
+				<key>Processor</key>
+				<string>MunkiPkginfoMerger</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>pkg_path</key>
+					<string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
+					<key>repo_subdirectory</key>
+					<string>%MUNKI_REPO_SUBDIR%</string>
+				</dict>
+				<key>Processor</key>
+				<string>MunkiImporter</string>
+			</dict>
+		</array>
+	</dict>
 </plist>
