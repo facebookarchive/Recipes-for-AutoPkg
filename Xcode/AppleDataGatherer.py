@@ -14,9 +14,15 @@
 # pylint: disable=e1101,f0401
 
 import os
-from urllib import quote
 
 from autopkglib import Processor, ProcessorError
+
+try:
+    # python 2
+    from urllib import quote
+except ImportError:
+    from urllib.parse import quote
+
 
 
 __all__ = ["AppleDataGatherer"]

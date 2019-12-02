@@ -9,10 +9,6 @@
 """Get all Version information from Xcode."""
 
 
-# Disabling warnings for env members and imports that only affect recipe-
-# specific processors.
-# pylint: disable=e1101,f0401
-
 from collections import namedtuple
 
 from autopkglib import Processor, ProcessorError

@@ -8,11 +8,6 @@
 #
 """Unpack an Xcode XIP."""
 
-# Disabling warnings for env members and imports that only affect recipe-
-# specific processors.
-# pylint: disable=e1101,f0401
-
-
 import os
 import subprocess
 

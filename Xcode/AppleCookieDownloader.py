@@ -80,7 +80,7 @@ class AppleCookieDownloader(Processor):
         header["http_result_description"] = ""
         while True:
             if not donewithheaders:
-                info = proc.stdout.readline().strip("\r\n")
+                info = proc.stdout.readline().decode().strip("\r\n")
                 if info.startswith("HTTP/"):
                     try:
                         header["http_result_code"] = info.split(None, 2)[1]

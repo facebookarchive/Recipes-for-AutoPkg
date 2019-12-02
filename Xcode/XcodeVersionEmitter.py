@@ -9,7 +9,12 @@
 """Get all Version information from Xcode."""
 
 import os.path
-from urlparse import urlsplit
+
+try:
+    # python 2
+    from urlparse import urlsplit
+except ImportError:
+    from urllib.parse import urlsplit
 
 from autopkglib import Processor
 
@@ -48,9 +53,7 @@ class XcodeVersionEmitter(Processor):
         url_split_object = urlsplit(url)
         # "https://download.developer.apple.com/Developer_Tools/Xcode_10.2.1/Xcode_10.2.1.xip"  # noqa
         # "https://developer.apple.com//services-account/download?path=/Developer_Tools/Xcode_11_Beta_2/Xcode_11_Beta_2.xip"  # noqa
-        filename = os.path.splitext(os.path.basename(url_split_object.path))[
-            0
-        ].lower()
+        filename = os.path.splitext(os.path.basename(url_split_object.path))[0].lower()
         self.output("Derived filename: {}".format(filename))
         self.env["derived_filename"] = filename
         destination = os.path.expandvars(self.env["output_filepath"])

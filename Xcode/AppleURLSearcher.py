@@ -14,9 +14,14 @@ import os.path
 import posixpath
 import re
 import subprocess
-import urlparse
 
 from autopkglib import Processor, ProcessorError
+
+try:
+    # python 2
+    from urlparse import urlsplit
+except ImportError:
+    from urllib.parse import urlsplit
 
 
 __all__ = ["AppleURLSearcher"]
@@ -159,7 +164,7 @@ class AppleURLSearcher(Processor):
                 if not dl_match:
                     continue
                 filename = os.path.splitext(
-                    posixpath.basename(urlparse.urlsplit(y["remotePath"]).path)
+                    posixpath.basename(urlsplit(y["remotePath"]).path)
                 )[0]
                 xcode_item = {
                     "datePublished_str": x["datePublished"],
