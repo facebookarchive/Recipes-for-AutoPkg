@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>Copyright</key>
+		<string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
+		<key>Description</key>
+		<string>Note: munkitools does not include a code signature. If your
+organization requires code signature, it is recommend to internally sign
+the application.
+
+Downloads and imports version 4 of the Munki tools via
+the official releases listing on GitHub. You can set INCLUDE_PRERELEASES
+to any value to have this recipe pull prerelease versions.
+
+Note that Munki 4 includes two additional component pkgs, munkitools_python
+and munkitools_no_python.
+This recipe imports this to the Munki with the appropriate 'requires' key,
+however as it is considered an optional component, this recipe does not
+add it as an update_for any Munki component. Admins should add
+munkitools_app_usage to a manifest manually if its installation on clients
+is desired.
+
+This recipe cannot be overridden to pull a download from an
+alternate location such as munkibuilds.org - it will only download the
+official releases. For this, use the munkitools2-autobuild.munki
+recipe with a manually-provided DOWNLOAD_URL variable.
+
+The GitHubReleasesInfoProvider processor used by this recipe also
+respects an input variable: 'sort_by_highest_tag_names', which
+if set, will ignore the post dates of the releases and instead sort
+descending by tag names according to LooseVersion semantics.
+
+MUNKI_ICON should be overridden with your icon name.
+		</string>
+		<key>Identifier</key>
+		<string>com.facebook.autopkg.download.munkitools4</string>
+		<key>Input</key>
+		<dict>
+			<key>INCLUDE_PRERELEASES</key>
+			<string></string>
+			<key>NAME</key>
+			<string>munkitools4</string>
+		</dict>
+		<key>MinimumVersion</key>
+		<string>0.5.0</string>
+		<key>Process</key>
+		<array>
+			<dict>
+				<key>Arguments</key>
+				<dict>
+					<key>asset_regex</key>
+					<string>^munkitools-4.*?pkg$</string>
+					<key>github_repo</key>
+					<string>munki/munki</string>
+					<key>include_prereleases</key>
+					<string>%INCLUDE_PRERELEASES%</string>
+				</dict>
+				<key>Processor</key>
+				<string>GitHubReleasesInfoProvider</string>
+			</dict>
+			<dict>
+				<key>Processor</key>
+				<string>URLDownloader</string>
+			</dict>
+			<dict>
+				<key>Processor</key>
+				<string>EndOfCheckPhase</string>
+			</dict>
+		</array>
+	</dict>
+</plist>
