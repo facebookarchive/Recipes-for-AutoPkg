@@ -52,13 +52,11 @@ class ConfigureMakeInstaller(Processor):
         os.chdir(conf_path)
         cmd = ["./configure"]
         if self.env["prefix_path"]:
-            cmd = ["./configure --prefix=" + self.env["prefix_path"]]
+            cmd.append("--prefix=" + self.env["prefix_path"])
 
         # ./configure
         self.output("Command: %s" % cmd)
-        proc = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True
-        )
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (conf_out, conf_err) = proc.communicate()
         if conf_err:
             raise ProcessorError("./configure error: %s" % conf_err)
@@ -66,10 +64,8 @@ class ConfigureMakeInstaller(Processor):
 
         # make
         self.output("Running make")
-        cmd = ["/usr/bin/make -f %s" % makefile]
-        proc = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True
-        )
+        cmd = ["/usr/bin/make", "-f", makefile]
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (m_out, m_err) = proc.communicate()
         # if m_err:
         #   raise ProcessorError("make error: %s" % m_err)
@@ -78,13 +74,11 @@ class ConfigureMakeInstaller(Processor):
         # make install
         self.output("Running make install")
         destpath = self.env.get("output_path")
-        cmd = ["/usr/bin/make install -f %s" % makefile]
+        cmd = ["/usr/bin/make", "install", "-f", makefile]
         if destpath:
-            cmd = ["/usr/bin/make install -f %s DESTDIR=%s" % (makefile, destpath)]
+            cmd.append("DESTDIR=" + destpath)
         self.output("install cmd: %s" % cmd)
-        proc = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True
-        )
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (mi_out, mi_err) = proc.communicate()
         # if mi_err:
         #   raise ProcessorError("make install error: %s" % mi_err)
