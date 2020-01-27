@@ -4,7 +4,7 @@
   <!-- Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved -->
   <dict>
     <key>Description</key>
-    <string>Download Xcode from the Apple dev portal. You must override the APPLE_ID and PASSWORD. BETA must either be empty for stable releases or set to "Beta" in order to match Xcode betas.</string>
+  <string>Download Xcode from the Apple dev portal. You must override the APPLE_ID and PASSWORD_FILE. BETA must either be empty for stable releases or set to "Beta" in order to match Xcode betas.</string>
     <key>Identifier</key>
     <string>com.facebook.autopkg.xcode.downloader</string>
     <key>Input</key>

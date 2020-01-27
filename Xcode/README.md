@@ -9,7 +9,7 @@ To download Xcode, you need to create an override with the following two input
 variables:
 * APPLE_ID: an AppleID that has access to the developer downloads portal
 * PASSWORD_FILE: path to a text file containing the APPLE_ID password in plain
-    text
+    text. This defaults to a file called "secret.txt".
 
 *KNOWN LIMITATION: This does not work on an account with 2fa or 2-step.*
 
@@ -131,7 +131,7 @@ and populate the `BETA` tag:
 
 **Override for latest non-beta**
 For the latest release of any *non-beta* Xcode, change the `PATTERN` regex and
-populate the `BETA` tag:
+clear the `BETA` tag:
 
 ```
 		<key>BETA</key>
