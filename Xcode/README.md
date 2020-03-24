@@ -27,7 +27,7 @@ Because of the fact that any possible release of Xcode could behave differently
 than identically-numbered previous releases, we use all possible version data
 to differentiate Xcode releases.
 
-THe build number is used in the Display Name only, and not included in the
+The build number is used in the Display Name only, and not included in the
 version information used by Munki to determine install status.
 
 ## Recipes
