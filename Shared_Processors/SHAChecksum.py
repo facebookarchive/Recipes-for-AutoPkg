@@ -1,27 +1,27 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 #
-# Copyright (c) Facebook, Inc. and its affiliates.
+#  Copyright (c) 2015, Facebook, Inc.
+#  All rights reserved.
 #
-# This source code is licensed under the BSD-style license found in the
-# LICENSE file in the root directory of this source tree.#
-"""See docstring for SHAChecksum class."""
+#  This source code is licensed under the BSD-style license found in the
+#  LICENSE file in the root directory of this source tree. An additional grant
+#  of patent rights can be found in the PATENTS file in the same directory.
+"""See docstring for SHAChecksum class"""
 
 # Disabling warnings for env members and imports that only affect recipe-
 # specific processors.
 # pylint: disable=e1101,f0401
 
-from __future__ import absolute_import
-
 import subprocess
 
 from autopkglib import Processor, ProcessorError
+
 
 __all__ = ["SHAChecksum"]
 
 
 class SHAChecksum(Processor):
-    """Calculate checksum for a file."""
+    """Calculate checksum for a file"""
 
     description = __doc__
     input_variables = {
@@ -33,12 +33,15 @@ class SHAChecksum(Processor):
             "required": False,
             "description": (
                 "Checksum type, will be passed directly to ",
-                "shasum -a. See manpage for available options. Defaults to SHA1.",
+                "shasum -a. See manpage for available options. "
+                "Defaults to SHA1.",
             ),
         },
     }
     output_variables = {
-        "checksum": {"description": "SHA checksum calculated from path."}
+        "checksum": {
+            "description": "Version returned from pkg-info field in PackageInfo."
+        }
     }
 
     __doc__ = description
@@ -55,7 +58,7 @@ class SHAChecksum(Processor):
         if shaerr:
             raise ProcessorError(shaerr)
         self.output(shaout)
-        self.env["checksum"] = shaout.split()[0]
+        self.env["checksum"] = shaout.split()[0].decode("utf-8")
 
 
 if __name__ == "__main__":
