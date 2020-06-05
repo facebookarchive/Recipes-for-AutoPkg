@@ -1,25 +1,24 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#
-# Copyright (c) Facebook, Inc. and its affiliates.
+"""Intellij URL Provider."""
+# Copyright (c) 2015-present, Facebook, Inc.
+# All rights reserved.
 #
 # This source code is licensed under the BSD-style license found in the
-# LICENSE file in the root directory of this source tree.#
-"""Intellij URL Provider."""
+# LICENSE file in the root directory of this source tree. An additional grant
+# of patent rights can be found in the PATENTS file in the same directory.
+#
 
-from __future__ import absolute_import
-
-import urllib2
 import xml.etree.cElementTree as ET
 
-from autopkglib import Processor, ProcessorError
+from autopkglib.URLGetter import URLGetter
+
 
 __all__ = ["IntellijURLProvider"]
 
 intellij_version_url = "https://www.jetbrains.com/updates/updates.xml"
 
 
-class IntellijURLProvider(Processor):
+class IntellijURLProvider(URLGetter):
     """Provide URL for latest Intellij IDEA build."""
 
     description = "Provides URL and version for the latest release of Intellij."
@@ -27,7 +26,7 @@ class IntellijURLProvider(Processor):
         "base_url": {
             "required": False,
             "description": (
-                "Default is https://www.jetbrains.com/updates/updates.xml"
+                "Default is " "https://www.jetbrains.com/updates/updates.xml"
             ),
         },
         "edition": {
@@ -45,31 +44,22 @@ class IntellijURLProvider(Processor):
     def get_intellij_version(self, intellij_version_url):
         """Retrieve version number from XML."""
         # Read XML
-        try:
-            req = urllib2.Request(intellij_version_url)
-            f = urllib2.urlopen(req)
-            html = f.read()
-            f.close()
-        except BaseException as e:
-            raise ProcessorError("Can't download %s: %s" % (intellij_version_url, e))
-        # Search for download link.
-        root = ET.fromstring(html)
-        # Use XPath to select the IntelliJ node; will always
-        # select the first instance which *should* be the
-        # latest version.
-        latest_version = root.find(
-            "./product[@name='IntelliJ IDEA']/"
-            "channel[@name='IntelliJ IDEA RELEASE']//"
-        )
-        # Return version number
-        return str(latest_version.attrib["version"])
+        raw_xml = self.download(intellij_version_url, text=True)
+        # Select the latest released build
+        root = ET.fromstring(raw_xml)
+        product = root.find('product[@name="IntelliJ IDEA"]')
+        channel = product.find('channel[@status="release"]')
+        builds = channel.findall("build")
+        version = builds[0].attrib["version"]
+        # Return pkg url.
+        return str(version)
 
     def main(self):
         """Main function."""
         # Determine values.
         version_url = self.env.get("version_url", intellij_version_url)
         version = self.get_intellij_version(version_url)
-        download_url = "https://download.jetbrains.com/idea/ideaI%s-%s.dmg" % (
+        download_url = "https://download.jetbrains.com/idea/" "ideaI%s-%s.dmg" % (
             self.env.get("edition", "C"),
             version,
         )
