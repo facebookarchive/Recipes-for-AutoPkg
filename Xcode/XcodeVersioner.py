@@ -63,7 +63,7 @@ class XcodeVersioner(Processor):
 
     def _load_objc_framework(self, f_name, f_path, class_whitelist):
         loaded = {}
-        framework_bundle = objc.loadBundle(  # NOQA
+        _ = objc.loadBundle(
             f_name, bundle_path=f_path, module_globals=loaded
         )
         desired = {}
