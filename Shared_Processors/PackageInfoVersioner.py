@@ -50,9 +50,9 @@ class PackageInfoVersioner(Processor):
         except IOError as err:
             raise ProcessorError(err)
         pkgrefs = dom.getElementsByTagName("pkg-info")
-        self.env["pkg_id"] = pkgrefs[0].attributes["identifier"].value.encode("UTF-8")
+        self.env["pkg_id"] = pkgrefs[0].attributes["identifier"].value
         self.output("Found pkg_id %s" % self.env["pkg_id"]) 
-        self.env["version"] = pkgrefs[0].attributes["version"].value.encode("UTF-8")
+        self.env["version"] = pkgrefs[0].attributes["version"].value
         self.output("Found version %s" % self.env["version"])
 
 
