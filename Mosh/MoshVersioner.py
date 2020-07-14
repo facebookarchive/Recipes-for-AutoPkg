@@ -1,20 +1,14 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 #
 # Copyright (c) Facebook, Inc. and its affiliates.
 #
 # This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.#
-"""See docstring for MoshVersioner class."""
 
-# Disabling warnings for env members and imports that only affect recipe-
-# specific processors.
-# pylint: disable=e1101,f0401
+"""See docstring for MoshVersioner class"""
 
 # The majority of this code is taken from MunkiCommon:
 # https://github.com/munki/munki/blob/master/code/client/munkilib/munkicommon.py
-
-from __future__ import absolute_import
 
 import os
 import subprocess
@@ -23,11 +17,11 @@ from xml.dom import minidom
 
 from autopkglib import Processor, ProcessorError
 
+
 __all__ = ["MoshVersioner"]
 
 
 class MoshVersioner(Processor):
-    # pylint: disable=missing-docstring
     description = "Get version from Mosh download."
     input_variables = {
         "pathname": {"required": True, "description": ("Path to downloaded package.")}
@@ -35,7 +29,7 @@ class MoshVersioner(Processor):
     output_variables = {
         "version": {
             "description": (
-                "Version info parsed, naively derived from the package's name."
+                "Version info parsed, naively derived from the " "package's name."
             )
         }
     }
@@ -53,7 +47,7 @@ class MoshVersioner(Processor):
             pkgrefs = dom.getElementsByTagName("pkg-ref")
             unfixed = pkgrefs[1].attributes["version"].value.encode("UTF-8")
             # At this point, unfixed_version is typically "mosh-1.x.x"
-            self.env["version"] = unfixed.lstrip("mosh-")
+            self.env["version"] = unfixed.lstrip(b"mosh-").decode()
             self.output("Found version: %s" % self.env["version"])
         else:
             raise ProcessorError(
