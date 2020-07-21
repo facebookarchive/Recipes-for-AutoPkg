@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>Description</key>
+        <string>Downloads the current release version of AdoptOpenJDK 11. JVM defaults to "hotspot", or you can use "openj9". JDK_VERSION is which JDK OpenJDK version you wish to use, defaults to 11.</string>
+        <key>Identifier</key>
+        <string>com.facebook.autopkg.download.AdoptOpenJDK11</string>
+        <key>Input</key>
+        <dict>
+            <key>NAME</key>
+            <string>AdoptOpenJDK11</string>
+            <key>JVM_TYPE</key>
+            <string>hotspot</string>
+            <key>JDK_TYPE</key>
+            <string>jdk</string>
+            <key>JDK_VERSION</key>
+            <string>11</string>
+            <key>BINARY_TYPE</key>
+            <string>pkg</string>
+            <key>RELEASE</key>
+            <string>latest</string>
+        </dict>
+        <key>MinimumVersion</key>
+        <string>1.4.1</string>
+        <key>Process</key>
+        <array>
+            <dict>
+                <key>Arguments</key>
+                <dict>
+                    <key>jdk_version</key>
+                    <string>%JDK_VERSION%</string>
+                    <key>jvm_type</key>
+                    <string>%JVM_TYPE%</string>
+                    <key>jdk_type</key>
+                    <string>%JDK_TYPE%</string>
+                    <key>binary_type</key>
+                    <string>%BINARY_TYPE%</string>
+                    <key>release</key>
+                    <string>%RELEASE%</string>
+                </dict>
+                <key>Processor</key>
+                <string>AdoptOpenJDKURLProvider</string>
+            </dict>
+            <dict>
+                <key>Processor</key>
+                <string>URLDownloader</string>
+            </dict>
+            <dict>
+                <key>Processor</key>
+                <string>EndOfCheckPhase</string>
+            </dict>
+        </array>
+    </dict>
+</plist>
