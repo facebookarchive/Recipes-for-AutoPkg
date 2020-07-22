@@ -2,9 +2,17 @@
 #
 # Copyright (c) Facebook, Inc. and its affiliates.
 #
-# This source code is licensed under the BSD-style license found in the
-# LICENSE file in the root directory of this source tree. An additional grant
-# of patent rights can be found in the PATENTS file in the same directory.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 #
 """See docstring for AppleURLSearcher class"""
 
@@ -16,6 +24,7 @@ import re
 import subprocess
 
 from autopkglib import Processor, ProcessorError
+
 
 try:
     # python 2
@@ -89,10 +98,11 @@ class AppleURLSearcher(Processor):
 
         # Output this to disk so I can search it later
         with open(
-            os.path.join(self.env["RECIPE_CACHE_DIR"], "downloads", "url_text.txt"), "w"
+            os.path.join(self.env["RECIPE_CACHE_DIR"], "downloads", "url_text.txt"),
+            "wb",
         ) as f:
             f.write(content)
-        match = re_pattern.search(content)
+        match = re_pattern.search(content.decode('utf-8'))
 
         if not match:
             raise ProcessorError("No match found on URL: %s" % url)
