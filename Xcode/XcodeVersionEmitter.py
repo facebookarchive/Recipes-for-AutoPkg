@@ -18,13 +18,14 @@
 
 import os.path
 
+from autopkglib import Processor
+
+
 try:
     # python 2
     from urlparse import urlsplit
 except ImportError:
     from urllib.parse import urlsplit
-
-from autopkglib import Processor
 
 
 __all__ = ["XcodeVersionEmitter"]
@@ -43,7 +44,7 @@ class XcodeVersionEmitter(Processor):
         "url": {"required": True, "description": ("URL to parse the version from.")},
         "output_filepath": {
             "required": True,
-            "description": ("Path to a file to create."),
+            "description": ("Path to which xcode version tag is emitted."),
         },
     }
     output_variables = {
@@ -64,10 +65,15 @@ class XcodeVersionEmitter(Processor):
         filename = os.path.splitext(os.path.basename(url_split_object.path))[0].lower()
         self.output("Derived filename: {}".format(filename))
         self.env["derived_filename"] = filename
+
         destination = os.path.expandvars(self.env["output_filepath"])
         with open(destination, "w") as f:
             f.write(filename)
-            self.output("Derived filename written to disk at {}".format(destination))
+            self.output(
+                "Derived filename ({}) written to disk at {}".format(
+                    filename, destination
+                )
+            )
 
 
 if __name__ == "__main__":

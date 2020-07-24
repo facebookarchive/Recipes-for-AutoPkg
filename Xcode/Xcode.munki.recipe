@@ -1,97 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-  <!-- Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved -->
+<!-- Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved -->
+<dict>
+  <key>Description</key>
+  <string>Download, extract, and import Xcode into Munki. You must override the APPLE_ID and PASSWORD.</string>
+  <key>Identifier</key>
+  <string>com.facebook.autopkg.xcode.munki</string>
+  <key>Input</key>
   <dict>
-    <key>Description</key>
-    <string>Download, extract, and import Xcode into Munki. You must override the APPLE_ID and PASSWORD.</string>
-    <key>Identifier</key>
-    <string>com.facebook.autopkg.xcode.munki</string>
-    <key>Input</key>
+    <key>NAME</key>
+    <string>Xcode</string>
+    <key>USE_VERSIONED_FILENAME</key>
+    <string></string>
+    <key>FILENAME_SUFFIX</key>
+    <string></string>
+    <key>MUNKI_REPO_SUBDIR</key>
+    <string>apps/apple/xcode/</string>
+    <key>ICON_NAME</key>
+    <string>Xcode.png</string>
+    <key>pkginfo</key>
     <dict>
-      <key>APPLE_ID</key>
-      <string>dev@domain.com</string>
-      <key>PASSWORD</key>
-      <string>password</string>
-      <key>NAME</key>
+      <key>catalogs</key>
+      <array>
+        <string>testing</string>
+      </array>
+      <key>description</key>
       <string>Xcode</string>
-      <key>MUNKI_REPO_SUBDIR</key>
-      <string>apps/apple/xcode/</string>
-      <key>ICON_NAME</key>
-      <string>Xcode.png</string>
-      <key>DESTINATION_APP_NAME</key>
-      <string>Xcode.app</string>
-      <key>pkginfo</key>
+      <key>display_name</key>
+      <string>%NAME%</string>
+      <key>name</key>
+      <string>%NAME%</string>
+      <key>postinstall_script</key>
+      <string>#!/bin/sh
+# Ensure everyone is a member of "developer" group
+/usr/sbin/dseditgroup -o edit -a everyone -t group _developer
+# Enable Developer Mode
+/usr/sbin/DevToolsSecurity -enable
+# Accept the license
+/Applications/%fixed_filename%/Contents/Developer/usr/bin/xcodebuild -license accept
+# Install embedded packages
+for PKG in `/bin/ls /Applications/%fixed_filename%/Contents/Resources/Packages/*.pkg` ; do
+  /usr/sbin/installer -pkg "$PKG" -target /
+done
+      </string>
+      <key>unattended_install</key>
+      <true/>
+    </dict>
+  </dict>
+  <key>MinimumVersion</key>
+  <string>1.0.4</string>
+  <key>ParentRecipe</key>
+  <string>com.facebook.autopkg.xcode.extract</string>
+  <key>Process</key>
+  <array>
+    <dict>
+      <key>Comment</key>
+      <string>Generate filename based on input variables</string>
+      <key>Processor</key>
+      <string>XcodeFileNamer</string>
+      <key>Arguments</key>
       <dict>
-        <key>catalogs</key>
-        <array>
-          <string>testing</string>
-        </array>
-        <key>description</key>
-        <string>Xcode</string>
-        <key>display_name</key>
-        <string>%NAME%</string>
-        <key>name</key>
-        <string>%NAME%</string>
-        <key>unattended_install</key>
-        <true/>
+        <key>should_produce_versioned_name</key>
+        <string>%USE_VERSIONED_FILENAME%</string>
+        <key>suffix</key>
+        <string>%FILENAME_SUFFIX%</string>
       </dict>
     </dict>
-    <key>MinimumVersion</key>
-    <string>1.0.4</string>
-    <key>ParentRecipe</key>
-    <string>com.facebook.autopkg.xcode.extract</string>
-    <key>Process</key>
-    <array>
+    <dict>
+      <key>Processor</key>
+      <string>FileMover</string>
+      <key>Arguments</key>
       <dict>
-        <key>Processor</key>
-        <string>DmgCreator</string>
-        <key>Arguments</key>
+        <key>source</key>
+        <string>%found_filename%</string>
+        <key>target</key>
+        <string>%RECIPE_CACHE_DIR%/%NAME%_unpack/%xcode_filename%.app</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>DmgCreator</string>
+      <key>Arguments</key>
+      <dict>
+        <key>dmg_root</key>
+        <string>%RECIPE_CACHE_DIR%/%NAME%_unpack/%xcode_filename%.app</string>
+        <key>dmg_path</key>
+        <string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>Processor</key>
+      <string>MunkiPkginfoMerger</string>
+      <key>Arguments</key>
+      <dict>
+        <key>additional_pkginfo</key>
         <dict>
-          <key>dmg_root</key>
-          <string>%found_filename%</string>
-          <key>dmg_path</key>
-          <string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
+          <key>display_name</key>
+          <string>Xcode %major_version%.%minor_version%.%patch_version% (%build_version%) %BETA%</string>
+          <key>icon_name</key>
+          <string>%ICON_NAME%</string>
+          <key>version</key>
+          <string>%major_version%.%minor_version%.%patch_version%.%bundle_version%</string>
         </dict>
       </dict>
+    </dict>
+    <dict>
+      <key>Arguments</key>
       <dict>
-        <key>Processor</key>
-        <string>MunkiPkginfoMerger</string>
-        <key>Arguments</key>
-        <dict>
-          <key>additional_pkginfo</key>
-          <dict>
-            <key>display_name</key>
-            <string>Xcode %major_version%.%minor_version%.%patch_version%</string>
-            <key>icon_name</key>
-            <string>%ICON_NAME%</string>
-            <key>version</key>
-            <string>%major_version%.%minor_version%.%patch_version%.%bundle_version%</string>
-          </dict>
-        </dict>
+        <key>pkg_path</key>
+        <string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
+        <key>repo_subdirectory</key>
+        <string>%MUNKI_REPO_SUBDIR%</string>
       </dict>
-      <dict>
-        <key>Arguments</key>
-        <dict>
-          <key>pkg_path</key>
-          <string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
-          <key>repo_subdirectory</key>
-          <string>%MUNKI_REPO_SUBDIR%</string>
-        </dict>
-        <key>Processor</key>
-        <string>MunkiImporter</string>
-      </dict>
-      <dict>
-        <key>Processor</key>
-        <string>PathDeleter</string>
-        <key>Arguments</key>
-        <dict>
-          <key>path_list</key>
-          <array>
-            <string>%RECIPE_CACHE_DIR%/%NAME%_unpack</string>
-          </array>
-        </dict>
-      </dict>
-    </array>
-  </dict>
+      <key>Processor</key>
+      <string>MunkiImporter</string>
+    </dict>
+  </array>
+</dict>
 </plist>

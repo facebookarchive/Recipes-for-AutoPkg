@@ -65,13 +65,14 @@ class XcodeVersioner(Processor):
             "description": ("Boolean that is true if this Xcode is a beta version.")
         },
         "beta_version": {"description": ("The beta number - 1, 2, 3, etc.")},
+        "build_version": {"description": ("Build version of Xcode - e.g. 11B500")},
     }
 
     __doc__ = description
 
     def _load_objc_framework(self, f_name, f_path, class_whitelist):
         loaded = {}
-        _ = objc.loadBundle(
+        framework_bundle = objc.loadBundle(  # NOQA
             f_name, bundle_path=f_path, module_globals=loaded
         )
         desired = {}
@@ -132,6 +133,9 @@ class XcodeVersioner(Processor):
             self.env["is_beta"] = xcode_data["is_beta"]
             self.env["beta_version"] = xcode_data["beta_version"]
         self.output("Patch version: %s" % self.env["patch_version"])
+
+        self.env["build_version"] = xcode_data["build_version"]
+        self.output("Build version: %s" % self.env["build_version"])
 
 
 if __name__ == "__main__":
