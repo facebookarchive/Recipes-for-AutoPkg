@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Copyright</key>
+    <string>Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved</string>
+    <key>Description</key>
+    <string>Downloads the latest version of Acrolinx and imports it into Munki.</string>
+    <key>Identifier</key>
+    <string>com.facebook.autopkg.download.Acrolinx</string>
+    <key>Input</key>
+    <dict>
+        <key>NAME</key>
+        <string>Acrolinx</string>
+        <key>AC_USERNAME</key>
+        <string>username</string>
+        <key>AC_PASSWORD</key>
+        <string>password</string>
+    </dict>
+    <key>MinimumVersion</key>
+    <string>2.0</string>
+    <key>Process</key>
+    <array>
+        <dict>
+            <key>Arguments</key>
+            <dict>
+                <key>username</key>
+                <string>%AC_USERNAME%</string>
+                <key>password</key>
+                <string>%AC_PASSWORD%</string>
+            </dict>
+            <key>Processor</key>
+            <string>AcrolinxURLProvider</string>
+        </dict>
+        <dict>
+            <key>Arguments</key>
+            <dict>
+                <key>filename</key>
+                <string>Acrolinx.dmg</string>
+            </dict>
+            <key>Processor</key>
+            <string>URLDownloader</string>
+        </dict>
+        <dict>
+            <key>Arguments</key>
+            <dict>
+                <key>pattern</key>
+                <string>%pathname%/*.app</string>
+            </dict>
+            <key>Processor</key>
+            <string>FileFinder</string>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>CodeSignatureVerifier</string>
+            <key>Arguments</key>
+            <dict>
+                <key>input_path</key>
+                <string>%pathname%/%dmg_found_filename%</string>
+                <key>requirement</key>
+                <string>identifier "com.acrolinx.Acrolinx" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = TH2ET36H76</string>
+            </dict>
+        </dict>
+    </array>
+</dict>
+</plist>
