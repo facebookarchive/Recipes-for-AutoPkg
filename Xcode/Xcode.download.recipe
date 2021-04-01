@@ -22,7 +22,7 @@
       <key>NOSKIP</key>
       <string></string>
       <key>VERSION_EMIT_PATH</key>
-      <string>%RECIPE_CACHE_DIR%/xcode_tag</string>
+      <string>xcode_tag</string>
     </dict>
     <key>MinimumVersion</key>
     <string>1.0.4</string>
