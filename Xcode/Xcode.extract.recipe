@@ -12,7 +12,7 @@
     <key>NAME</key>
     <string>Xcode</string>
     <key>BUILD_NUMBER_EMIT_PATH</key>
-    <string>%RECIPE_CACHE_DIR%/xcode_build_number</string>
+    <string>xcode_build_number</string>
   </dict>
   <key>MinimumVersion</key>
   <string>1.0.4</string>
