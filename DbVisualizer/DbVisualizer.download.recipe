@@ -25,7 +25,7 @@
 					<key>url</key>
 					<string>https://www.dbvis.com/download</string>
 					<key>re_pattern</key>
-					<string>(https://dbvis.com/product_download/dbvis-[\S]+/media/dbvis_macos_[\S]+\.tgz)</string>
+					<string>(https://dbvis.com/product_download/dbvis-%VERSION%.[\S]+/media/dbvis_macos_%VERSION%.[\S]+\.tgz)</string>
 				</dict>
 				<key>Processor</key>
 				<string>URLTextSearcher</string>
@@ -34,7 +34,7 @@
 				<key>Arguments</key>
 				<dict>
 					<key>url</key>
-					<string>https:%match%</string>
+					<string>%match%</string>
 				</dict>
 				<key>Processor</key>
 				<string>URLDownloader</string>
