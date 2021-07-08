@@ -22,10 +22,10 @@
 			<dict>
 				<key>Arguments</key>
 				<dict>
-					<key>re_pattern</key>
-					<string>\/.*.tgz(?=")</string>
 					<key>url</key>
-					<string>https://www.dbvis.com/download/%VERSION%.0</string>
+					<string>https://www.dbvis.com/download</string>
+					<key>re_pattern</key>
+					<string>(https://dbvis.com/product_download/dbvis-[\S]+/media/dbvis_macos_[\S]+\.tgz)</string>
 				</dict>
 				<key>Processor</key>
 				<string>URLTextSearcher</string>
