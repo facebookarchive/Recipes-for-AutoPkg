@@ -25,7 +25,7 @@
 				<key>category</key>
 				<string>Database Tools</string>
 				<key>description</key>
-				<string>DbVisualizer is the universal database tool for developers,  DBAs and analysts. It is the perfect solution since the same tool can be used on all major operating systems accessing a wide range of databases.</string>
+				<string>DbVisualizer is the universal database tool for developers, DBAs and analysts. It is the perfect solution since the same tool can be used on all major operating systems accessing a wide range of databases.</string>
 				<key>developer</key>
 				<string>DbVis Software</string>
 				<key>display_name</key>
