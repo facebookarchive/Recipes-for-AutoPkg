@@ -3,6 +3,8 @@ This repository is a collection of recipes for use with [AutoPkg](https://github
 
 You can see other projects from the CPE team at the [IT-CPE GitHub repo](https://github.com/facebook/IT-CPE).
 
+* Note: On Aug 12, 2021 we renamed our `master` branch to `main`.  If you're having trouble with existing clone of our repo, please re-clone the repo.
+
 ## Usage
 
 Clone the repo using `autopkg repo-add` or `git clone`:

@@ -12,7 +12,7 @@ Changes may occur in these recipes as Facebook encounters new solutions or revis
 ## Pull Requests
 We actively welcome your pull requests.
 
-1. Fork the repo and create your branch from `master`.
+1. Fork the repo and create your branch from `main`.
 2. If you've added code that should be tested, please extensively test it and demonstrate with run logs that it works.
 3. If any input or output variables change, please update the documentation.
 4. Obviously, your recipe changes should work.
