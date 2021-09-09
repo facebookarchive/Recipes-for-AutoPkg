@@ -71,7 +71,7 @@ class AppleDataGatherer(Processor):
                 "You must provide either a password, or a password_file argument."
             )
         password = self.env.get("password")
-        if self.env.get("password_file"):
+        if self.env.get("password_file") and self.env.get("password_file") != "%PASSWORD_FILE%":
             with open(self.env["password_file"]) as f:
                 password = f.read()
         passwordstring = "accountPassword={}".format(password)
