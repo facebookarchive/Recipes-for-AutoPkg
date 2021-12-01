@@ -69,6 +69,38 @@ class AppleURLSearcher(Processor):
         }
     }
 
+    def parse_beta_info(self, url):
+        """Parse download url to set beta environment variables"""
+        self.output("Parsing for beta version with url: %s" % url)
+        split_url = url.split("/")
+        matched_item = split_url[-1]
+        if matched_item.endswith(".xip"):
+            matched_item = matched_item.replace(".xip", "")
+
+        split_matched_item = matched_item.split("_")
+        if "beta" in split_matched_item:
+            self.env["is_beta"] = True
+            if split_matched_item[-1].isnumeric():
+                self.env["beta_version"] = split_matched_item[-1]
+                self.output("beta_version: %s" % self.env["beta_version"])
+            else:
+                # Normalizing beta_version to 1
+                self.env["beta_version"] = str("1")
+                self.output("beta_version: %s" % self.env["beta_version"])
+            return
+        # Check for Release Candidate versions
+        if 'Release' in split_matched_item and 'Candidate' in split_matched_item:
+            self.env["is_beta"] = True
+            if split_matched_item[-1].isnumeric():
+                self.env["beta_version"] = "Release Candidate %s" % (split_matched_item[-1])
+                self.output("beta_version: %s" % self.env["beta_version"])
+            else:
+                self.env["beta_version"] = "Release Candidate"
+                self.output("beta_version: %s" % self.env["beta_version"])
+            return
+        self.env["is_beta"] = False
+        self.output("is_beta: %s" % self.env["is_beta"])
+
     # This code is taken directly from URLTextSearcher
     def get_url_and_search(self, url, re_pattern, headers=None, flags=None, opts=None):
         """Get data from url and search for re_pattern"""
@@ -122,6 +154,7 @@ class AppleURLSearcher(Processor):
         # If we have "URL" already passed in, we should just use it
         if self.env.get("URL"):
             self.output_result(self.env["URL"])
+            self.parse_beta_info(self.env["URL"])
             return
 
         if self.env.get("BETA"):
@@ -147,6 +180,7 @@ class AppleURLSearcher(Processor):
             )
             fixed_url = "https://developer.apple.com/" + groupmatch
             self.env[self.env["result_output_var_name"]] = fixed_url
+            self.parse_beta_info(fixed_url)
             self.output("New fixed URL: {}".format(fixed_url))
             self.output_variables = {}
             self.output_variables[self.env["result_output_var_name"]] = fixed_url
@@ -201,6 +235,7 @@ class AppleURLSearcher(Processor):
         )
         self.output("Found matching item: {}".format(match["filename"]))
         full_url_match = match["full_url"]
+        self.parse_beta_info(full_url_match)
 
         if not full_url_match:
             raise ProcessorError("No matching URL found!")
