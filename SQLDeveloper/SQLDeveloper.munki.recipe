@@ -44,7 +44,7 @@
 				<key>Arguments</key>
 				<dict>
 					<key>faux_root</key>
-					<string>%pkgroot</string>
+					<string>%pkgroot%</string>
 					<key>installs_item_paths</key>
 					<array>
 						<string>SQLDeveloper.app/Contents/Resources/sqldeveloper/sqldeveloper/bin/version.properties</string>
@@ -56,13 +56,22 @@
 			<dict>
 				<key>Arguments</key>
 				<dict>
+					<key>hashfile_path</key>
+					<string>%pkgroot%/SQLDeveloper.app/Contents/Resources/sqldeveloper/sqldeveloper/bin/version.properties</string>
+				</dict>
+				<key>Processor</key>
+				<string>HashOfFile</string>
+			</dict>
+			<dict>
+				<key>Arguments</key>
+				<dict>
 					<key>additional_pkginfo</key>
 					<dict>
 						<key>installs</key>
 						<array>
 							<dict>
 								<key>md5checksum</key>
-								<string>2e7650fee02f3ac91838397daf5f8817</string>
+								<string>%hashoffile%</string>
 								<key>path</key>
 								<string>/Applications/SQLDeveloper.app/Contents/Resources/sqldeveloper/sqldeveloper/bin/version.properties</string>
 								<key>type</key>

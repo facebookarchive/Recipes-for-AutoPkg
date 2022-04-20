@@ -65,7 +65,6 @@ class SQLDeveloperVersioner(Processor):
                 cp.read_file(self.add_section_header(fopen), source=file_path)
             except IOError as err:
                 raise ProcessorError(err)
-            self.output(cp.sections())
             self.env["version"] = cp["properties"]["ver_full"]
             self.output("Version: %s" % self.env["version"])
 
