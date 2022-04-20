@@ -19,30 +19,13 @@
 
 from __future__ import absolute_import
 
-import ConfigParser
+import configparser
+from distutils.command.config import config
 import os.path
 
 from autopkglib import Processor, ProcessorError
 
 __all__ = ["SQLDeveloperVersioner"]
-
-
-# this code stolen directly from
-# http://stackoverflow.com/questions/2819696/parsing-properties-file-in-python/2819788#2819788
-class FakeSecHead(object):
-    def __init__(self, fp):
-        self.fp = fp
-        self.sechead = "[properties]\n"
-
-    def readline(self):
-        if self.sechead:
-            try:
-                return self.sechead
-            finally:
-                self.sechead = None
-        else:
-            return self.fp.readline()
-
 
 class SQLDeveloperVersioner(Processor):
     # pylint: disable=missing-docstring
@@ -57,6 +40,15 @@ class SQLDeveloperVersioner(Processor):
 
     __doc__ = description
 
+    # this code stolen directly from https://stackoverflow.com/a/8555776
+    def add_section_header(self, properties_file, header_name="properties"):
+        # configparser.ConfigParser requires at least one section header in a properties file.
+        # Our properties file doesn't have one, so add a header to it on the fly.
+        yield '[{}]\n'.format(header_name)
+        for line in properties_file:
+            yield line
+
+
     def main(self):
         # Unsurprisingly, SQLDeveloper fails to include a useful version in
         # the app's Info.plist.  Instead, the actual version is buried deep
@@ -66,15 +58,16 @@ class SQLDeveloperVersioner(Processor):
             "Contents/Resources/sqldeveloper/sqldeveloper/bin/version.properties"
         )
         file_path = os.path.join(self.env["app_path"], relative_path)
-        # this code stolen directly from
-        # http://stackoverflow.com/questions/2819696/parsing-properties-file-in-python/2819788#2819788
-        cp = ConfigParser.SafeConfigParser()
-        try:
-            cp.readfp(FakeSecHead(open(file_path)))
-        except IOError as err:
-            raise ProcessorError(err)
-        self.env["version"] = cp.get("properties", "ver_full")
-        self.output("Version: %s" % self.env["version"])
+
+        with open(file_path, encoding="utf_8") as fopen:
+            cp = configparser.SafeConfigParser()
+            try:
+                cp.read_file(self.add_section_header(fopen), source=file_path)
+            except IOError as err:
+                raise ProcessorError(err)
+            self.output(cp.sections())
+            self.env["version"] = cp["properties"]["ver_full"]
+            self.output("Version: %s" % self.env["version"])
 
 
 if __name__ == "__main__":
