@@ -36,6 +36,7 @@ class HashOfFile(Processor):
         return h.hexdigest()
 
     def main(self):
+        self.output(self.env['hashfile_path'])
         self.env['hashoffile'] = self.hash_file(self.env['hashfile_path'])
 if __name__ == "__main__":
     PROCESSOR = HashOfFile()
