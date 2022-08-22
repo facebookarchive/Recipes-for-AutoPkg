@@ -17,47 +17,17 @@
 		</dict>
 		<key>MinimumVersion</key>
 		<string>0.2.0</string>
-		<key>Process</key>
-		<array>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>filename</key>
-					<string>%NAME%.zip</string>
-					<key>url</key>
-					<string>%DOWNLOAD_URL%</string>
-				</dict>
-				<key>Processor</key>
-				<string>URLDownloader</string>
-			</dict>
-			<dict>
-				<key>Processor</key>
-				<string>EndOfCheckPhase</string>
-			</dict>
-			<dict>
-				<key>Processor</key>
-				<string>Unarchiver</string>
-			</dict>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>pattern</key>
-					<string>%RECIPE_CACHE_DIR%/%NAME%/*.app</string>
-				</dict>
-				<key>Processor</key>
-				<string>FileFinder</string>
-			</dict>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>input_path</key>
-					<string>%found_filename%</string>
-					<key>requirement</key>
-					<string>identifier "com.motif.framer" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = JZ2M63CZ28</string>
-				</dict>
-				<key>Processor</key>
-				<string>CodeSignatureVerifier</string>
-			</dict>
-		</array>
+        <key>Process</key>
+        <array>
+            <dict>
+                <key>Processor</key>
+                <string>DeprecationWarning</string>
+                <key>Arguments</key>
+                <dict>
+                    <key>warning_message</key>
+                    <string>These recipes have moved into nmcspadden-recipes, and the identifiers have changed. Please update your overrides!</string>
+                </dict>
+            </dict>
+        </array>
 	</dict>
 </plist>

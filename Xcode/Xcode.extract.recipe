@@ -3,92 +3,33 @@
 <plist version="1.0">
 <!-- Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved -->
 <dict>
-  <key>Description</key>
-  <string>Extract Xcode from a XIP. Requires passing in a XIP containing Xcode.</string>
-  <key>Identifier</key>
-  <string>com.facebook.autopkg.xcode.extract</string>
-  <key>Input</key>
-  <dict>
-    <key>NAME</key>
-    <string>Xcode</string>
-    <key>BUILD_NUMBER_EMIT_PATH</key>
-    <string>%RECIPE_CACHE_DIR%/xcode_build_number</string>
-  </dict>
-  <key>MinimumVersion</key>
-  <string>1.0.4</string>
-  <key>ParentRecipe</key>
-  <string>com.facebook.autopkg.xcode.downloader</string>
-  <key>Process</key>
-  <array>
+    <key>Description</key>
+    <string>Extract Xcode from a XIP. Requires passing in a XIP containing Xcode.</string>
+    <key>Identifier</key>
+    <string>com.facebook.autopkg.xcode.extract</string>
+    <key>Input</key>
     <dict>
-      <key>Processor</key>
-      <string>XcodeXIPUnpacker</string>
-      <key>Arguments</key>
-      <dict>
-        <key>PKG</key>
-        <string>%pathname%</string>
-      </dict>
+        <key>NAME</key>
+        <string>Xcode</string>
+        <key>BUILD_NUMBER_EMIT_PATH</key>
+        <string>%RECIPE_CACHE_DIR%/xcode_build_number</string>
     </dict>
-    <dict>
-      <key>Processor</key>
-      <string>FileFinder</string>
-      <key>Arguments</key>
-      <dict>
-        <key>pattern</key>
-        <string>%RECIPE_CACHE_DIR%/%NAME%_unpack/*.app</string>
-      </dict>
-    </dict>
-    <dict>
-      <key>Processor</key>
-      <string>CodeSignatureVerifier</string>
-      <key>Arguments</key>
-      <dict>
-        <key>input_path</key>
-        <string>%found_filename%</string>
-        <key>requirement</key>
-        <string>identifier "com.apple.dt.Xcode" and anchor apple</string>
-      </dict>
-    </dict>
-    <dict>
-      <key>Processor</key>
-      <string>PlistReader</string>
-      <key>Arguments</key>
-      <dict>
-        <key>info_path</key>
-        <string>%found_filename%/Contents/version.plist</string>
-        <key>plist_keys</key>
-        <dict>
-          <key>CFBundleVersion</key>
-          <string>bundle_version</string>
-          <key>CFBundleShortVersionString</key>
-          <string>version</string>
-          <key>ProductBuildVersion</key>
-          <string>build_version</string>
-        </dict>
-      </dict>
-    </dict>
-    <dict>
-      <key>Processor</key>
-      <string>XcodeVersioner</string>
-      <key>Arguments</key>
-      <dict>
-        <key>app_path</key>
-        <string>%found_filename%</string>
-        <key>version</key>
-        <string>%version%</string>
-      </dict>
-    </dict>
-    <dict>
-      <key>Processor</key>
-      <string>XcodeBuildNumberEmitter</string>
-      <key>Arguments</key>
-      <dict>
-        <key>dont_skip</key>
-        <string>%NOSKIP%</string>
-        <key>output_filepath</key>
-        <string>%BUILD_NUMBER_EMIT_PATH%</string>
-      </dict>
-    </dict>
-  </array>
+    <key>MinimumVersion</key>
+    <string>1.0.4</string>
+    <key>ParentRecipe</key>
+    <string>com.facebook.autopkg.xcode.downloader</string>
+        <key>Process</key>
+        <array>
+            <dict>
+                <key>Processor</key>
+                <string>DeprecationWarning</string>
+                <key>Arguments</key>
+                <dict>
+                    <key>warning_message</key>
+                    <string>These recipes have moved into nmcspadden-recipes, and the identifiers have changed. Please update your overrides!</string>
+                </dict>
+            </dict>
+        </array>
+
 </dict>
 </plist>

@@ -28,29 +28,13 @@
         <key>Process</key>
         <array>
             <dict>
+                <key>Processor</key>
+                <string>DeprecationWarning</string>
                 <key>Arguments</key>
                 <dict>
-                    <key>jdk_version</key>
-                    <string>%JDK_VERSION%</string>
-                    <key>jvm_type</key>
-                    <string>%JVM_TYPE%</string>
-                    <key>jdk_type</key>
-                    <string>%JDK_TYPE%</string>
-                    <key>binary_type</key>
-                    <string>%BINARY_TYPE%</string>
-                    <key>release</key>
-                    <string>%RELEASE%</string>
+                    <key>warning_message</key>
+                    <string>These recipes have moved into nmcspadden-recipes, and the identifiers have changed. Please update your overrides!</string>
                 </dict>
-                <key>Processor</key>
-                <string>AdoptOpenJDKURLProvider</string>
-            </dict>
-            <dict>
-                <key>Processor</key>
-                <string>URLDownloader</string>
-            </dict>
-            <dict>
-                <key>Processor</key>
-                <string>EndOfCheckPhase</string>
             </dict>
         </array>
     </dict>

@@ -44,95 +44,17 @@ See and share video, audio, and content</string>
 		<string>0.2.0</string>
 		<key>ParentRecipe</key>
 		<string>com.facebook.autopkg.download.bluejeans</string>
-		<key>Process</key>
-		<array>
+        <key>Process</key>
+        <array>
             <dict>
                 <key>Processor</key>
                 <string>DeprecationWarning</string>
                 <key>Arguments</key>
                 <dict>
                     <key>warning_message</key>
-                    <string>This recipe will soon be removed. Please remove it from your list of recipes.</string>
+                    <string>These recipes have moved into nmcspadden-recipes, and the identifiers have changed. Please update your overrides!</string>
                 </dict>
             </dict>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>destination_path</key>
-					<string>%RECIPE_CACHE_DIR%/unpack</string>
-					<key>flat_pkg_path</key>
-					<string>%pathname%</string>
-				</dict>
-				<key>Processor</key>
-				<string>FlatPkgUnpacker</string>
-			</dict>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>pkgdirs</key>
-					<dict/>
-					<key>pkgroot</key>
-					<string>%RECIPE_CACHE_DIR%/BlueJeans</string>
-				</dict>
-				<key>Processor</key>
-				<string>PkgRootCreator</string>
-			</dict>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>destination_path</key>
-					<string>%pkgroot%</string>
-					<key>pkg_payload_path</key>
-					<string>%RECIPE_CACHE_DIR%/unpack/BlueJeansSetup.pkg/Payload</string>
-					<key>purge_destination</key>
-					<true/>
-				</dict>
-				<key>Processor</key>
-				<string>PkgPayloadUnpacker</string>
-			</dict>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>info_path</key>
-					<string>%pkgroot%/Blue Jeans.app</string>
-				</dict>
-				<key>Processor</key>
-				<string>PlistReader</string>
-			</dict>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>dmg_path</key>
-					<string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
-					<key>dmg_root</key>
-					<string>%pkgroot%</string>
-				</dict>
-				<key>Processor</key>
-				<string>DmgCreator</string>
-			</dict>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>additional_pkginfo</key>
-					<dict>
-						<key>version</key>
-						<string>%version%</string>
-					</dict>
-				</dict>
-				<key>Processor</key>
-				<string>MunkiPkginfoMerger</string>
-			</dict>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>pkg_path</key>
-					<string>%RECIPE_CACHE_DIR%/%NAME%.dmg</string>
-					<key>repo_subdirectory</key>
-					<string>%MUNKI_REPO_SUBDIR%</string>
-				</dict>
-				<key>Processor</key>
-				<string>MunkiImporter</string>
-			</dict>
-		</array>
+        </array>
 	</dict>
 </plist>

@@ -41,15 +41,13 @@
         <key>Process</key>
         <array>
             <dict>
+                <key>Processor</key>
+                <string>DeprecationWarning</string>
                 <key>Arguments</key>
                 <dict>
-                    <key>pkg_path</key>
-                    <string>%pathname%</string>
-                    <key>repo_subdirectory</key>
-                    <string>%MUNKI_REPO_SUBDIR%</string>
+                    <key>warning_message</key>
+                    <string>These recipes have moved into nmcspadden-recipes, and the identifiers have changed. Please update your overrides!</string>
                 </dict>
-                <key>Processor</key>
-                <string>MunkiImporter</string>
             </dict>
         </array>
     </dict>

@@ -19,68 +19,17 @@
 		<string>0.2.0</string>
 		<key>ParentRecipe</key>
 		<string>com.facebook.autopkg.extract.duo</string>
-		<key>Process</key>
-		<array>
-			<dict>
-				<key>Processor</key>
-				<string>DeprecationWarning</string>
-				<key>Arguments</key>
-				<dict>
-					<key>warning_message</key>
-					<string>This recipe will soon be removed. Please remove it from your list of recipes.</string>
-				</dict>
-			</dict>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>header_file</key>
-					<string>%found_filename%/config.h</string>
-				</dict>
-				<key>Processor</key>
-				<string>ConfigHeaderVersioner</string>
-			</dict>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>path_list</key>
-					<array>
-						<string>%pkgroot%/etc</string>
-					</array>
-				</dict>
-				<key>Processor</key>
-				<string>PathDeleter</string>
-			</dict>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>pkg_request</key>
-					<dict>
-						<key>chown</key>
-						<array>
-							<dict>
-								<key>group</key>
-								<string>wheel</string>
-								<key>mode</key>
-								<string>4775</string>
-								<key>path</key>
-								<string>%PREFIX_PATH%/sbin/login_duo</string>
-								<key>user</key>
-								<string>root</string>
-							</dict>
-						</array>
-						<key>id</key>
-						<string>com.facebook.pkg.duo</string>
-						<key>options</key>
-						<string>purge_ds_store</string>
-						<key>pkgdir</key>
-						<string>%RECIPE_CACHE_DIR%</string>
-					</dict>
-					<key>pkgname</key>
-					<string>%NAME%</string>
-				</dict>
-				<key>Processor</key>
-				<string>PkgCreator</string>
-			</dict>
-		</array>
+        <key>Process</key>
+        <array>
+            <dict>
+                <key>Processor</key>
+                <string>DeprecationWarning</string>
+                <key>Arguments</key>
+                <dict>
+                    <key>warning_message</key>
+                    <string>These recipes have moved into nmcspadden-recipes, and the identifiers have changed. Please update your overrides!</string>
+                </dict>
+            </dict>
+        </array>
 	</dict>
 </plist>

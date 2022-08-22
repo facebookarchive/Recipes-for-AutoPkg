@@ -49,44 +49,17 @@
 		<string>0.2.5</string>
 		<key>ParentRecipe</key>
 		<string>com.facebook.autopkg.pkg.deploy.VMwareFusion</string>
-		<key>Process</key>
-		<array>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>dmg_path</key>
-					<string>%RECIPE_CACHE_DIR%/DeployVMwareFusion.dmg</string>
-					<key>dmg_root</key>
-					<string>%pkgroot%</string>
-				</dict>
-				<key>Processor</key>
-				<string>DmgCreator</string>
-			</dict>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>additional_pkginfo</key>
-					<dict>
-						<key>minimum_os_version</key>
-						<string>%ls_minimum_system_version%</string>
-						<key>version</key>
-						<string>%version%</string>
-					</dict>
-				</dict>
-				<key>Processor</key>
-				<string>MunkiPkginfoMerger</string>
-			</dict>
-			<dict>
-				<key>Arguments</key>
-				<dict>
-					<key>pkg_path</key>
-					<string>%RECIPE_CACHE_DIR%/DeployVMwareFusion.dmg</string>
-					<key>repo_subdirectory</key>
-					<string>%MUNKI_REPO_SUBDIR%</string>
-				</dict>
-				<key>Processor</key>
-				<string>MunkiImporter</string>
-			</dict>
-		</array>
+        <key>Process</key>
+        <array>
+            <dict>
+                <key>Processor</key>
+                <string>DeprecationWarning</string>
+                <key>Arguments</key>
+                <dict>
+                    <key>warning_message</key>
+                    <string>These recipes have moved into nmcspadden-recipes, and the identifiers have changed. Please update your overrides!</string>
+                </dict>
+            </dict>
+        </array>
 	</dict>
 </plist>
